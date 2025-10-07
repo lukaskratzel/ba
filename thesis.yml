@@ -1,16 +1,178 @@
-bruegge2004object:
-  type: book
-  title: Object Oriented Software Engineering Using UML, Patterns, and Java
+kruscheArtemisAutomaticAssessment2018:
+  type: article
+  title: "Artemis: An Automatic Assessment Management System for Interactive Learning"
   author:
-    - Bruegge, Bernd
-    - Dutoit, Allen H
-  date: 2009
-  publisher: Prentice Hall
+    - Krusche, Stephan
+    - Seitz, Andreas
+  date: 2018
+  parent:
+    - type: proceedings
+      title: "Proceedings of the 49th Technical Symposium on Computer Science Education (SIGCSE)"
+  publisher: ACM
+  page-range: 284-289
+  doi: 10.1145/3159450.3159602
 
-mustermann2020design:
+benottiEffectWebbasedCoding2018:
+  type: article
+  title: "The Effect of a Web-based Coding Tool with Automatic Feedback on Students' Performance and Perceptions"
+  author:
+    - Benotti, Luciana
+    - Aloi, Federico
+    - Bulgarelli, Franco
+    - Gomez, Marcos J.
+  date: 2018-02
+  parent:
+    - type: proceedings
+      title: "Proceedings of the 49th ACM Technical Symposium on Computer Science Education"
+  publisher: ACM
+  page-range: 2-7
+  doi: 10.1145/3159450.3159579
+
+srinivasaBadIDEaWeaponizing2022:
+  type: article
+  title: "A Bad IDEa: Weaponizing uncontrolled online-IDEs in availability attacks"
+  author:
+    - Srinivasa, Shreyas
+    - Georgoulias, Dimitrios
+    - Pedersen, Jens Myrup
+    - Vasilomanolakis, Emmanouil
+  date: 2022-06
+  parent:
+    - type: proceedings
+      title: "2022 IEEE European Symposium on Security and Privacy Workshops (EuroS&PW)"
+  publisher: IEEE
+  page-range: 82-92
+  doi: 10.1109/EuroSPW55150.2022.00015
+
+jenkinsJavaWIDEInnovationOnline2010:
+  type: article
+  title: "JavaWIDE: Innovation in an online IDE: Tutorial Presentation"
+  author:
+    - Jenkins, Jam
+    - Brannock, Evelyn
+    - Dekhane, Sonal
+  date: 2010-05
+  parent:
+    - type: periodical
+      title: "Journal of Computing Sciences in Colleges"
+      volume: 25
+      issue: 5
+  publisher: Consortium for Computing Sciences in Colleges
+  page-range: 102-104
+
+valezStudentAdoptionPerceptions2020a:
+  type: article
+  title: "Student Adoption and Perceptions of a Web Integrated Development Environment: An Experience Report"
+  author:
+    - Valez, Martin
+    - Yen, Michael
+    - Le, Mathew
+    - Su, Zhendong
+    - Alipour, Mohammad Amin
+  date: 2020-02
+  parent:
+    - type: proceedings
+      title: "Proceedings of the 51st ACM Technical Symposium on Computer Science Education"
+  publisher: ACM
+  page-range: 1172-1178
+  doi: 10.1145/3328778.3366949
+
+malanStandardizingStudentsProgramming2022:
+  type: article
+  title: "Standardizing Students' Programming Environments with Docker Containers: Using Visual Studio Code in the Cloud with GitHub Codespaces"
+  author: Malan, David J.
+  date: 2022-07
+  parent:
+    - type: proceedings
+      title: "Proceedings of the 27th ACM Conference on Innovation and Technology in Computer Science Education Vol. 2"
+  publisher: ACM
+  page-range: 599-600
+  doi: 10.1145/3502717.3532164
+
+staubitzPracticalProgrammingExercises2015:
+  type: article
+  title: "Towards practical programming exercises and automated assessment in Massive Open Online Courses"
+  author:
+    - Staubitz, Thomas
+    - Klement, Hauke
+    - Renz, Jan
+    - Teusner, Ralf
+    - Meinel, Christoph
+  date: 2015-12
+  parent:
+    - type: proceedings
+      title: "2015 IEEE International Conference on Teaching, Assessment, and Learning for Engineering (TALE)"
+  publisher: IEEE
+  page-range: 23-30
+  doi: 10.1109/TALE.2015.7386010
+
+frankfordAITutoringSoftwareEngineering2024:
+  type: article
+  title: "AI-Tutoring in Software Engineering Education"
+  author:
+    - Frankford, Eduard
+    - Sauerwein, Clemens
+    - Bassner, Patrick
+    - Krusche, Stephan
+    - Breu, Ruth
+  date: 2024-05
+  parent:
+    - type: proceedings
+      title: "Proceedings of the 46th International Conference on Software Engineering: Software Engineering Education and Training"
+  publisher: ACM
+  page-range: 309-319
+  doi: 10.1145/3639474.3640061
+
+rubakMachineLearningPredictive2023a:
+  type: article
+  title: "Machine Learning for Predictive Resource Scaling of Microservices on Kubernetes Platforms"
+  author:
+    - Rubak, Adam
+    - Taheri, Javid
+  date: 2023-12
+  parent:
+    - type: proceedings
+      title: "Proceedings of the IEEE/ACM 16th International Conference on Utility and Cloud Computing"
+  publisher: ACM
+  page-range: 1-8
+  doi: 10.1145/3603166.3632165
+
+kumarOptimizingResourceAllocation2024:
+  type: article
+  title: "Optimizing Resource Allocation Using Proactive Scaling with Predictive Models and Custom Resources"
+  author:
+    - Kumar, Bablu
+    - Verma, Anshul
+    - Verma, Pradeepika
+  date: 2024-09
+  parent:
+    - type: periodical
+      title: "Computers and Electrical Engineering"
+      volume: 118
+  page-range: 109419
+  doi: 10.1016/j.compeleceng.2024.109419
+
+mohanAgileColdStarts2019:
+  type: article
+  title: "Agile Cold Starts for Scalable Serverless"
+  author:
+    - Mohan, Anup
+    - Sane, Harshad
+    - Doshi, Kshitij
+    - Edupuganti, Saikrishna
+    - Nayak, Naren
+    - Sukhomlinov, Vadim
+  date: 2019-07
+  parent:
+    - type: proceedings
+      title: "Proceedings of the 11th USENIX Conference on Hot Topics in Cloud Computing"
+  publisher: USENIX Association
+  page-range: 21
+
+schmidtInclusiveLearningEnvironments2024:
   type: thesis
-  title: "Design and Implementation of a Scalable Microservice Architecture"
-  author: Max Mustermann
+  title: "Inclusive Learning Environments in the Cloud: Scalable Online IDEs for Higher Education"
+  author: Schmidt, Yannik
+  date: 2024-12
   genre: Master Thesis
-  publisher: Technical University of Munich
-  date: 2020 
+  publisher: Technical University of Munich 

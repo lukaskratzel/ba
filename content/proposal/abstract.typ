@@ -1,8 +1,3 @@
-#import "/utils/todo.typ": TODO
-
 = Abstract
-#TODO[ // Remove this block
-  *Abstract*
-  - Short (1/3-1/2 page) summary of the project 
-  - It is fine to repeat yourself here 
-]
+
+Online IDEs can reduce technical barriers in computer science education by providing immediate access to programming tools without complex local installations. Theia as an online IDE platform suffers from slow startup times as Kubernetes resources have to be provisioned per session. This thesis addresses the challenge by designing and implementing a predictive scaling and prewarming system for Eclipse Theia Cloud. The solution combines machine learning-based demand forecasting with proactive container prewarming, leveraging historical usage patterns, course schedules, and real-time signals to maintain a pool of ready-to-use IDE containers. The system extends Theia Cloud's Kubernetes operator to dynamically adjust warm pool sizes while maintaining security through proper user-to-container binding mechanisms.

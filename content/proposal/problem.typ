@@ -1,10 +1,9 @@
-#import "/utils/todo.typ": TODO
-
 = Problem
-#TODO[ // Remove this block
-  *Problem description*
-  - What is/are the problem(s)? 
-  - Identify the actors and use these to describe how the problem negatively influences them.
-  - Do not present solutions or alternatives yet!
-  - Present the negative consequences in detail 
-]
+
+Deploying cloud IDEs at educational scale introduces new challenges. The platform must handle synchronized usage spikes when many students simultaneously access resources at predictable times like course starts, lab sessions, and assignment deadlines. The underlying Kubernetes infrastructure must provision and initialize containers quickly enough to meet demand, while also managing resources efficiently. Current reactive scaling approaches often fall short due to infrastructure provisioning delays and container initialization times. This problem is amplified during synchronized usage spikes.
+
+For *students*, the most immediate problem is startup latency when launching cloud IDE sessions. @rubakMachineLearningPredictive2023a demonstrate that Kubernetes' default Horizontal Pod Autoscaler "is not always able to scale up in time to catch up with load bursts," meaning sudden surges of users can overwhelm the system before new containers are ready. In the context of Theia Cloud, cold starts involving image pulls, container initialization, Theia boot, and language server startup can exceed 60-90 seconds. During assignment releases or approaching deadlines, students face frustrating delays when they are most motivated to begin work. These technical barriers erode confidence in the platform and waste valuable time.
+
+The problem compounds for *instructors* who schedule synchronized activities like live coding sessions or timed assessments. When many students attempt to launch IDEs simultaneously at the start of a lab session, reactive scaling mechanisms cannot provision resources quickly enough. @jenkinsJavaWIDEInnovationOnline2010 and @valezStudentAdoptionPerceptions2020a report that technical difficulties with development environments "consume considerable instructional time and create barriers for novice programmers," undermining educational objectives.
+
+// From the perspective of *system administrators*, the challenge lies in balancing resource utilization with quality of service. Provisioning enough infrastructure to handle peak loads results in substantial waste during off-peak hours. Conversely, under-provisioning to control costs leads to the performance issues described above. Traditional reactive autoscaling operates with inherent delays: by the time metrics indicate high load, the damage to user experience is already done. This creates an operational dilemma where administrators must choose between consistent over-provisioning or accepting periodic service degradation.

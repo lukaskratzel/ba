@@ -1,11 +1,7 @@
-#import "/utils/todo.typ": TODO
-
-
 = Introduction
-#TODO[ // Remove this block
-  *Introduction*
-  - Introduce the reader to the general setting (No Problem description yet)
-  - What is the environment?
-  - What are the tools in use?
-  - (Not more than 1/2 a page)
-]
+
+The landscape of computer science education has transformed over the past decade. Krusche et al. note that the surge in student numbers has rendered manual assessment of programming exercises impractical, prompting the need for automated assessment systems @kruscheArtemisAutomaticAssessment2018. In response to this challenge, platforms like Artemis have emerged to provide automatic programming exercise assessment with quick feedback at scale.
+
+At the same time, there has been an increase in cloud-based IDE services for education. Srinivasa et al. observe a growing "increase in online IDE services offered for training, assessments, and development environments" as more learning platforms move development infrastructure to the cloud @srinivasaBadIDEaWeaponizing2022. These cloud-hosted environments eliminate local setup requirements and provide consistent, standardized development experiences across diverse student populations. Eclipse Theia, an extensible cloud and desktop IDE platform, has become a popular choice for educational deployments due to its flexibility and feature completeness.
+
+Theia Cloud represents a comprehensive solution for deploying and managing Theia-based IDEs on Kubernetes at scale. It provides a Kubernetes operator that manages the lifecycle of IDE instances, a REST service for session management, and custom resource definitions that simplify configuration. When integrated with learning management systems like Artemis, Theia Cloud enables students to launch pre-configured development environments from their course assignments without any local installation and receive timely feedback.

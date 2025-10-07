@@ -1,12 +1,15 @@
-#import "/utils/todo.typ": TODO
-
-
 = Motivation
-#TODO[ // Remove this block
-  *Proposal Motivation*
-  - Outline why it is (scientifically) important to solve the problem
-  - Again use the actors to present your solution, but don't be to specific
-  - Do not repeat the problem, instead focus on the positive aspects when the solution to the problem is available
-  - Be visionary! 
-  - Optional: motivate with existing research, previous work 
-]
+
+Solving the startup latency and resource provisioning challenges in cloud-based IDEs has profound implications for educational outcomes, system efficiency, and the broader adoption of scalable learning platforms.
+
+For *students*, immediate access to development environments transforms the learning experience. @benottiEffectWebbasedCoding2018 demonstrated that web-based coding tools with immediate feedback "positively affect student engagement and learning outcomes" in programming courses. Without startup delays, students can maintain momentum and focus on problem-solving. By ensuring that IDEs are always ready, we remove a significant barrier to educational success and enable more practice opportunities.
+
+From an *instructor* perspective, reliable and responsive cloud IDE infrastructure enables more ambitious and effective teaching strategies. With predictive provisioning ensuring capacity for synchronized activities, instructors can confidently design interactive exercises, live coding demonstrations, and time-bound assessments involving entire classes. @kruscheArtemisAutomaticAssessment2018 showed that integrated automated assessment systems "help students realize their progress [...] and enhance the learning experience" while reducing instructor workload. When the technical foundation is robust, instructors can focus on pedagogy and student support rather than managing infrastructure failures.
+
+// For *system administrators*, proactive resource management represents a paradigm shift from reactive firefighting to strategic optimization. Recent research by @kumarOptimizingResourceAllocation2024 demonstrates that machine learning-driven autoscaling can "achieve a 90.66% improvement in scaling efficiency compared to reactive methods," reducing both resource waste and service degradation. By anticipating demand rather than reacting to it, administrators can maintain consistent quality of service while optimizing infrastructure costs. The predictive approach enables sustainable scaling where more students can be served with the same infrastructure investment.
+
+// From a *research and systems perspective*, this work advances the state of the art in cloud resource management for educational workloads. 
+// @mohanAgileColdStarts2019 note that "pre-warmed containers save the cost of launching a new container by pre-creating the container with the needed code and dependencies," dramatically reducing startup latency.
+// Combining prewarming strategies with predictive models specifically tuned for educational usage patterns creates a novel approach that could be generalized to other domains with predictable demand spikes. The integration of course schedules, historical patterns, and real-time signals into scaling decisions represents an application-aware cloud orchestration strategy that goes beyond generic Kubernetes autoscaling.
+
+This thesis envisions a future where cloud-based development environments are readily available and reliable as opening a text editor on a local machine. This work contributes to making high-quality programming education accessible to larger and more diverse student populations.
