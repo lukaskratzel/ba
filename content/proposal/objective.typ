@@ -1,19 +1,19 @@
 = Objective
 
-This thesis aims to design, implement, and evaluate a comprehensive scaling API for cloud-based IDE deployments in educational platforms. Building upon Theia Cloud's existing infrastructure, the work will address the identified challenges through four primary objectives.
+This thesis aims to design, implement, and evaluate a comprehensive scaling API for cloud-based IDE deployments in educational platforms. Building upon Theia Cloud's existing infrastructure, the work will address the identified challenges through four primary objectives using the architecture shown in @fig:ssd.
 
-// 1. Design and implement a unified scaling API
-// 2. Enhance container prewarming mechanisms to eliminate cold-start delays
-// 3. Implement secure user binding and dynamic session management
-// 4. Evaluate system performance and establish operational guidelines
+1. Design and implement a unified scaling API
+2. Enhance container prewarming mechanisms to eliminate cold-start delays
+3. Implement User Binding and Session Management
+4. Evaluate system performance and establish operational guidelines
 
 == Design and Implement a Unified Scaling API
 
-This objective creates a comprehensive API as the primary interface for controlling Theia Cloud's scaling behavior. The API enables dynamic IDE provisioning through endpoints for warm pool adjustment, capacity reservation, and session lifecycle management, supporting programming language-specific configurations and real-time capacity queries. This forms the foundation for all subsequent objectives.
+This objective creates a comprehensive API as the primary interface for controlling Theia Cloud's scaling behavior. The API enables dynamic IDE provisioning through endpoints for session pool adjustment, capacity reservation, and session lifecycle management, supporting programming language-specific configurations and real-time capacity queries. This forms the foundation for all subsequent objectives.
 
 == Enhance Container Prewarming Mechanisms to Eliminate Cold-Start Delays
 
-Building upon Theia Cloud's existing prewarming mechanism, this objective refines warm pool management to ensure reliable instance handling across multiple programming language configurations. The enhanced mechanism maintains pre-initialized containers with loaded dependencies, eliminating provisioning and initialization delays while handling concurrent assignments and preventing resource leaks.
+Building upon Theia Cloud's existing prewarming mechanism, this objective refines session pool management to ensure reliable instance handling across multiple programming language configurations. The enhanced mechanism maintains pre-initialized containers with loaded dependencies, eliminating provisioning and initialization delays while handling concurrent assignments and preventing resource leaks.
 
 == Implement User Binding and Session Management
 
@@ -26,4 +26,4 @@ This objective comprehensively evaluates the system using existing Theia scale t
 #figure(
   image("../../figures/ssd.svg"),
   caption: [Subsystem decomposition diagram showing the integration of the Scaling API within Theia Cloud. The Scaling API component allows for dynamic control of the session pool. The User Binding component handles secure credential injection and workspace configuration.]
-)
+) <fig:ssd>
