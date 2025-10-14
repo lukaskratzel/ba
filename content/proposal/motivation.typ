@@ -9,3 +9,8 @@ From an *instructor* perspective, reliable and responsive cloud IDE infrastructu
 // This work advances the state of the art in cloud resource management for educational workloads. Mohan et al. note that "pre-warmed containers save the cost of launching a new container by pre-creating the container with the needed code and dependencies," dramatically reducing startup latency @mohanAgileColdStarts2019. Combining prewarming strategies with predictive models specifically tuned for educational usage patterns creates a solution that integrates course schedules, historical patterns, and real-time signals into scaling decisions.
 
 This work envisions a future where cloud-based development environments are as readily available and reliable as opening a text editor on a local machine, contributing to making high-quality programming education accessible to larger and more diverse student populations.
+
+#figure(
+  image("../../figures/activity-diagram.svg"),
+  caption: [Activity diagram showing the desired flow between student and Theia Cloud]
+)

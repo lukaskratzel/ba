@@ -9,7 +9,7 @@ This thesis aims to design, implement, and evaluate a comprehensive scaling API 
 
 == Design and Implement a Unified Scaling API
 
-This objective creates a comprehensive API as the primary interface for controlling Theia Cloud's scaling behavior. The API enables external systems to dynamically manage IDE provisioning through endpoints for warm pool adjustment, capacity reservation, and session lifecycle management, supporting programming language-specific configurations and real-time capacity queries. This forms the foundation for all subsequent objectives.
+This objective creates a comprehensive API as the primary interface for controlling Theia Cloud's scaling behavior. The API enables dynamic IDE provisioning through endpoints for warm pool adjustment, capacity reservation, and session lifecycle management, supporting programming language-specific configurations and real-time capacity queries. This forms the foundation for all subsequent objectives.
 
 == Enhance Container Prewarming Mechanisms to Eliminate Cold-Start Delays
 
@@ -22,3 +22,8 @@ This objective addresses injecting user-specific configurations into prewarmed c
 == Evaluate System Performance and Establish Operational Guidelines
 
 This objective comprehensively evaluates the system using existing Theia scale test infrastructure, systematically assessing behavior under various pool configurations and load scenarios. Experiments measure latency, utilization rates, resource efficiency, and response times when adjusting pool sizes, establishing guidelines on prediction lead times for future predictive scaling work. The evaluation produces an operational manual documenting optimal configurations, scaling thresholds, and best practices, providing empirically validated parameters for subsequent.
+
+#figure(
+  image("../../figures/ssd.svg"),
+  caption: [Subsystem decomposition diagram showing the integration of the Scaling API within Theia Cloud. The Scaling API component allows for dynamic control of the session pool. The User Binding component handles secure credential injection and workspace configuration.]
+)
