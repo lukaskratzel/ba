@@ -1,9 +1,12 @@
 = Objective
 
-This thesis aims to design, implement, and evaluate a comprehensive scaling API for cloud-based IDE
-deployments in educational platforms. Building upon Theia Cloud's existing infrastructure, the work
-will address the identified challenges through four primary objectives using the architecture shown
-in @fig:ssd.
+// TODO: Objectives should be described in two paragrpahs instead of one.
+// The total length shouuld not increase as a result of this change, as I'm currently at the
+// page limit for my proposal already.
+This thesis aims to design, implement, and evaluate a comprehensive scaling API for
+cloud-based IDE deployments in educational platforms. Building upon Theia Cloud's
+existing infrastructure, the work will address the identified challenges through four
+primary objectives using the architecture shown in @fig:ssd.
 
 1. Design and implement a unified scaling API
 2. Enhance container prewarming mechanisms to eliminate cold-start delays
@@ -12,41 +15,44 @@ in @fig:ssd.
 
 == Design and Implement a Unified Scaling API
 
-This objective creates a comprehensive API as the primary interface for controlling Theia Cloud's
-scaling behavior. The API enables dynamic IDE provisioning through endpoints for session pool
-adjustment, capacity reservation, and session lifecycle management, supporting programming
-language-specific configurations and real-time capacity queries. This forms the foundation for all
-subsequent objectives.
+This objective creates a comprehensive API as the primary interface for controlling
+Theia Cloud's scaling behavior. The API enables dynamic IDE provisioning through
+endpoints for session pool adjustment, capacity reservation, and session lifecycle
+management, supporting programming language-specific configurations and real-time
+capacity queries. This forms the foundation for all subsequent objectives.
 
 == Enhance Container Prewarming Mechanisms to Eliminate Cold-Start Delays
 
-Building upon Theia Cloud's existing prewarming mechanism, this objective refines session pool
-management to ensure reliable instance handling across multiple programming language configurations.
-The enhanced mechanism maintains pre-initialized containers with loaded dependencies, eliminating
-provisioning and initialization delays while handling concurrent assignments and preventing resource
-leaks.
+Building upon Theia Cloud's existing prewarming mechanism, this objective refines
+session pool management to ensure reliable instance handling across multiple
+programming language configurations. The enhanced mechanism maintains pre-initialized
+containers with loaded dependencies, eliminating provisioning and initialization
+delays while handling concurrent assignments and preventing resource leaks.
 
 == Implement User Binding and Session Management
 
-This objective addresses injecting user-specific configurations into prewarmed containers without
-compromising isolation. When students launch IDEs from Artemis, the system dynamically binds them to
-pool containers, injecting authentication tokens, repository credentials, and workspace settings
-while preventing credential leakage and ensuring proper session cleanup. The binding mechanism
-supports the Artemis Scorpio extension workflow for problem statements, submissions, and build
+This objective addresses injecting user-specific configurations into prewarmed
+containers without compromising isolation. When students launch IDEs from Artemis,
+the system dynamically binds them to pool containers, injecting authentication
+tokens, repository credentials, and workspace settings while preventing credential
+leakage and ensuring proper session cleanup. The binding mechanism supports the
+Artemis Scorpio extension workflow for problem statements, submissions, and build
 feedback.
 
 == Evaluate System Performance and Establish Operational Guidelines
 
-This objective comprehensively evaluates the system using existing Theia scale test infrastructure,
-systematically assessing behavior under various pool configurations and load scenarios. Experiments
-measure latency, utilization rates, resource efficiency, and response times when adjusting pool
-sizes, establishing guidelines on prediction lead times for future predictive scaling work. The
-evaluation produces an operational manual documenting optimal configurations, scaling thresholds,
-and best practices, providing empirically validated parameters for subsequent.
+This objective comprehensively evaluates the system using existing Theia scale test
+infrastructure, systematically assessing behavior under various pool configurations
+and load scenarios. Experiments measure latency, utilization rates, resource
+efficiency, and response times when adjusting pool sizes, establishing guidelines on
+prediction lead times for future predictive scaling work. The evaluation produces an
+operational manual documenting optimal configurations, scaling thresholds, and best
+practices, providing empirically validated parameters for subsequent.
 
 #figure(
   image("../../figures/ssd.svg"),
-  caption: [Subsystem decomposition diagram showing the integration of the Scaling API within Theia
-    Cloud. The Scaling API component allows for dynamic control of the session pool. The User
-    Binding component handles secure credential injection and workspace configuration.],
+  caption: [Subsystem decomposition diagram showing the integration of the Scaling
+    API within Theia Cloud. The Scaling API component allows for dynamic control of
+    the session pool. The User Binding component handles secure credential injection
+    and workspace configuration.],
 ) <fig:ssd>
