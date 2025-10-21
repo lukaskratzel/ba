@@ -3,9 +3,9 @@
 The landscape of computer science education has transformed over the past decade.
 Krusche et al. note that the surge in student numbers has rendered manual assessment
 of programming exercises impractical, prompting the need for automated assessment
-systems @kruscheArtemisAutomaticAssessment2018.
-In response, platforms like Artemis have emerged to provide automatic programming
-exercise assessment with quick feedback at scale @kruscheArtemisAutomaticAssessment2018.
+systems @kruscheArtemisAutomaticAssessment2018. In response, platforms like Artemis
+have emerged to provide automatic programming exercise assessment with quick feedback
+at scale @kruscheArtemisAutomaticAssessment2018.
 
 Online IDE services for training, assessments, and development environments have
 proliferated as learning platforms increasingly migrate their development
@@ -14,16 +14,11 @@ infrastructure to the cloud @srinivasaBadIDEaWeaponizing2022
 local setup requirements and provide consistent, standardized development experiences
 to students @schmidtInclusiveLearningEnvironments2024.
 
-// TODO: uncited claim
-Eclipse Theia, an extensible cloud and desktop IDE platform, has become a popular
-choice for educational deployments.
-//
-Theia Cloud represents a solution for deploying and managing Theia-based IDEs on
-Kubernetes at scale. It provides a Kubernetes operator that manages the lifecycle of
-IDE instances, a REST service for session management, and custom resource definitions
-that simplify configuration.
-// TODO: uncited claim
-When integrated with learning management systems like Artemis, Theia Cloud enables
-students to launch pre-configured development environments from their course
-assignments without any local installation, receiving timely automated feedback on
-their programming work.
+Eclipse Theia is an extensible cloud and desktop IDE platform. Theia Cloud enables
+deployment and management of Theia-based IDEs on Kubernetes at scale through a
+Kubernetes operator for instance lifecycle management, a REST service for session
+handling, and custom resource definitions that simplify configuration.
+
+Ideally, the integration with a learning platform would enable students to launch
+pre-configured development environments from their course assignments without any
+local installation, receiving timely automated feedback.

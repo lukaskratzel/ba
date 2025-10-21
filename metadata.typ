@@ -1,6 +1,6 @@
 // Enter your thesis data here:
-#let titleEnglish = "Prewarming and Predictive Scaling for Cloud-Based IDEs in Educational Platforms"
-#let titleGerman = "Prädiktive Skalierung und Vorwärmung für Cloud-basierte IDEs in Bildungsplattformen"
+#let titleEnglish = "Prewarming for Cloud-Based IDEs in Educational Platforms"
+#let titleGerman = "Prewarming für Cloud-basierte IDEs in Bildungsplattformen"
 #let degree = "Bachelor"
 #let program = "Information Systems"
 #let examiner = "Prof. Dr. Stephan Krusche"
