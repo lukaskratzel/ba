@@ -187,3 +187,9 @@ For the best thesis proposal feedback experience:
 - [Typst Documentation](https://typst.app/docs/)
 - [Typst Guide for LaTeX Users](https://typst.app/docs/guides/guide-for-latex-users/)
 - [Typst VS Code Extension (inofficial)](https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp)
+
+## Format
+
+```bash
+typstyle -i . --wrap-text --line-width 100
+```
