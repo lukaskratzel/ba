@@ -8,6 +8,6 @@
       ..for (term, desc) in entries {
         ([*#term:*], desc)
       }
-    )
+    ),
   )
 }

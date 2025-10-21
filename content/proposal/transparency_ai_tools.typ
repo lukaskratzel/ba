@@ -1,2 +1,6 @@
-In the preparation of this proposal, I leveraged several AI-powered tools to assist with content generation, organization, and refinement. I utilized GPT-5 to complete initial research around related literature and point me toward relevant sources. I used Claude 4.5 Sonnet through Cursor to help me navigate the problem space technically and refine my proposal with respect to content and structure across all sections.
-I have carefully checked all texts created with these tools to ensure that they are correct and make sense.
+In the preparation of this proposal, I leveraged several AI-powered tools to assist with content
+generation, organization, and refinement. I utilized GPT-5 to complete initial research around
+related literature and point me toward relevant sources. I used Claude 4.5 Sonnet through Cursor to
+help me navigate the problem space technically and refine my proposal with respect to content and
+structure across all sections. I have carefully checked all texts created with these tools to ensure
+that they are correct and make sense.

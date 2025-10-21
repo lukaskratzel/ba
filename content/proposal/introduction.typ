@@ -1,7 +1,22 @@
 = Introduction
 
-The landscape of computer science education has transformed over the past decade. Krusche et al. note that the surge in student numbers has rendered manual assessment of programming exercises impractical, prompting the need for automated assessment systems @kruscheArtemisAutomaticAssessment2018. In response, platforms like Artemis have emerged to provide automatic programming exercise assessment with quick feedback at scale.
+The landscape of computer science education has transformed over the past decade. Krusche et al.
+note that the surge in student numbers has rendered manual assessment of programming exercises
+impractical, prompting the need for automated assessment systems
+@kruscheArtemisAutomaticAssessment2018. In response, platforms like Artemis have emerged to provide
+automatic programming exercise assessment with quick feedback at scale.
 
-Online IDE services for training, assessments, and development environments have proliferated as learning platforms increasingly migrate their development infrastructure to the cloud @srinivasaBadIDEaWeaponizing2022 @usa:2024:CloudBasedLightweightModern. These cloud-hosted environments eliminate local setup requirements and provide consistent, standardized development experiences across diverse student populations.
+Online IDE services for training, assessments, and development environments have proliferated as
+learning platforms increasingly migrate their development infrastructure to the cloud
+@srinivasaBadIDEaWeaponizing2022 @usa:2024:CloudBasedLightweightModern. These cloud-hosted
+environments eliminate local setup requirements and provide consistent, standardized development
+experiences across diverse student populations.
 
-Eclipse Theia, an extensible cloud and desktop IDE platform, has become a popular choice for educational deployments due to its flexibility and feature completeness. Theia Cloud represents a comprehensive solution for deploying and managing Theia-based IDEs on Kubernetes at scale, providing a Kubernetes operator that manages the lifecycle of IDE instances, a REST service for session management, and custom resource definitions that simplify configuration. When integrated with learning management systems like Artemis, Theia Cloud enables students to launch pre-configured development environments from their course assignments without any local installation, receiving timely automated feedback on their programming work.
+Eclipse Theia, an extensible cloud and desktop IDE platform, has become a popular choice for
+educational deployments due to its flexibility and feature completeness. Theia Cloud represents a
+comprehensive solution for deploying and managing Theia-based IDEs on Kubernetes at scale, providing
+a Kubernetes operator that manages the lifecycle of IDE instances, a REST service for session
+management, and custom resource definitions that simplify configuration. When integrated with
+learning management systems like Artemis, Theia Cloud enables students to launch pre-configured
+development environments from their course assignments without any local installation, receiving
+timely automated feedback on their programming work.

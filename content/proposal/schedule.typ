@@ -1,8 +1,8 @@
 = Schedule
 
-The project timeline spans from November 10, 2024, to April 10, 2025.
-Results will be delivered and tested incrementally through the iterations.
-The implementation will proceed through iterative milestones designed to systematically address the outlined objectives:
+The project timeline spans from November 10, 2024, to April 10, 2025. Results will be delivered and
+tested incrementally through the iterations. The implementation will proceed through iterative
+milestones designed to systematically address the outlined objectives:
 
 #set heading(numbering: none)
 == Iteration 1: Foundation and Scaling API Design (Weeks 1-4, Objective 4.1)

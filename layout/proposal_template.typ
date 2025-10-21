@@ -29,7 +29,7 @@
     supervisors: supervisors,
     author: author,
     startDate: startDate,
-    submissionDate: submissionDate
+    submissionDate: submissionDate,
   )
 
   print_page_break(print: is_print)
@@ -43,9 +43,9 @@
 
   // Set body font family.
   set text(
-    font: fonts.body, 
-    size: 12pt, 
-    lang: "en"
+    font: fonts.body,
+    size: 12pt,
+    lang: "en",
   )
 
   show math.equation: set text(weight: 400)

@@ -19,16 +19,26 @@
 
   // Set body font family.
   set text(
-    font: fonts.body, 
-    size: 12pt, 
-    lang: "en"
+    font: fonts.body,
+    size: 12pt,
+    lang: "en",
   )
-  
-  align(center, text(font: fonts.sans, 1.7em, weight: 700, "Presentation Feedbacklog" + linebreak() + titleEnglish))
+
+  align(center, text(
+    font: fonts.sans,
+    1.7em,
+    weight: 700,
+    "Presentation Feedbacklog" + linebreak() + titleEnglish,
+  ))
 
   v(7.5mm)
 
-  align(center, text(font: fonts.sans, 1.2em, weight: 400, feedbacklogSubmissionDate.display("[day]. [month repr:long] [year]")))
+  align(center, text(
+    font: fonts.sans,
+    1.2em,
+    weight: 400,
+    feedbacklogSubmissionDate.display("[day]. [month repr:long] [year]"),
+  ))
 
   v(7.5mm)
 
@@ -42,7 +52,10 @@
     let supervisorField = "Supervisor" + if supervisors.len() > 1 [s]
     entries.push((supervisorField, supervisors.join(", ")))
   }
-  entries.push(("Presentation Date", presentationDate.display("[day].[month].[year]")))
+  entries.push((
+    "Presentation Date",
+    presentationDate.display("[day].[month].[year]"),
+  ))
 
   render-title-table(entries)
 
