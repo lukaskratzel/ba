@@ -11,8 +11,8 @@ feedback positively affect student engagement and learning outcomes in programmi
 courses @benottiEffectWebbasedCoding2018. With shorter startup delays, students can
 maintain momentum and focus on problem-solving.
 
-From an *instructor* perspective, reliable and responsive cloud IDE infrastructure
-enables more ambitious and effective teaching strategies. If the infrastrucutre can
+From an *instructor's* perspective, reliable and responsive cloud IDE infrastructure
+enables more ambitious and effective teaching strategies. If the infrastructure can
 ensure capacity for synchronized activities, instructors can confidently design
 interactive exercises and live coding demonstrations involving entire classes.
 Krusche and Seitz showed that integrated automated assessment systems "help students
@@ -26,6 +26,6 @@ more diverse student populations.
 
 #figure(
   image("../../figures/activity-diagram.svg"),
-  caption: [Desired activity flow showing seamless integration between student,
-    Artemis, and Theia Cloud],
+  caption: [Desired activity flow showing seamless integration between a student and
+    Theia Cloud],
 ) <fig:activity-diagram>

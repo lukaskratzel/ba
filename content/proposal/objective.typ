@@ -1,9 +1,9 @@
-= Objective
+= Objectives
 
 This thesis aims to design, implement, and evaluate a comprehensive scaling API for
 cloud-based IDE deployments in educational platforms. Building upon Theia Cloud's
 existing infrastructure, the work will address the identified challenges through four
-primary objectives using the architecture shown in @fig:ssd.
+primary objectives:
 
 1. Design and implement a unified scaling API
 2. Enhance container prewarming mechanisms to eliminate cold-start delays
@@ -27,8 +27,8 @@ session pool management to ensure reliable instance handling across multiple
 programming language configurations.
 
 The enhanced mechanism maintains pre-initialized containers with loaded dependencies,
-eliminating provisioning and initialization delays while handling concurrent
-assignments and preventing resource leaks.
+reducing provisioning and initialization delays while handling concurrent assignments
+and preventing resource leaks.
 
 == Implement User Binding and Session Management
 
@@ -51,11 +51,3 @@ response times when adjusting pool sizes.
 The evaluation establishes guidelines on prediction lead times for future predictive
 scaling work and produces an operational manual documenting optimal configurations,
 scaling thresholds, and best practices with empirically validated parameters.
-
-#figure(
-  image("../../figures/ssd.svg"),
-  caption: [Subsystem decomposition diagram showing the integration of the Scaling
-    API within Theia Cloud. The Scaling API component allows for dynamic control of
-    the session pool. The User Binding component handles secure credential injection
-    and workspace configuration.],
-) <fig:ssd>

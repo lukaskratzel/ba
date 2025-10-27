@@ -1,6 +1,6 @@
 = Schedule
 
-The project timeline spans from November 10, 2024, to April 10, 2025. Results will be
+The project timeline spans from November 10, 2025, to April 10, 2026. Results will be
 delivered and tested incrementally through the iterations. The implementation will
 proceed through iterative milestones designed to systematically address the outlined
 objectives:

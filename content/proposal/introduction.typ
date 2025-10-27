@@ -14,11 +14,18 @@ infrastructure to the cloud @srinivasaBadIDEaWeaponizing2022
 local setup requirements and provide consistent, standardized development experiences
 to students @schmidtInclusiveLearningEnvironments2024.
 
-Eclipse Theia is an extensible cloud and desktop IDE platform. Theia Cloud enables
-deployment and management of Theia-based IDEs on Kubernetes at scale through a
-Kubernetes operator for instance lifecycle management, a REST service for session
-handling, and custom resource definitions that simplify configuration.
+Eclipse Theia is an extensible cloud and desktop IDE platform. It provides a unified
+interface for various programming languages in a browser-based environment. Theia
+Cloud enables the deployment and management of Theia-based IDEs on Kubernetes at
+scale. Artemis integrates Theia as shown in @fig:ssd.
 
-Ideally, the integration with a learning platform would enable students to launch
-pre-configured development environments from their course assignments without any
-local installation, receiving timely automated feedback.
+#figure(
+  image("../../figures/ssd2.svg"),
+  caption: [The deployment diagram showing the integration between Artemis and Theia
+    Cloud.],
+) <fig:ssd>
+
+
+// Ideally, the integration with a learning platform enables students to launch
+// pre-configured development environments from their course assignments without any
+// local installation, receiving timely automated feedback.
