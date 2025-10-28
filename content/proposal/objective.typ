@@ -28,7 +28,7 @@ programming language configurations.
 
 The enhanced mechanism maintains pre-initialized containers with loaded dependencies,
 reducing provisioning and initialization delays while handling concurrent assignments
-and preventing resource leaks.
+Moreover, preventing resource leaks.
 
 == Implement User Binding and Session Management
 
@@ -43,11 +43,11 @@ submissions, and build feedback.
 
 == Evaluate System Performance and Establish Operational Guidelines
 
-This objective evaluates the system using existing Theia scale test infrastructure,
+This objective evaluates the system using the existing Theia scale test infrastructure,
 systematically assessing behavior under various pool configurations and load
 scenarios. Experiments measure latency, utilization rates, resource efficiency, and
 response times when adjusting pool sizes.
 
 The evaluation establishes guidelines on prediction lead times for future predictive
-scaling work and produces an operational manual documenting optimal configurations,
+scaling work, producing an operational manual documenting optimal configurations,
 scaling thresholds, and best practices with empirically validated parameters.

@@ -1,8 +1,8 @@
 = Problem
 
-Despite the benefits of cloud-based IDEs like Theia Cloud, their practical use in
-educational settings is hindered by critical issues around performance, user
-experience, and infrastructure scalability.
+Despite the benefits of cloud-based IDEs like Theia Cloud, critical issues around
+performance, user experience, and infrastructure scalability impede their practical
+use in educational settings.
 
 One core problem is rooted in startup delays. When a student starts a session, the
 system provisions a Kubernetes pod to host the development session. This process can

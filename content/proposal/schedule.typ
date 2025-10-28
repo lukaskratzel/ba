@@ -1,6 +1,6 @@
 = Schedule
 
-The project timeline spans from November 10, 2025, to April 10, 2026. Results will be
+The project timeline spans from 10 November 2025 to 10 April 2026. Results will be
 delivered and tested incrementally through the iterations. The implementation will
 proceed through iterative milestones designed to systematically address the outlined
 objectives:
@@ -13,13 +13,13 @@ objectives:
 
 == Iteration 2: Prewarming Pool Enhancement (Weeks 5-9, Objective 4.2)
 
-- Debug and refine existing Theia Cloud prewarming mechanism
+- Debug and refine the existing Theia Cloud prewarming mechanism
 - Support multiple programming language pool configurations
 
 == Iteration 3: Secure User Binding and Session Management (Weeks 10-14, Objective 4.3)
 
-- Design secure credential injection architecture for prewarmed containers
-- Implement dynamic user binding mechanism with session state management
+- Design a secure credential injection architecture for prewarmed containers
+- Implement a dynamic user binding mechanism with session state management
 - Integrate Scorpio workflow
 
 == Iteration 4: Initial Evaluation and Provisioning Experiments (Weeks 15-17, Objective 4.4)
