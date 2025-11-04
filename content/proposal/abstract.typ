@@ -10,4 +10,4 @@ mechanisms. The solution provides a unified API that enables scaling through dyn
 session pool management and secure user-to-container binding. The system pre-creates
 pools of generic IDE containers and injects user-specific credentials, workspace
 settings, and routing configurations when students launch sessions, reducing startup
-latency while maintaining security isolation.
+latency while maintaining isolation.

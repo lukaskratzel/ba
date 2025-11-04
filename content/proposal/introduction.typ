@@ -20,7 +20,7 @@ Cloud enables the deployment and management of Theia-based IDEs on Kubernetes at
 scale. Artemis integrates Theia as shown in @fig:ssd.
 
 #figure(
-  image("../../figures/ssd2.svg"),
+  image("../../figures/ssd3.svg"),
   caption: [The deployment diagram showing the integration between Artemis and Theia
     Cloud.],
 ) <fig:ssd>
