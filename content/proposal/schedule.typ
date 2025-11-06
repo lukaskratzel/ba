@@ -11,16 +11,16 @@ objectives:
 - Instrument Theia Cloud operator to collect detailed session startup telemetry
 - Design and implement API endpoints for scaling control
 
-== Iteration 2: Prewarming Pool Enhancement (Weeks 5-9, Objective 4.2)
-
-- Debug and refine the existing Theia Cloud prewarming mechanism
-- Support multiple programming language pool configurations
-
-== Iteration 3: Secure User Binding and Session Management (Weeks 10-14, Objective 4.3)
+== Iteration 2: Secure User Binding and Session Management (Weeks 5-9, Objective 4.2)
 
 - Design a secure credential injection architecture for prewarmed containers
 - Implement a dynamic user binding mechanism with session state management
 - Integrate Scorpio workflow
+
+== Iteration 3: Prewarming Pool Enhancement (Weeks 10-14, Objective 4.3)
+
+- Debug and refine the existing Theia Cloud prewarming mechanism
+- Support multiple programming language pool configurations
 
 == Iteration 4: Initial Evaluation and Provisioning Experiments (Weeks 15-17, Objective 4.4)
 
