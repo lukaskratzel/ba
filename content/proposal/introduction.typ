@@ -22,7 +22,7 @@ scale. Artemis integrates Theia as shown in @fig:ssd.
 #figure(
   image("../../figures/ssd3.svg"),
   caption: [The deployment diagram showing the integration between Artemis and Theia
-    Cloud.],
+    Cloud. Adapted from Schmidt @schmidtInclusiveLearningEnvironments2024.],
 ) <fig:ssd>
 
 
