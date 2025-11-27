@@ -6,9 +6,9 @@ existing infrastructure, the work will address the identified challenges through
 primary objectives:
 
 1. Design and implement a unified scaling API
-2. Implement User Binding and Session Management
-3. Enhance container prewarming mechanisms to reduce cold-start delays
-4. Test system performance and establish operational guidelines
+2. Implement user binding and session management
+3. Enhance container prewarming mechanisms
+4. Test system performance and establish guidelines
 
 #figure(
   image("../../figures/activity-diagram.svg"),
@@ -18,10 +18,10 @@ primary objectives:
 
 == Design and Implement a Unified Scaling API
 
-This objective creates a comprehensive API as the primary interface for controlling
-Theia Cloud's scaling behavior. The API enables dynamic IDE provisioning through
-endpoints for session pool adjustment, capacity reservation, and session lifecycle
-management.
+A comprehensive API will serve as the primary interface for controlling Theia Cloud's
+scaling behavior. Through endpoints for session pool adjustment, capacity
+reservation, and session lifecycle management, this API enables dynamic IDE
+provisioning tailored to educational workloads.
 
 It supports programming language-specific configurations and real-time capacity
 queries, forming the foundation for all subsequent objectives. The implementation
@@ -31,24 +31,23 @@ session latency, pool utilization, and resource efficiency.
 
 == Implement User Binding and Session Management
 
-This objective addresses injecting user-specific configurations into prewarmed
-containers without compromising isolation. As illustrated in @fig:activity-diagram,
-when students launch IDEs from Artemis, the system dynamically binds them to pool
-containers, injecting authentication tokens, repository credentials, and workspace
-settings.
+Prewarmed containers require a mechanism for injecting user-specific configurations
+without compromising isolation. @fig:activity-diagram illustrates this flow. When a
+student starts an exercise, Theia Cloud first checks for available prewarmed pods. If
+one exists, the system skips the costly provisioning and initialization steps and
+directly binds the user environment, injecting authentication tokens, repository
+credentials, and workspace settings into the running container.
 
 The binding mechanism prevents credential leakage and ensures proper session cleanup
 while supporting the Artemis Scorpio extension workflow for problem statements,
 submissions, and test feedback. This work will allow the user-to-pod assignment
 process to happen at runtime of the prewarmed session.
 
-== Enhance Container Prewarming Mechanisms to Reduce Cold-Start Delays
+== Enhance Container Prewarming Mechanisms
 
 Building upon Theia Cloud's existing prewarming mechanism, this objective refines
 session pool management to ensure reliable instance handling across multiple
-programming language configurations. As shown in @fig:activity-diagram, when a
-student starts an exercise, the system first checks for available prewarmed pods
-before provisioning new instances.
+programming language configurations.
 
 The enhanced mechanism maintains pre-initialized containers with loaded dependencies,
 reducing provisioning and initialization delays while handling concurrent assignments
@@ -56,7 +55,7 @@ and preventing resource leaks. The system will replace static pool sizing with
 dynamic pool controllers that can scale based on demand with configurable safety
 bounds to balance responsiveness with resource efficiency.
 
-== Test System Performance and Establish Operational Guidelines
+== Test System Performance and Establish Guidelines
 
 This objective tests the system using the existing Theia scale test infrastructure,
 systematically assessing behavior under various pool configurations and load
