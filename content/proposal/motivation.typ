@@ -3,8 +3,13 @@
 Addressing the startup latency issues in cloud-based Integrated Development
 Environments is important from a scientific perspective, but also for improving
 educational outcomes and driving adoption of scalable learning platforms. Prewarming
-offers a solution by handling significant initialization tasks upfront, as
-illustrated in @fig:activity-diagram.
+offers a solution by handling significant initialization tasks upfront.
+
+@fig:activity-diagram illustrates this approach. When a student starts an exercise,
+Theia Cloud first checks for available prewarmed pods. If one exists, the system
+skips the costly provisioning steps including pod creation and IDE startup. It
+directly binds the user environment to the ready pod. This binding injects the
+necessary authentication tokens, repository credentials, and workspace settings.
 
 For students, immediate access to development environments can enhance their learning
 experience. Research by Benotti et al. demonstrated that web-based coding tools that

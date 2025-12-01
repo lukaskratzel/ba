@@ -31,15 +31,10 @@ session latency, pool utilization, and resource efficiency.
 
 == Implement User Binding and Session Management
 
-Prewarmed containers require a mechanism for injecting user-specific configurations
-without compromising isolation. @fig:activity-diagram illustrates this flow. When a
-student starts an exercise, Theia Cloud first checks for available prewarmed pods. If
-one exists, the system skips the costly provisioning and initialization steps and
-directly binds the user environment, injecting authentication tokens, repository
-credentials, and workspace settings into the running container.
-
-The binding mechanism prevents credential leakage and ensures proper session cleanup
-while supporting the Artemis Scorpio extension workflow for problem statements,
+As outlined in @fig:activity-diagram, prewarmed containers require a mechanism for
+injecting user-specific configurations without compromising isolation. The binding
+mechanism prevents credential leakage and ensures proper session cleanup while
+supporting the Artemis Scorpio extension workflow for problem statements,
 submissions, and test feedback. This work will allow the user-to-pod assignment
 process to happen at runtime of the prewarmed session.
 
