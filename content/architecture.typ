@@ -1,4 +1,4 @@
-= Architecture
+= System Design
 
 This chapter details the system architecture designed to fulfill the requirements
 outlined in the previous chapter. It begins by establishing the core design goals
@@ -6,12 +6,13 @@ that guided the architectural decisions. Subsequently, it breaks down the system
 its primary subsystems, detailing the internal components of the Theia Cloud
 Operator, the routing layer, and the IDE runtime. The chapter then maps these
 software components to their underlying hardware and infrastructure environments.
-Finally, it explains how persistent state is managed and how scaling parameters are
-controlled to enable programmatic scaling.
+Finally, it explains how persistent state is managed, how scaling parameters are
+controlled to enable programmatic scaling, and how backend observability is wired
+into the service and operator.
 
 == Design Goals
 
-The architecture of the eager session startup pipeline was driven by five primary
+The architecture of the eager session startup pipeline was driven by six primary
 design goals, directly derived from the functional and non-functional requirements:
 
 1. *Minimize Startup Latency*: The primary objective is to reduce the time it takes
@@ -33,6 +34,10 @@ design goals, directly derived from the functional and non-functional requiremen
 5. *Enable Programmatic Scaling*: The system must expose a clear, API-driven control
   surface for scaling parameters, allowing external systems or future
   machine-learning models to adjust prewarmed pool sizes based on anticipated demand.
+6. *Support Operability*: The system must remain diagnosable in production.
+  Fine-grained timing and error reporting on session-start paths in the service and
+  operator are required to validate optimizations, explain variance under load, and
+  shorten incident response.
 
 == Subsystem Decomposition
 
@@ -69,20 +74,39 @@ extended with several new components to manage the eager startup lifecycle:
   IDE container's internal service and securely transmits the collected user
   environment variables via HTTP.
 
-=== Routing Layer (Gateway API)
+=== Routing Layer
 
 To address the latency introduced by routing propagation, the architecture migrates
 from `ingress-nginx` to the Kubernetes Gateway API, utilizing Envoy Gateway as the
 controller.
 
-- *IngressManager*: This component centralizes operations on shared `HTTPRoute`
+The decision to replace the legacy Ingress controller is rooted in the fundamental
+architectural differences in how NGINX and Envoy handle dynamic configuration
+updates. According to official project documentation, `ingress-nginx` derives an
+`nginx.conf` file from Kubernetes resources; any effective configuration change
+requires the controller to rebuild the model from scratch and trigger a proxy reload
+@ingress-nginx-docs. Under high churn---such as concurrent session starts during an
+exam---these reload cycles can compound, leading to operational bottlenecks and propagation delays @ingress-nginx-issues.
+
+By contrast, the Envoy proxy supports runtime routing updates without requiring a hot
+restart. This is achieved through the Route Discovery Service (RDS) and the broader
+xDS protocol suite, which allows configuration state to be swapped in gracefully
+@envoy-docs.
+
+While peer-reviewed academic literature directly comparing these implementations is
+sparse, independent Gateway API benchmarks provide strong quantitative support for
+this architectural shift. In large-scale route propagation tests, Envoy Gateway has
+demonstrated lower baseline propagation delays compared to NGINX-based
+implementations @gateway-api-bench-part2. This
+dynamic configuration capability is essential for minimizing the time between a
+prewarmed pod reservation and the session becoming reachable to the student.
+
+- *Ingress Manager:* This component centralizes operations on shared `HTTPRoute`
   resources. Instead of creating a dedicated ingress object for every session, the
   manager appends path-specific routing rules to a single, shared `HTTPRoute`. This
-  approach aligns better with Envoy's dynamic configuration capabilities,
-  significantly reducing the time it takes for a newly assigned session to become
-  externally reachable. The manager also implements retry logic with jittered backoff
-  to handle `409 Conflict` errors when multiple sessions attempt to update the route
-  concurrently.
+  approach aligns with Envoy's dynamic configuration capabilities, significantly
+  reducing the time it takes for a newly assigned session to become externally
+  reachable.
 
 === IDE Runtime Components
 
@@ -112,6 +136,23 @@ gap between the generic infrastructure and the user's specific context.
 // 5. Scorpio reads from bridge and clones repo.
 // This diagram proves NFR1 by showing the URL is returned before personalization finishes.
 // <fig:architecture-sequence>
+
+== Observability (Sentry)
+
+Backend observability is implemented with *Sentry* for the Theia Cloud REST service
+and the operator. Incoming session-start requests are tied to *performance
+transactions*; sub-operations are modeled as *spans* so that wall-clock time is
+attributed to concrete steps—for example pool lookup and reservation, Kubernetes
+resource mutations, `HTTPRoute` updates via the ingress manager, and the asynchronous
+data-injection loop toward the IDE pod.
+
+This complements the aggregate benchmark in Chapter~5: end-to-end latency shows
+whether the system is fast enough, while Sentry shows *where* time is spent when
+regressions or tail latencies appear. Errors and slow operations are correlated with
+release and deployment context (e.g., service version, cluster environment) without
+logging full session payloads. Credentials and other injected secrets are excluded
+from Sentry payloads; span names and tags emphasize operational phases rather than
+user-specific content, in line with NFR6 (Backend Observability).
 
 == Hardware Software Mapping
 

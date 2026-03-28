@@ -3,16 +3,16 @@
 The landscape of computer science education has transformed over the past decade.
 Krusche et al. note that the surge in student numbers has rendered manual assessment
 of programming exercises impractical, prompting the need for automated assessment
-systems @kruscheArtemisAutomaticAssessment2018. In response, platforms like Artemis
+systems @krusche:2018:ArtemisAutomaticAssessment. In response, platforms like Artemis
 have emerged to provide automatic programming exercise assessment with quick feedback
-at scale @kruscheArtemisAutomaticAssessment2018.
+at scale @krusche:2018:ArtemisAutomaticAssessment.
 
 Online IDE services for training, assessments, and development environments have
 proliferated as learning platforms increasingly migrate their development
-infrastructure to the cloud @srinivasaBadIDEaWeaponizing2022
+infrastructure to the cloud @srinivasa:2022:BadIDEaWeaponizing
 @usa:2024:CloudBasedLightweightModern. These cloud-hosted environments eliminate
 local setup requirements and provide consistent, standardized development experiences
-to students @schmidtInclusiveLearningEnvironments2024.
+to students @schmidt:2024:InclusiveLearningEnvironmentsa.
 
 Eclipse Theia is an extensible cloud and desktop IDE platform. It provides a unified
 interface for various programming languages in a browser-based environment. Theia
@@ -22,7 +22,7 @@ scale. Artemis integrates Theia as shown in @fig:ssd.
 #figure(
   image("../figures/ssd3.svg"),
   caption: [The deployment diagram showing the integration between Artemis and Theia
-    Cloud. Adapted from Schmidt @schmidtInclusiveLearningEnvironments2024.],
+    Cloud. Adapted from Schmidt @schmidt:2024:InclusiveLearningEnvironmentsa.],
 ) <fig:ssd>
 
 == Problem
@@ -39,7 +39,7 @@ deadlines.
 
 To address startup latency, Theia Cloud can maintain pools of prewarmed containers,
 an approach validated by Mohan et al. in the context of serverless functions
-@mohanAgileColdStarts2019. However, assigning users to prewarmed environments
+@mohan:2019:AgileColdStarts. However, assigning users to prewarmed environments
 presents a significant challenge. Prewarmed environments must remain generic before
 assignment, while each student requires personalized configurations like version
 control credentials and assignment metadata. Technically, injecting this
@@ -69,7 +69,7 @@ settings into the already running container.
 For students, immediate access to development environments can enhance their learning
 experience. Research by Benotti et al. demonstrated that web-based coding tools that
 provide quick feedback significantly enhance student engagement and improve learning
-outcomes in programming courses @benottiEffectWebbasedCoding2018. By minimizing
+outcomes in programming courses @benotti:2018:EffectWebbasedCoding. By minimizing
 startup delays, students can maintain focus and momentum, allowing them to focus on
 problem-solving.
 
@@ -86,8 +86,9 @@ This thesis implements the architectural basis for low-latency personalized clou
 sessions in educational environments. Building upon Theia Cloud's existing
 infrastructure, the core contribution is a production-oriented eager session startup
 pipeline that combines prewarmed instance pools, concurrency-safe handling of burst
-session starts, runtime session personalization, faster routing, and integration with
-Artemis.
+session starts, runtime session personalization, faster routing, integration with
+Artemis, and server-side observability with Sentry for timing and error visibility
+across the service and operator.
 
 The work addresses the identified challenges through the following primary
 objectives:
@@ -116,14 +117,21 @@ objectives:
 5. *Benchmark:* Assess the system's performance, comparing cold versus eager startup
   latency and operational behavior under concurrent load.
 
+6. *Observability:* Integrate Sentry into the Theia Cloud service and operator so
+  that session-start paths expose structured performance data (transactions and
+  spans) for critical steps such as pool reservation, routing updates, and
+  asynchronous data injection, complementing aggregate benchmark results with
+  fine-grained timing.
+
 == Outline
 
 The remainder of this thesis is structured as follows: Chapter 2 provides the
 background and context, detailing the challenges of startup latency and runtime
 personalization in cloud IDEs. Chapter 3 presents the system design, including the
-architecture of eager session startup, runtime data injection, and the scaling API.
-Chapter 4 details the implementation of the core components, such as the prewarmed
-resource pool, the data bridge, and the routing migration. Chapter 5 benchmarks the
-system's performance, comparing startup latencies and analyzing behavior under
-concurrent workloads. Finally, Chapter 6 concludes the thesis and discusses future
-work, including the potential for predictive scaling.
+architecture of eager session startup, runtime data injection, the scaling API, and
+operability requirements for backend observability. Chapter 4 details the
+architecture of the core components, such as the prewarmed resource pool, the data
+bridge, the routing migration, and Sentry instrumentation in the service and
+operator. Chapter 5 benchmarks the system's performance, comparing startup latencies
+and analyzing behavior under concurrent workloads. Finally, Chapter 6 concludes the
+thesis and discusses future work, including the potential for predictive scaling.

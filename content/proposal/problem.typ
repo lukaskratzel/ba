@@ -12,6 +12,6 @@ delays during assignment releases or approaching deadlines.
 Binding users to prewarmed environments also presents a significant challenge to
 system administrators. To address startup latency, Theia Cloud maintains pools of
 prewarmed containers, an approach validated by Mohan et al.
-@mohanAgileColdStarts2019. However, prewarmed environments are generic, while each
+@mohan:2019:AgileColdStarts. However, prewarmed environments are generic, while each
 student requires personalized configurations like version control credentials and
 assignment metadata. Technically, this personalization poses a significant challenge.

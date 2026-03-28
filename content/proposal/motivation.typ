@@ -14,7 +14,7 @@ necessary authentication tokens, repository credentials, and workspace settings.
 For students, immediate access to development environments can enhance their learning
 experience. Research by Benotti et al. demonstrated that web-based coding tools that
 provide quick feedback significantly enhance student engagement and improve learning
-outcomes in programming courses @benottiEffectWebbasedCoding2018. By minimizing
+outcomes in programming courses @benotti:2018:EffectWebbasedCoding. By minimizing
 startup delays, students can maintain focus and momentum, allowing them to focus on
 problem-solving.
 

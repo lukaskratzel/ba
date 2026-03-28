@@ -142,6 +142,12 @@ non-functional requirements (NFRs) that define its operational quality:
 - *NFR5 Maintainability*: The eager startup logic should integrate with the existing
   operator patterns. It should build upon the existing `AppDefinition` and `Session`
   concepts.
+- *NFR6 Backend Observability*: The Theia Cloud service and operator must support
+  production-oriented monitoring of session-start performance and failures. Critical
+  control-plane and API steps must be attributable in telemetry (e.g., via
+  distributed transactions and spans) so that latency and errors can be diagnosed
+  without relying solely on end-to-end measurements. Sensitive data must not be
+  exposed in telemetry beyond what is necessary for operations.
 
 // TODO: choose which diagrams to use
 
