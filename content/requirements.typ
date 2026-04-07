@@ -303,9 +303,9 @@ simultaneously, these assignment steps must handle concurrency safely (#link(
   <fr6>,
 )[FR6]).
 
-For the student, this eager provisioning minimizes idle time. By shifting heavy
+For the student, this eager provisioning minimizes idle time. By shifting
 initialization to occur before the request, latency is reduced, allowing productive
-work to begin sooner than in a fully lazy setup.
+work to begin sooner than in a lazy setup.
 
 If the prewarmed pool is exhausted, the system falls back to lazy startup (#link(
   <fr7>,

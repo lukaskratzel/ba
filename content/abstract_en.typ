@@ -1,6 +1,16 @@
-Note:
-1. *paragraph:* What is the motivation of your thesis? Why is it interesting from a
-  scientific point of view? Which main problem do you like to solve?
-2. *paragraph:* What is the purpose of the document? What is the main content, the
-  main contribution?
-3. *paragraph:* What is your methodology? How do you proceed?
+Cloud-based Integrated Development Environments (IDEs) reduce technical barriers in
+computer science education by providing immediate access to programming tools without
+complex local installations.
+
+The Theia Cloud online IDE service uses dynamic provisioning within Kubernetes,
+suffering from cold-start delays that disrupt synchronous learning. This thesis
+implements an eager session startup pipeline for Theia Cloud to mitigate these
+latencies. The solution utilizes prewarmed instance pools combined with a data bridge
+for secure, "late-binding" runtime personalization, allowing for credential injection
+without container restarts. By migrating to the Kubernetes Gateway API, the
+architecture further minimizes startup time by reducing routing propagation delays.
+
+Benchmarks demonstrate a 75% reduction in median sequential startup latency to 1.37s
+and an 89% reduction under burst loads to 1.99s. This architecture provides a robust,
+low-latency foundation for large-scale educational activities while maintaining
+strict multi-tenant isolation.

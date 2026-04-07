@@ -74,7 +74,7 @@ demonstrations for entire classes. Prewarming minimizes delays in exercise
 conduction, which is especially valuable for short in-class exercises where startup
 latency would otherwise consume a significant portion of the available time.
 
-== Objectives and Contributions
+== Objectives
 
 This thesis implements the architectural basis for low-latency personalized cloud IDE
 sessions in educational environments. Building upon Theia Cloud's existing
