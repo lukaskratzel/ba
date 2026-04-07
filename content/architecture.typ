@@ -22,55 +22,60 @@ design goals, directly derived from the functional and non-functional requiremen
     [DG1],
     [
       #par(justify: true)[
-        #strong[Minimize Startup Latency]: The primary objective is to reduce the time it
-        takes for a requested session to become reachable. This requires shifting costly
-        operations, such as pod scheduling and image pulling, out of the critical path of
-        the user's request.
+        #strong[Minimize Startup Latency]: The primary objective is to reduce the
+        time it takes for a requested session to become reachable. This requires
+        shifting costly operations, such as pod scheduling and image pulling, out of
+        the critical path of the user's request.
       ] <dg1>
     ],
+
     [DG2],
     [
       #par(justify: true)[
         #strong[Decouple Personalization from Provisioning]: To utilize prewarming
-        effectively, the architecture must separate the generic infrastructure provisioning
-        phase from the user-specific personalization phase. Personalization must occur
-        dynamically at runtime.
+        effectively, the architecture must separate the generic infrastructure
+        provisioning phase from the user-specific personalization phase.
+        Personalization must occur dynamically at runtime.
       ] <dg2>
     ],
+
     [DG3],
     [
       #par(justify: true)[
         #strong[Ensure Robustness Under Burst Load]: Educational platforms frequently
-        experience sudden spikes in demand. The architecture must handle high concurrency
-        safely, preventing race conditions on shared resources and degrading gracefully
-        when eager capacity is exhausted.
+        experience sudden spikes in demand. The architecture must handle high
+        concurrency safely, preventing race conditions on shared resources and
+        degrading gracefully when eager capacity is exhausted.
       ] <dg3>
     ],
+
     [DG4],
     [
       #par(justify: true)[
-        #strong[Preserve Platform Compatibility]: The solution must build upon the existing
-        Theia Cloud concepts (`AppDefinition`, `Session`) and integrate seamlessly with the
-        Artemis learning platform. It should act as an optimization layer rather than a
-        disruptive rewrite.
+        #strong[Preserve Platform Compatibility]: The solution must build upon the
+        existing Theia Cloud concepts (`AppDefinition`, `Session`) and integrate
+        seamlessly with the Artemis learning platform. It should act as an
+        optimization layer rather than a disruptive rewrite.
       ] <dg4>
     ],
+
     [DG5],
     [
       #par(justify: true)[
-        #strong[Enable Programmatic Scaling]: The system must expose an API-driven control
-        surface for scaling parameters, allowing external systems or future
+        #strong[Enable Programmatic Scaling]: The system must expose an API-driven
+        control surface for scaling parameters, allowing external systems or future
         machine-learning models to adjust prewarmed pool sizes based on anticipated
         demand.
       ] <dg5>
     ],
+
     [DG6],
     [
       #par(justify: true)[
-        #strong[Support Operability]: The system must remain diagnosable in production.
-        Fine-grained timing and error reporting on session-start paths in the landing page,
-        service, and operator are required to validate optimizations, explain variance
-        under load, and shorten incident response.
+        #strong[Support Operability]: The system must remain diagnosable in
+        production. Fine-grained timing and error reporting on session-start paths in
+        the landing page, service, and operator are required to validate
+        optimizations, explain variance under load, and shorten incident response.
       ] <dg6>
     ],
   ),
