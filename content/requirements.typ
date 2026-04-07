@@ -244,26 +244,40 @@ dynamic models describe the core workflows and interactions within the architect
 
 === Use Case Model
 
-A use case diagram maps out the interactions between the primary actors and the
-system's core capabilities. The *Student* interacts with the system to request a
-session and work on their programming exercises. The *Administrator* or an external
-*Scaling Service* interacts with the Scaling API to adjust the pool sizes
-(`minInstances` and `maxInstances`) to prepare for anticipated demand. Internally,
-the system handles the complex logic of deciding between eager assignment and lazy
-fallback, as well as the asynchronous injection of runtime data to personalize the
-student's environment.
+#figure(
+  image("../figures/use-case.svg"),
+  caption: [Use case diagram for the prewarming and session management system.],
+) <fig:use-case>
 
-// TODO: Insert Use Case Diagram here
-// <fig:use-case>
+@fig:use-case identifies two primary actors. The *Student* initiates the core session
+lifecycle by requesting an IDE session, connecting to the provisioned environment, and
+ending the session once work is complete. These use cases correspond directly to the
+functional requirements for dynamic session assignment (#link(<fr2>)[FR2]), runtime data injection
+(#link(<fr3>)[FR3]), and lazy fallback (#link(<fr7>)[FR7]).
+
+The *Administrator* operates the system's scaling and monitoring surface. Configuring
+the pool size maps to the scaling API requirement (#link(<fr5>)[FR5]), allowing prewarmed capacity
+to be adjusted ahead of anticipated demand. Monitoring pool utilization and resource
+usage support the observability requirement (#link(<nfr6>)[NFR6]), giving operators visibility into
+whether the prewarmed pool is adequately sized and how infrastructure resources are
+consumed under load.
 
 === End-to-End Startup Workflow
 
-The activity diagram in @fig:activity-diagram outlines the complete end-to-end
-workflow from the moment a student requests an exercise to the point where they can
-begin coding. The diagram is partitioned into swimlanes representing the *Student*,
-*Artemis*, the *Theia Cloud Operator*, and the *Prewarmed IDE Container*.
+#figure(
+  image("../figures/activity-diagram.svg"),
+  caption: [Activity diagram showing the desired flow between the student and Theia
+    Cloud, illustrating how prewarmed pods and user binding reduce startup delay.],
+) <fig:activity-diagram>
 
-When the student initiates an exercise in Artemis, a session request is sent to Theia
+@fig:activity-diagram outlines the end-to-end workflow from the moment a student
+starts an exercise to the point where they can begin coding. When a session is
+requested, Theia Cloud checks for an available prewarmed pod. If one exists, the
+system skips provisioning and directly binds the user environment to the ready
+instance. Otherwise, a new pod is provisioned before proceeding.
+
+At the implementation level, this involves several coordinated steps. When the
+student initiates an exercise in Artemis, a session request is sent to Theia
 Cloud. The operator evaluates the `PrewarmedResourcePool`. If a generic instance is
 available, it is immediately reserved. At this point, the workflow forks into two
 parallel tracks:

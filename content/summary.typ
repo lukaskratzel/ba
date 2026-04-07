@@ -22,9 +22,7 @@ delays in line with low startup latency (#link(<nfr1>)[NFR1]). Second, the
 contradiction between generic prewarming and user-specific environments was resolved
 through runtime personalization. The introduction of the `theia-data-bridge` and the
 adaptation of the Scorpio extension enabled secure injection of credentials into
-already-running containers, thereby fulfilling runtime data injection (#link(
-  <fr3>,
-)[FR3]), support for Artemis workflows (#link(<fr4>)[FR4]), and security and
+already-running containers, thereby fulfilling runtime data injection (#link(<fr3>)[FR3]), support for Artemis workflows (#link(<fr4>)[FR4]), and security and
 isolation (#link(<nfr4>)[NFR4]). Third, the control plane was fortified to handle
 burst workloads. Mechanisms such as race-aware session handling, synchronized pool
 reservations, and independent route mutations ensure the system remains stable during
@@ -39,9 +37,7 @@ over session-start operations across all major system components, timing and fai
 can be diagnosed at the level of pool reservation, routing updates, and data
 injection. This facilitates both iterative optimization and operational monitoring.
 Taken together, these changes satisfy programmatic scaling (#link(<fr5>)[FR5]), safe
-concurrency handling (#link(<fr6>)[FR6]), fallback to lazy startup (#link(
-  <fr7>,
-)[FR7]), correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst
+concurrency handling (#link(<fr6>)[FR6]), fallback to lazy startup (#link(<fr7>)[FR7]), correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst
 load (#link(<nfr3>)[NFR3]), and observability (#link(<nfr6>)[NFR6]).
 
 === Open Goals
@@ -65,9 +61,7 @@ This thesis successfully implemented the architectural basis for low-latency,
 personalized cloud IDE sessions in educational environments. By transitioning Theia
 Cloud from a purely lazy provisioning model to a production-oriented eager startup
 pipeline, the backend session-preparation time was reduced by up to 89% under burst
-loads, thereby meeting the central target of low startup latency (#link(
-  <nfr1>,
-)[NFR1]).
+loads, thereby meeting the central target of low startup latency (#link(<nfr1>)[NFR1]).
 
 The core contribution lies in proving that prewarming can be practically applied to
 highly personalized educational tools. By combining prewarmed instance pools,
@@ -82,9 +76,7 @@ providing administrators with the robust infrastructure needed to support
 large-scale, synchronous educational activities. In requirement terms, the resulting
 architecture demonstrates the maintenance of prewarmed pools (#link(<fr1>)[FR1]),
 runtime data injection (#link(<fr3>)[FR3]), programmatic scaling (#link(<fr5>)[FR5]),
-correctness under concurrency (#link(<nfr2>)[NFR2]), security and isolation (#link(
-  <nfr4>,
-)[NFR4]), and observability (#link(<nfr6>)[NFR6]) in a cohesive production setting.
+correctness under concurrency (#link(<nfr2>)[NFR2]), security and isolation (#link(<nfr4>)[NFR4]), and observability (#link(<nfr6>)[NFR6]) in a cohesive production setting.
 
 == Future Work
 
@@ -109,12 +101,12 @@ client-side tracing would capture the true perceived latency and help pinpoint
 rendering or network bottlenecks in the browser.
 
 
-Suggested New Claim / Detail,Section to Add,Benefit to Thesis "Response Time
-Thresholds: Define ""low latency"" using established human-computer interaction (HCI)
-limits (e.g., the 2-second rule).",3.2.2 Nonfunctional Requirements,"Instead of just
-saying ""significantly reduced"" , you can argue your 1.37s result meets specific
-pedagogical/psychological requirements for student focus.+1" "Comparison to ""State
-of the Art"" Cloud IDEs: Add a brief comparison to how commercial tools (e.g., GitHub
-Codespaces or Gitpod) handle prewarming.",5.4 Discussion,"It puts your work in
-context with industry leaders, showing that your solution for educational platforms
-is on par with professional-grade infrastructure.+1"
+// Suggested New Claim / Detail,Section to Add,Benefit to Thesis "Response Time
+// Thresholds: Define ""low latency"" using established human-computer interaction (HCI)
+// limits (e.g., the 2-second rule).",3.2.2 Nonfunctional Requirements,"Instead of just
+// saying ""significantly reduced"" , you can argue your 1.37s result meets specific
+// pedagogical/psychological requirements for student focus.+1" "Comparison to ""State
+// of the Art"" Cloud IDEs: Add a brief comparison to how commercial tools (e.g., GitHub
+// Codespaces or Gitpod) handle prewarming.",5.4 Discussion,"It puts your work in
+// context with industry leaders, showing that your solution for educational platforms
+// is on par with professional-grade infrastructure.+1"

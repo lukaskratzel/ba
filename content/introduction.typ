@@ -53,18 +53,12 @@ Environments is important from a scientific perspective, but also for improving
 educational outcomes and driving adoption of scalable learning platforms. Prewarming
 offers a solution by handling significant initialization tasks upfront.
 
-#figure(
-  image("../figures/activity-diagram.svg"),
-  caption: [Activity diagram showing the desired flow between the student and Theia
-    Cloud, illustrating how prewarmed pods and user binding reduce startup delay.],
-) <fig:activity-diagram>
-
-@fig:activity-diagram illustrates this approach. When a student starts an exercise,
-Theia Cloud first checks for available prewarmed pods. If one exists, the system
-skips the costly provisioning steps including pod creation and IDE startup. It
-directly binds the user environment to the ready pod. This binding dynamically
-injects the necessary authentication tokens, repository credentials, and workspace
-settings into the already running container.
+In this approach, when a student starts an exercise, Theia Cloud first checks for
+available prewarmed pods. If one exists, the system skips the costly provisioning
+steps including pod creation and IDE startup. It directly binds the user environment
+to the ready pod. This binding dynamically injects the necessary authentication
+tokens, repository credentials, and workspace settings into the already running
+container.
 
 For students, immediate access to development environments can enhance their learning
 experience. Research by Benotti et al. demonstrated that web-based coding tools that
