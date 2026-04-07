@@ -47,7 +47,8 @@ time*.
 The timer starts when the initial API call is made to the Theia Cloud service to
 request a session. The timer stops when the session has been fully prepared, the
 runtime data injection has been scheduled, the routing rules have propagated, and the
-session URL is externally reachable.
+session URL is externally reachable. This measurement boundary corresponds directly
+to low startup latency (#link(<nfr1>)[NFR1]).
 
 *Crucially, this measurement does not include the client-side browser loading time.*
 The time taken for the student's browser to download the IDE assets, render the DOM,
@@ -55,17 +56,21 @@ and execute the frontend JavaScript is outside the optimization scope of this th
 and is therefore excluded from the reported durations.
 
 During development and analysis, *Sentry* performance data from the Theia Cloud
-service and operator (transactions and spans along session-start paths) was used to
-interpret benchmark outcomes—for example to confirm which sub-steps dominate latency
-or widen variance under burst load. Those traces are not substituted for the
-controlled measurements above; they provide complementary, fine-grained timing
-context.
+landing page, service, and operator (transactions and spans along session-start
+paths) was used to interpret benchmark outcomes, for example to confirm which
+sub-steps dominate latency or widen variance under burst load. Those traces are not
+substituted for the controlled measurements above; they provide complementary,
+fine-grained timing context.
 
 == Objectives
 
 The benchmark aims to validate the system against the non-functional requirements
 established in Chapter 3, with a specific focus on the backend session-preparation
-phase. The primary objectives are to:
+phase. In particular, it evaluates low startup latency (#link(<nfr1>)[NFR1]),
+correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst load
+(#link(<nfr3>)[NFR3]), and the diagnostic support promised by observability (#link(
+  <nfr6>,
+)[NFR6]). The primary objectives are to:
 
 1. *Quantify Startup Latency Reduction*: Measure the absolute and relative reduction
   in session preparation time achieved by the eager startup pipeline compared to the
@@ -104,7 +109,10 @@ optimization*), the median latency improved to 4.18 seconds (mean: 4.24s, max:
 The fastest startup time is seen in the *Eager* state. Utilizing the prewarmed pool
 reduced the median startup time to just 1.37 seconds (mean: 1.54s, max: 3.28s). This
 represents a 75% reduction in median latency compared to the original baseline, and a
-67% reduction compared to the optimized lazy path.
+67% reduction compared to the optimized lazy path, providing strong evidence that the
+implementation satisfies the latency target of low startup latency (#link(
+  <nfr1>,
+)[NFR1]).
 
 === Concurrent Workload Results
 
@@ -127,7 +135,11 @@ plane, reducing the median to 11.58 seconds (mean: 13.13s, max: 23.72s).
 The *Eager* state counteracted the burst penalty. By reserving already-running
 instances rather than scheduling new pods, the median startup time remained low at
 1.99 seconds (mean: 3.73s, max: 9.33s). Compared to the original baseline, this is an
-89% reduction in median latency during high-stress scenarios.
+89% reduction in median latency during high-stress scenarios, while also validating
+the concurrency and burst-load expectations of safe concurrency handling (#link(
+  <fr6>,
+)[FR6]), correctness under concurrency (#link(<nfr2>)[NFR2]), and scalability under
+burst load (#link(<nfr3>)[NFR3]).
 
 == Discussion
 
@@ -137,6 +149,19 @@ primary challenges of cloud IDE provisioning in educational contexts.
 The transition from on-demand provisioning to prewarming is the dominant factor in
 latency reduction. By removing pod scheduling and container initialization from the
 critical path, the backend preparation time drops noticeably.
+
+Commercial cloud IDEs employ a similar pattern of shifting setup work off the
+critical path. GitHub Codespaces @github:docs:AboutCodespacesPrebuilds and Gitpod
+@gitpod:docs:RepositoryPrebuilds use prebuilds to prepare dependencies and
+configurations ahead of session creation. The architecture in this thesis differs by
+emphasizing late-binding of sensitive user context. Pooled pods remain generic until
+assignment and receive session-specific data through runtime injection within a
+Kubernetes-native control plane. This preserves multi-tenant isolation for
+educational platforms. If the pool is exhausted, the system falls back to lazy
+provisioning (#link(<fr7>)[FR7]). Finally, commercial prebuilds incur storage and
+compute costs @github:docs:AboutCodespacesPrebuilds @gitpod:docs:RepositoryPrebuilds.
+This mirrors the cost-performance tradeoff of maintaining warm capacity discussed
+below @vahidinia:2023:MitigatingColdStart.
 
 The comparison between *Lazy before optimization* and *Lazy after optimization*
 isolates the impact of the underlying control plane and routing enhancements. The
@@ -152,18 +177,28 @@ control plane. In the baseline system, burst requests caused severe latency
 degradation. The *Lazy after optimization* state already demonstrates significant
 resilience. Building on this, the *Eager* state's synchronized reservation mechanism
 ensured that the system remained stable and responsive, neutralizing much of the
-burst penalty.
+burst penalty. Where eager capacity is exhausted, the system can still degrade
+gracefully through the availability guarantee defined by fallback to lazy startup
+(#link(<fr7>)[FR7]), which is the practical counterpart to scalability under burst
+load (#link(<nfr3>)[NFR3]).
 
 While the eager startup pipeline improves user experience, it introduces a tradeoff
-regarding resource consumption. Maintaining a pool of prewarmed instances requires
-continuous memory and CPU allocation, even when no students are active. This
-emphasizes the importance of the newly introduced Scaling API. By exposing
+regarding resource consumption. As in serverless systems, reducing cold-start latency
+via warm pools shifts cost from latency to continuously allocated memory and compute,
+creating a classic cost-performance tradeoff @vahidinia:2023:MitigatingColdStart.
+This emphasizes the importance of the newly introduced Scaling API. By exposing
 `minInstances` and `maxInstances`, the system provides the necessary control surface
 for administrators or future predictive algorithms to dynamically adjust the pool
-size. This allows institutions to balance the cost of idle infrastructure against the
-need for fast session availability, scaling up just before a scheduled lab and
-scaling down during off-hours.
+size, directly exercising programmatic scaling (#link(<fr5>)[FR5]) while keeping the
+maintenance of prewarmed pools (#link(
+  <fr1>,
+)[FR1]) economically viable. This allows institutions to balance the cost of idle
+infrastructure against the need for fast session availability, scaling up just before
+a scheduled lab and scaling down during off-hours.
 
 In conclusion, the implemented architecture successfully transforms prewarming from a
 static infrastructure concept into a production-ready, personalized session-start
-pipeline, providing a responsive and robust foundation for educational cloud IDEs.
+pipeline, providing a responsive and robust foundation for educational cloud IDEs
+that fulfills the maintenance of prewarmed pools (#link(<fr1>)[FR1]), runtime data
+injection (#link(<fr3>)[FR3]), and low startup latency (#link(<nfr1>)[NFR1]) in
+practice.

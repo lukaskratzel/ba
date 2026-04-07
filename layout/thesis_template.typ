@@ -167,5 +167,5 @@
   include "/layout/appendix.typ"
 
   pagebreak()
-  bibliography("/thesis.bib")
+  bibliography(("/thesis.bib", "/thesis-supplementary.bib"))
 }

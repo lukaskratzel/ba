@@ -59,16 +59,16 @@ resources (Services and Ingress/Routes) to make the IDE accessible to the studen
 browser.
 
 Routing plays a critical role in the startup time. Previously, the system relied on
-`ingress-nginx` to expose sessions. When a new session was created, the operator had
-to update the ingress configuration to route traffic to the newly provisioned pod.
-The delay in routing propagation, the time it takes for the updated routing rules to
-take effect and for the session URL to become reachable, contributed meaningfully to
-the end-to-end startup latency.
-// TODO: back this claim
+one central `ingress-nginx` to expose sessions. When a new session was created, the
+operator had to update the ingress configuration to route traffic to the newly
+provisioned pod. The delay in routing propagation, the time it takes for the updated
+routing rules to take effect and for the session URL to become reachable, contributed
+meaningfully to the end-to-end startup latency.
+This delay stems from the `ingress-nginx` update mechanism, which rebuilds the configuration model and reloads NGINX on most routing changes @kubernetes:ingressnginx:HowItWorks. In contrast, Envoy-based gateways update routing state dynamically at runtime via xDS APIs without requiring a reload @envoy:docs:DynamicConfiguration @envoygateway:docs:SystemDesign, reducing route propagation latency.
 Consequently, optimizing container startup time alone is insufficient if the
 networking layer remains a bottleneck. This limitation necessitated the exploration
-of more dynamic routing solutions, such as the Kubernetes Gateway API combined with
-Envoy Gateway.
+of more dynamic routing solutions, such as the Kubernetes Gateway API using
+Envoy Gateway as an implementation.
 
 === Personalization and Prewarming Constraints
 
@@ -81,11 +81,11 @@ To be reusable and secure, prewarmed sessions must remain generic during their
 initialization phase. They cannot be personalized at creation time because the system
 does not yet know which student will be assigned to the pod. Baking user-specific
 credentials or assignment metadata into a prewarmed container would violate security
-and isolation constraints. Therefore, personalization must be deferred until
-assignment of a generic instance to a specific user. This requires a mechanism for
-runtime data injection that securely delivers sensitive information into an already
-running container without requiring a restart, which would negate the latency
-benefits of prewarming.
+and isolation constraints @souppaya:2017:ApplicationContainerSecurityGuide.
+Therefore, personalization must be deferred until assignment of a generic instance to
+a specific user. This requires a mechanism for runtime data injection that securely
+delivers sensitive information into an already running container without requiring a
+restart, which would negate the latency benefits of prewarming.
 
 == Proposed System
 
@@ -99,57 +99,143 @@ by a hardened control plane and an API for automation.
 The proposed system must fulfill the following functional requirements (FRs) to
 achieve its objectives:
 
-- *FR1 Maintain Prewarmed Pools*: The system must maintain a pool of prewarmed,
-  generic IDE instances for each configured `AppDefinition`. The size of this pool
-  must be configurable.
-- *FR2 Dynamic Session Assignment*: Upon receiving a session request, the system must
-  be able to dynamically and safely reserve an available prewarmed instance from the
-  pool and assign it to the requesting user.
-- *FR3 Runtime Data Injection*: The system must provide a mechanism to securely
-  inject session-specific runtime data (e.g., authentication tokens, Git credentials)
-  into the IDE container after it has been assigned, without requiring a container
-  restart.
-- *FR4 Support Artemis Workflows*: The system must adapt the Scorpio extension to
-  consume the runtime-injected data, ensuring that Artemis workflows (cloning,
-  submission, feedback) function correctly within the prewarmed Theia environment.
-- *FR5 Expose Scaling API*: The system must expose a dedicated API to inspect and
-  programmatically adjust the scaling parameters (`minInstances` and `maxInstances`)
-  of an `AppDefinition`.
-- *FR6 Safe Concurrency Handling*: The system must handle concurrent session starts
-  safely, particularly during burst loads like the start of an exam.
-- *FR7 Fallback to Lazy Startup*: If the prewarmed pool is exhausted and no warm
-  instances are available, the system must gracefully fall back to the traditional
-  lazy startup path, ensuring availability up to the configured maximum session
-  limit.
+#figure(
+  table(
+    columns: (auto, 1fr),
+    stroke: none,
+    column-gutter: 1em,
+    row-gutter: 0.85em,
+    align: (top + left, top + left),
+    [FR1],
+    [
+      #par(justify: true)[
+        #strong[Maintain Prewarmed Pools]: The system must maintain a pool of prewarmed,
+        generic IDE instances for each configured `AppDefinition`. The size of this pool
+        must be configurable.
+      ] <fr1>
+    ],
+    [FR2],
+    [
+      #par(justify: true)[
+        #strong[Dynamic Session Assignment]: Upon receiving a session request, the system must
+        be able to dynamically and safely reserve an available prewarmed instance from the
+        pool and assign it to the requesting user.
+      ] <fr2>
+    ],
+    [FR3],
+    [
+      #par(justify: true)[
+        #strong[Runtime Data Injection]: The system must provide a mechanism to securely
+        inject session-specific runtime data (e.g., authentication tokens, Git credentials)
+        into the IDE container after it has been assigned, without requiring a container
+        restart.
+      ] <fr3>
+    ],
+    [FR4],
+    [
+      #par(justify: true)[
+        #strong[Support Artemis Workflows]: The system must adapt the Scorpio extension to
+        consume the runtime-injected data, ensuring that Artemis workflows (cloning,
+        submission, feedback) function correctly within the prewarmed Theia
+        environment.
+      ] <fr4>
+    ],
+    [FR5],
+    [
+      #par(justify: true)[
+        #strong[Expose Scaling API]: The system must expose a dedicated API to inspect and
+        programmatically adjust the scaling parameters (`minInstances` and `maxInstances`)
+        of an `AppDefinition`.
+      ] <fr5>
+    ],
+    [FR6],
+    [
+      #par(justify: true)[
+        #strong[Safe Concurrency Handling]: The system must handle concurrent session starts
+        safely, particularly during burst loads like the start of an exam.
+      ] <fr6>
+    ],
+    [FR7],
+    [
+      #par(justify: true)[
+        #strong[Fallback to Lazy Startup]: If the prewarmed pool is exhausted and no warm
+        instances are available, the system must gracefully fall back to the traditional
+        lazy startup path, ensuring availability up to the configured maximum session
+        limit.
+      ] <fr7>
+    ],
+  ),
+  caption: [Functional Requirements],
+  kind: table,
+)
 
 === Nonfunctional Requirements
 
 In addition to the functional capabilities, the system must satisfy several
 non-functional requirements (NFRs) that define its operational quality:
 
-- *NFR1 Low Startup Latency*: The backend preparation time, measured from the initial
-  API call to the Theia Cloud service until the session URL is reachable, must be
-  significantly reduced compared to the lazy startup baseline.
-- *NFR2 Correctness under Concurrency*: The control plane must remain robust under
-  high contention. Shared resources, such as the prewarmed pool and routing objects,
-  must not become corrupted or enter inconsistent states during simultaneous session
-  requests.
-- *NFR3 Scalability under Burst Load*: The system must maintain high throughput
-  during spikes in demand and degrade gracefully via lazy fallback.
-- *NFR4 Security and Isolation*: Generic prewarmed instances must not leak
-  credentials. Once a session is terminated, the instance state must be destroyed
-  before its resources can be returned to the pool.
-- *NFR5 Maintainability*: The eager startup logic should integrate with the existing
-  operator patterns. It should build upon the existing `AppDefinition` and `Session`
-  concepts.
-- *NFR6 Backend Observability*: The Theia Cloud service and operator must support
-  production-oriented monitoring of session-start performance and failures. Critical
-  control-plane and API steps must be attributable in telemetry (e.g., via
-  distributed transactions and spans) so that latency and errors can be diagnosed
-  without relying solely on end-to-end measurements. Sensitive data must not be
-  exposed in telemetry beyond what is necessary for operations.
-
-// TODO: choose which diagrams to use
+#figure(
+  table(
+    columns: (auto, 1fr),
+    stroke: none,
+    column-gutter: 1em,
+    row-gutter: 0.85em,
+    align: (top + left, top + left),
+    [NFR1],
+    [
+      #par(justify: true)[
+        #strong[Low Startup Latency]: The backend preparation time, measured from the initial
+        API call to the Theia Cloud service until the session URL is reachable, must be
+        significantly reduced compared to the lazy startup baseline.
+      ] <nfr1>
+    ],
+    [NFR2],
+    [
+      #par(justify: true)[
+        #strong[Correctness under Concurrency]: The control plane must remain robust under
+        high contention. Shared resources, such as the prewarmed pool and routing objects,
+        must not become corrupted or enter inconsistent states during simultaneous session
+        requests.
+      ] <nfr2>
+    ],
+    [NFR3],
+    [
+      #par(justify: true)[
+        #strong[Scalability under Burst Load]: The system must maintain high throughput
+        during spikes in demand and degrade gracefully via lazy fallback.
+      ] <nfr3>
+    ],
+    [NFR4],
+    [
+      #par(justify: true)[
+        #strong[Security and Isolation]: Generic prewarmed instances must not leak
+        credentials. Once a session is terminated, the instance state must be destroyed
+        before its resources can be returned to the pool.
+      ] <nfr4>
+    ],
+    [NFR5],
+    [
+      #par(justify: true)[
+        #strong[Maintainability]: The eager startup logic should integrate with the existing
+        operator patterns. It should build upon the existing `AppDefinition` and `Session`
+        concepts.
+      ] <nfr5>
+    ],
+    [NFR6],
+    [
+      #par(justify: true)[
+        #strong[Observability]: The Theia Cloud landing page, service, and operator must
+        support production-oriented monitoring of session-start performance and failures.
+        Critical control-plane, API, and user-facing entry steps must be attributable in
+        telemetry (e.g., via distributed transactions and spans) so that latency and errors
+        can be diagnosed without relying solely on end-to-end measurements. Sensitive data
+        must not be exposed in telemetry beyond what is necessary for operations.
+      ] <nfr6>
+    ],
+  ),
+  caption: [Non-Functional Requirements],
+  kind: table,
+)
 
 == Dynamic Models
 
@@ -192,6 +278,3 @@ Once the data is injected, the Scorpio extension within the IDE consumes it to
 authenticate with Artemis and clone the student's repository. If the prewarmed pool
 is exhausted at the initial decision point, the operator falls back to the lazy
 startup path, provisioning a new pod before proceeding with the routing update.
-
-// TODO: Insert Activity Diagram here
-// <fig:activity-startup>

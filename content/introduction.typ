@@ -129,9 +129,9 @@ The remainder of this thesis is structured as follows: Chapter 2 provides the
 background and context, detailing the challenges of startup latency and runtime
 personalization in cloud IDEs. Chapter 3 presents the system design, including the
 architecture of eager session startup, runtime data injection, the scaling API, and
-operability requirements for backend observability. Chapter 4 details the
-architecture of the core components, such as the prewarmed resource pool, the data
-bridge, the routing migration, and Sentry instrumentation in the service and
-operator. Chapter 5 benchmarks the system's performance, comparing startup latencies
-and analyzing behavior under concurrent workloads. Finally, Chapter 6 concludes the
-thesis and discusses future work, including the potential for predictive scaling.
+operability requirements for observability. Chapter 4 details the architecture of the
+core components, such as the prewarmed resource pool, the data bridge, the routing
+migration, and Sentry instrumentation in the service and operator. Chapter 5
+benchmarks the system's performance, comparing startup latencies and analyzing
+behavior under concurrent workloads. Finally, Chapter 6 concludes the thesis and
+discusses future work, including the potential for predictive scaling.
