@@ -14,8 +14,19 @@ against the previous implementation state.
 === Benchmark Environment and Workloads
 
 The benchmark suite ran against a dedicated Kubernetes cluster running the Theia
-Cloud infrastructure. To simulate realistic usage patterns, the evaluation defined
-two distinct workload scenarios:
+Cloud infrastructure. The cluster was provisioned as a Rancher-managed RKE2
+deployment consisting of eleven QEMU virtual machines running Ubuntu 20.04.5 LTS,
+organized into three control-plane nodes and eight worker nodes. Each node was
+allocated 12 virtual CPUs and approximately 31.3 GiB of RAM, yielding a total
+cluster capacity of 132 vCPUs and roughly 345 GiB of RAM, with the worker pool
+alone contributing 96 vCPUs and 251 GiB of RAM to schedulable workloads. The
+underlying physical hardware is slightly heterogeneous: the majority of nodes are
+backed by AMD EPYC 9374F processors, while one control-plane node and one worker
+node utilize Intel Xeon Gold 6234 processors. Networking was provided by Calico as
+the Container Network Interface.
+
+To simulate realistic usage patterns, the evaluation defined two distinct workload
+scenarios:
 
 1. _Sequential Workload_: 100 session starts triggered sequentially with a 10-second
   delay between each request. This scenario represents a steady, predictable flow of
