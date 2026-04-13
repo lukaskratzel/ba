@@ -17,32 +17,32 @@ The benchmarks were executed against a dedicated Kubernetes cluster running the 
 Cloud infrastructure. To simulate realistic usage patterns, two distinct workload
 scenarios were defined:
 
-1. *Sequential Workload*: 100 session starts triggered sequentially with a 10-second
+1. _Sequential Workload_: 100 session starts triggered sequentially with a 10-second
   delay between each request. This scenario represents a steady, predictable flow of
   students starting their exercises, allowing for the measurement of baseline system
   latency without the interference of resource contention.
-2. *Concurrent Workload (Burst)*: 50 session starts triggered at random intervals
-  within a 20-second window. This scenario simulates a burst event, such as the
-  beginning of an exam or a synchronized lab session, testing the control plane's
-  ability to handle high concurrency and shared resource contention.
+2. _Concurrent Workload (Burst)_: 50 session starts distributed randomly within a
+  20-second window. This scenario simulates a burst event, such as the beginning of
+  an exam or a synchronized lab session, testing the control plane's ability to
+  handle high concurrency and shared resource contention.
 
 === Baseline and Comparison Setup
 
 For each workload scenario, the system was benchmarked in three different states to
 isolate the impact of specific architectural changes:
 
-- *Lazy before optimization (Baseline)*: The previous system state utilizing purely
-  lazy startup and `ingress-nginx` for routing.
-- *Lazy after optimization*: The current system state utilizing lazy startup, but
-  benefiting from the new Gateway API routing layer and concurrency-hardened control
-  plane. On top, many small optimizations were applied throughout the pipeline.
-- *Eager*: The optimized target state utilizing the eager session startup pipeline
-  alongside the new routing layer.
+- _Lazy before optimization (Baseline)_: The previous system state utilizing lazy
+  startup and `ingress-nginx` for routing.
+- _Lazy after optimization_: The current system state utilizing lazy startup, but
+  benefiting from the Gateway API routing layer and concurrency-hardened control
+  plane. On top, numerous small optimizations were applied throughout the pipeline.
+- _Eager_: The optimized target state utilizing the eager session startup pipeline
+  alongside the Gateway API routing layer.
 
 === Measurement Boundary
 
-The latency measured in this benchmark represents the *end-to-end session-preparation
-time*.
+The latency measured in this benchmark represents the end-to-end session-preparation
+time.
 
 The timer starts when the initial API call is made to the Theia Cloud service to
 request a session. The timer stops when the session has been fully prepared, the
@@ -50,17 +50,16 @@ runtime data injection has been scheduled, the routing rules have propagated, an
 session URL is externally reachable. This measurement boundary corresponds directly
 to low startup latency (#link(<nfr1>)[NFR1]).
 
-*Crucially, this measurement does not include the client-side browser loading time.*
-The time taken for the student's browser to download the IDE assets, render the DOM,
-and execute the frontend JavaScript is outside the optimization scope of this thesis
-and is therefore excluded from the reported durations.
+This measurement does not include the client-side browser loading time. The time
+taken for the student's browser to download the IDE assets, render the DOM, and
+execute the frontend JavaScript is outside the optimization scope of this thesis and
+is therefore excluded from the reported durations.
 
-During development and analysis, *Sentry* performance data from the Theia Cloud
-landing page, service, and operator (transactions and spans along session-start
-paths) was used to interpret benchmark outcomes, for example to confirm which
-sub-steps dominate latency or widen variance under burst load. Those traces are not
-substituted for the controlled measurements above; they provide complementary,
-fine-grained timing context.
+During development and analysis, Sentry performance data from the Theia Cloud landing
+page, service, and operator was used to interpret benchmark outcomes, for example to
+confirm which sub-steps dominate latency or widen variance under burst load. Those
+traces are not substituted for the controlled measurements above, but they provided
+complementary, fine-grained timing context during development.
 
 == Objectives
 
@@ -72,16 +71,10 @@ correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst loa
   <nfr6>,
 )[NFR6]). The primary objectives are to:
 
-1. *Quantify Startup Latency Reduction*: Measure the absolute and relative reduction
-  in session preparation time achieved by the eager startup pipeline compared to the
-  lazy baseline.
-2. *Analyze Behavior Under Burst Concurrency*: Assess the system's robustness and
-  latency degradation when subjected to a sudden spike in concurrent session
-  requests.
-3. *Measure Control Plane and Routing Improvements*: Isolate the performance gains
-  attributed to the internal optimization of startup paths, the hardened concurrency
-  handling, and the migration from `ingress-nginx` to Gateway API by comparing the
-  "Lazy before optimization" and "Lazy after optimization" states.
+1. Quantify the absolute and relative reduction in session preparation time achieved
+  by the eager startup pipeline compared to the lazy baseline.
+2. Assess the system's robustness and latency degradation when subjected to a sudden
+  spike in concurrent session requests.
 
 == Results
 
@@ -100,13 +93,12 @@ starts across the three system states.
     compared to the lazy approaches.],
 ) <fig:latency-seq>
 
-The baseline *Lazy before optimization* state exhibited a median startup duration of
-5.59 seconds (mean: 6.40s, max: 12.35s). By introducing internal startup path
-optimizations and updating the routing layer to Gateway API (*Lazy after
-optimization*), the median latency improved to 4.18 seconds (mean: 4.24s, max:
-8.35s).
+The lazy before optimization baseline exhibited a median startup duration of 5.59
+seconds (mean: 6.40s, max: 12.35s). By introducing internal startup path
+optimizations and updating the routing layer to Gateway API (lazy after
+optimization), the median latency improved to 4.18 seconds (mean: 4.24s, max: 8.35s).
 
-The fastest startup time is seen in the *Eager* state. Utilizing the prewarmed pool
+The fastest startup time is seen in the eager state. Utilizing the prewarmed pool
 reduced the median startup time to just 1.37 seconds (mean: 1.54s, max: 3.28s). This
 represents a 75% reduction in median latency compared to the original baseline, and a
 67% reduction compared to the optimized lazy path, providing strong evidence that the
@@ -126,13 +118,13 @@ conditions, as shown in @fig:latency-concurrent.
     the severe degradation seen in the lazy provisioning paths.],
 ) <fig:latency-concurrent>
 
-In the *Lazy before optimization* baseline, 50 concurrent requests caused severe
+In the lazy before optimization baseline, 50 concurrent requests caused strong
 resource contention, driving the median startup time up to 18.67 seconds (mean:
-20.63s), with the slowest session taking 36.31 seconds to become reachable. The *Lazy
-after optimization* state handled the concurrency better due to the hardened control
+20.63s), with the slowest session taking 36.31 seconds to become reachable. The lazy
+after optimization state handled the concurrency better due to the hardened control
 plane, reducing the median to 11.58 seconds (mean: 13.13s, max: 23.72s).
 
-The *Eager* state counteracted the burst penalty. By reserving already-running
+The eager state counteracted the burst penalty. By reserving already-running
 instances rather than scheduling new pods, the median startup time remained low at
 1.99 seconds (mean: 3.73s, max: 9.33s). Compared to the original baseline, this is an
 89% reduction in median latency during high-stress scenarios, while also validating
@@ -148,7 +140,7 @@ primary challenges of cloud IDE provisioning in educational contexts.
 
 The transition from on-demand provisioning to prewarming is the dominant factor in
 latency reduction. By removing pod scheduling and container initialization from the
-critical path, the backend preparation time drops noticeably.
+critical path, the session preparation time drops noticeably.
 
 Commercial cloud IDEs employ a similar pattern of shifting setup work off the
 critical path. GitHub Codespaces @github:docs:AboutCodespacesPrebuilds and Gitpod
@@ -163,19 +155,19 @@ compute costs @github:docs:AboutCodespacesPrebuilds @gitpod:docs:RepositoryPrebu
 This mirrors the cost-performance tradeoff of maintaining warm capacity discussed
 below @vahidinia:2023:MitigatingColdStart.
 
-The comparison between *Lazy before optimization* and *Lazy after optimization*
-isolates the impact of the underlying control plane and routing enhancements. The
-data shows that the previous setup was a significant bottleneck, particularly under
-load. The internal optimization of startup paths, combined with the migration to
-Gateway API, improved the baseline lazy startup by over a second. Furthermore, these
-routing improvements provide the necessary speed for route propagation to make eager
-startup viable, as the fast container assignment of the eager pool would have
+The comparison between the lazy before optimization and lazy after optimization
+states isolates the impact of the underlying control plane and routing enhancements.
+The data shows that the previous setup was a significant bottleneck, particularly
+under load. The internal optimization of startup paths, combined with the migration
+to Gateway API, improved the baseline lazy startup by over a second. Furthermore,
+these routing improvements provide the necessary speed for route propagation to make
+eager startup viable, as the fast container assignment of the eager pool would have
 otherwise been masked by slow network updates.
 
 The concurrent workload results highlight the operational value of the hardened
-control plane. In the baseline system, burst requests caused severe latency
-degradation. The *Lazy after optimization* state already demonstrates significant
-resilience. Building on this, the *Eager* state's synchronized reservation mechanism
+control plane. In the baseline system, burst requests caused strong latency
+degradation. The lazy after optimization state already demonstrates significant
+resilience. Building on this, the eager state's synchronized reservation mechanism
 ensured that the system remained stable and responsive, neutralizing much of the
 burst penalty. Where eager capacity is exhausted, the system can still degrade
 gracefully through the availability guarantee defined by fallback to lazy startup
@@ -186,19 +178,24 @@ While the eager startup pipeline improves user experience, it introduces a trade
 regarding resource consumption. As in serverless systems, reducing cold-start latency
 via warm pools shifts cost from latency to continuously allocated memory and compute,
 creating a classic cost-performance tradeoff @vahidinia:2023:MitigatingColdStart.
-This emphasizes the importance of the newly introduced Scaling API. By exposing
-`minInstances` and `maxInstances`, the system provides the necessary control surface
-for administrators or future predictive algorithms to dynamically adjust the pool
-size, directly exercising programmatic scaling (#link(<fr5>)[FR5]) while keeping the
-maintenance of prewarmed pools (#link(
+Measurements of prewarmed instances in the idle state quantify this overhead. Each
+pod in the prewarmed state consumes 0.0006 CPU cores and 265 MiB of memory on
+average, while Kubernetes reservations are set to 200m CPU and 500 MiB memory with
+limits of 2 CPU and 2400 MiB. The idle footprint therefore stays below the reserved
+resources, meaning the practical cost of a warm pool is dominated by the reservations
+rather than real utilization. This emphasizes the importance of the newly introduced
+Scaling API. By exposing `minInstances` and `maxInstances`, the system provides the
+necessary control surface for administrators or future predictive algorithms to
+dynamically adjust the pool size, exercising programmatic scaling (#link(
+  <fr5>,
+)[FR5]) while keeping the maintenance of prewarmed pools (#link(
   <fr1>,
 )[FR1]) economically viable. This allows institutions to balance the cost of idle
 infrastructure against the need for fast session availability, scaling up just before
 a scheduled lab and scaling down during off-hours.
 
-In conclusion, the implemented architecture successfully transforms prewarming from a
-static infrastructure concept into a production-ready, personalized session-start
-pipeline, providing a responsive and robust foundation for educational cloud IDEs
-that fulfills the maintenance of prewarmed pools (#link(<fr1>)[FR1]), runtime data
-injection (#link(<fr3>)[FR3]), and low startup latency (#link(<nfr1>)[NFR1]) in
-practice.
+In conclusion, the implemented system successfully transforms prewarming into a
+production-ready, personalized session-start pipeline, providing a responsive and
+robust foundation for educational cloud IDEs that fulfills the maintenance of
+prewarmed pools (#link(<fr1>)[FR1]), runtime data injection (#link(<fr3>)[FR3]), and
+low startup latency (#link(<nfr1>)[NFR1]) in practice.

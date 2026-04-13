@@ -3,9 +3,9 @@
 The landscape of computer science education has transformed over the past decade.
 Krusche et al. note that the surge in student numbers has rendered manual assessment
 of programming exercises impractical, prompting the need for automated assessment
-systems @krusche:2018:ArtemisAutomaticAssessment. In response, platforms like Artemis
-have emerged to provide automatic programming exercise assessment with quick feedback
-at scale @krusche:2018:ArtemisAutomaticAssessment.
+systems @krusche:2018:ArtemisAutomaticAssessment. In response, learning management
+system like Artemis have emerged to provide automatic programming exercise assessment
+with quick feedback at scale @krusche:2018:ArtemisAutomaticAssessment.
 
 Online IDE services for training, assessments, and development environments have
 proliferated as learning platforms increasingly migrate their development
@@ -17,7 +17,9 @@ to students @schmidt:2024:InclusiveLearningEnvironmentsa.
 Eclipse Theia is an extensible cloud and desktop IDE platform. It provides a unified
 interface for various programming languages in a browser-based environment. Theia
 Cloud enables the deployment and management of Theia-based IDEs on Kubernetes at
-scale. Artemis integrates Theia as shown in @fig:ssd.
+scale. Artemis integrates Theia as shown in @fig:ssd. The instance of Theia Cloud
+developed and evaluated in this thesis is deployed at the university under the name
+EduIDE.
 
 #figure(
   image("../figures/ssd3.svg"),
@@ -53,7 +55,7 @@ Environments is important from a scientific perspective, but also for improving
 educational outcomes and driving adoption of scalable learning platforms. Prewarming
 offers a solution by handling significant initialization tasks upfront.
 
-In this approach, when a student starts an exercise, Theia Cloud first checks for
+In this approach, when a student starts an exercise, EduIDE first checks for
 available prewarmed pods. If one exists, the system skips the costly provisioning
 steps including pod creation and IDE startup. It directly binds the user environment
 to the ready pod. This binding dynamically injects the necessary authentication
@@ -82,50 +84,93 @@ infrastructure, the core contribution is a production-oriented eager session sta
 pipeline that combines prewarmed instance pools, concurrency-safe handling of burst
 session starts, runtime session personalization, faster routing, integration with
 Artemis, and server-side observability with Sentry for timing and error visibility
-across the service and operator.
+across the Theia Cloud system.
 
 The work addresses the identified challenges through the following primary
 objectives:
 
-1. *Eager Session Start:* Enhance the container prewarming mechanisms to ensure
-  reliable instance handling. The system maintains pools of pre-initialized
-  containers and reserves them for incoming sessions, reducing provisioning delays
-//  while gracefully falling back to lazy startup when warm
-// capacity is exhausted.
+#figure(
+  table(
+    columns: (auto, 1fr),
+    stroke: none,
+    column-gutter: 1em,
+    row-gutter: 0.85em,
+    align: (top + left, top + left),
+    [O1],
+    [
+      #par(justify: true)[
+        #strong[Eager Session Start]: Enhance the container prewarming mechanisms to
+        ensure reliable instance handling. The system maintains pools of
+        eagerly-initialized containers and reserves them for incoming sessions,
+        reducing provisioning delays.
+        // while gracefully falling back to lazy startup when warm capacity is exhausted.
+      ]
+    ],
 
-2. *Runtime Personalization and Integration:* Implement user binding and session
-  management by injecting user-specific configurations into already running IDE
-  containers. A dedicated data bridge extension enables this runtime personalization.
-// which is then consumed by the Artemis Scorpio extension to initialize
-// authentication and repository access without requiring a restart.
+    [O2],
+    [
+      #par(justify: true)[
+        #strong[Runtime Personalization and Integration]: Implement user binding and
+        session management by injecting user-specific configurations into already
+        running IDE containers. A dedicated data bridge extension enables this
+        runtime personalization.
+        // which is then consumed by the Artemis Scorpio extension to initialize
+        // authentication and repository access without requiring a restart.
+      ]
+    ],
 
-3. *Concurrency and Routing Optimizations:* Harden the control plane to safely handle
-  burst workloads, such as exam starts. Additionally, migrate the routing layer to
-  the Kubernetes Gateway API to reduce route update propagation latency contributing
-  to session startup delay.
+    [O3],
+    [
+      #par(justify: true)[
+        #strong[Concurrency and Routing Optimizations]: Harden the control plane to
+        safely handle burst workloads, such as exam starts. Additionally, migrate the
+        routing layer to the Kubernetes Gateway API to reduce route update
+        propagation latency contributing to session startup delay.
+      ]
+    ],
 
-4. *Scaling API:* Design and implement a scaling API that exposes relevant scaling
-  parameters. This API serves as the control interface for adjusting the eager-start
-  pool capacity.
+    [O4],
+    [
+      #par(justify: true)[
+        #strong[Scaling API]: Design and implement a scaling API that exposes
+        relevant scaling parameters. This API serves as the control interface for
+        adjusting the eager-start pool capacity.
+      ]
+    ],
 
-5. *Benchmark:* Assess the system's performance, comparing cold versus eager startup
-  latency and operational behavior under concurrent load.
+    [O5],
+    [
+      #par(justify: true)[
+        #strong[Benchmark]: Assess the system's performance, comparing lazy versus
+        eager startup latency and operational behavior under concurrent load.
+      ]
+    ],
 
-6. *Observability:* Integrate Sentry into the Theia Cloud service and operator so
-  that session-start paths expose structured performance data (transactions and
-  spans) for critical steps such as pool reservation, routing updates, and
-  asynchronous data injection, complementing aggregate benchmark results with
-  fine-grained timing.
+    [O6],
+    [
+      #par(justify: true)[
+        #strong[Observability]: Integrate Sentry into Theia Cloud so that
+        session-start paths expose structured performance data for critical steps
+        such as pool reservation, routing updates, and asynchronous data injection,
+        complementing aggregate benchmark results with fine-grained timing to guide
+        optimization efforts.
+      ]
+    ],
+  ),
+  caption: [Primary Objectives],
+  kind: table,
+)
 
 == Outline
 
 The remainder of this thesis is structured as follows: Chapter 2 provides the
-background and context, detailing the challenges of startup latency and runtime
-personalization in cloud IDEs. Chapter 3 presents the system design, including the
-architecture of eager session startup, runtime data injection, the scaling API, and
-operability requirements for observability. Chapter 4 details the architecture of the
-core components, such as the prewarmed resource pool, the data bridge, the routing
-migration, and Sentry instrumentation in the service and operator. Chapter 5
+scientific background and context, detailing the challenges of startup latency and
+runtime personalization in cloud IDEs. Chapter 3 defines the system requirements,
+including the existing system context, the functional and non-functional
+requirements, and the dynamic models that capture the intended workflows. Chapter 4
+presents the system design, detailing the core components of the eager startup
+pipeline, such as the prewarmed resource pool, runtime personalization via the data
+bridge, the routing migration, observability, and the scaling API. Chapter 5
 benchmarks the system's performance, comparing startup latencies and analyzing
 behavior under concurrent workloads. Finally, Chapter 6 concludes the thesis and
-discusses future work, including the potential for predictive scaling.
+discusses future work.

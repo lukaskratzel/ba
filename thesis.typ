@@ -20,8 +20,13 @@
 )
 
 #include "/content/introduction.typ"
+#pagebreak()
 #include "/content/related_work.typ"
+#pagebreak()
 #include "/content/requirements.typ"
+#pagebreak()
 #include "/content/architecture.typ"
+#pagebreak()
 #include "/content/benchmark.typ"
+#pagebreak()
 #include "/content/summary.typ"

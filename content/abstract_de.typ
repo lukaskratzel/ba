@@ -11,7 +11,7 @@ Laufzeit, was die Injektion von Anmeldedaten ohne Container-Neustarts erlaubt. D
 die Migration auf die Kubernetes Gateway API reduziert die Architektur die Startzeit
 weiter, indem sie Verzögerungen bei der Routing-Propagation verringert.
 
-Benchmarks belegen eine Reduzierung der medialen sequentiellen Startup-Latenz um 75 %
-auf 1,37 s sowie eine Verringerung um 89 % bei Burst-Lasten auf 1,99 s. Diese
-Architektur bietet eine robuste, latenzarme Grundlage für umfangreiche
+Benchmarks belegen eine Reduzierung der sequentiellen Startup-Latenz im Median um 75
+% auf 1,37 s sowie eine Verringerung um 89 % bei Burst-Lasten im Median auf 1,99 s.
+Diese Architektur bietet eine robuste, latenzarme Grundlage für umfangreiche
 Bildungsaktivitäten bei gleichzeitiger Wahrung einer strikten Multi-Tenant-Isolation.
