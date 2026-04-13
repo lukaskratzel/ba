@@ -135,7 +135,7 @@ this cluster, as detailed in @tbl:theia-components.
     [*Service*],
     [
       #par(justify: true)[
-        The public-internet-facing service exposes session management APIs to the
+        The public-facing service exposes session management APIs to the
         Landing Page. It creates and watches custom resources via the Kubernetes API
         Server, expressing desired cluster state declaratively.
       ]

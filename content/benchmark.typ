@@ -31,13 +31,13 @@ two distinct workload scenarios:
 For each workload scenario, the evaluation benchmarked the system in three different
 states to isolate the impact of specific architectural changes:
 
-- _Lazy before optimization (Baseline)_: The previous system state utilizing lazy
-  startup and `ingress-nginx` for routing.
-- _Lazy after optimization_: The current system state utilizing lazy startup, but
+- _Lazy before optimization (Baseline)_: The previous system state using lazy startup
+  and `ingress-nginx` for routing.
+- _Lazy after optimization_: The current system state using lazy startup, but
   benefiting from the Gateway API routing layer and concurrency-hardened control
-  plane. On top, the implementation introduced numerous small optimizations
+  plane. In addition, the implementation introduced numerous small optimizations
   throughout the pipeline.
-- _Eager_: The optimized target state utilizing the eager session startup pipeline
+- _Eager_: The optimized target state using the eager session startup pipeline
   alongside the Gateway API routing layer.
 
 === Measurement Boundary

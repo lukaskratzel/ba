@@ -37,7 +37,6 @@ delay disrupts the student's workflow and degrades user experience.
 
 === Artemis-Theia Integration
 
-// TODO: cite scorpio
 Artemis is an interactive learning management platform. To bridge the gap between the
 learning platform and the development environment, Artemis utilizes an integration
 layer called Scorpio, which runs as an extension inside the IDE

@@ -36,8 +36,8 @@ benefits of the prewarmed pool. Fifth, the project implemented a dedicated Scali
 API to expose and control the `minInstances` and `maxInstances` scaling parameters,
 successfully decoupling the mechanical scaling of the infrastructure from the logic
 of demand prediction. Sixth, the project integrated detailed instrumentation into
-the Theia Cloud landing page, service, and operator. By adding Sentry transactions and spans
-over session-start operations across all major system components, operators can
+the Theia Cloud landing page, service, and operator. By adding Sentry transactions
+and spans for session-start operations across all major system components, operators can
 diagnose timing and failures at the level of pool reservation, routing updates, and
 data injection. This facilitates both iterative optimization and operational
 monitoring.
