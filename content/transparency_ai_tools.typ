@@ -41,6 +41,6 @@ coherence in my writing. I used DeepL to enhance language quality and translate 
 of the Literature Review. I used ChatGPT to generate initial drafts and expand on
 ideas in the Introduction and Discussion sections, providing valuable suggestions and
 examples. Additionally, I used GitHub Copilot to generate code snippets for the
-developed functionality and code snippets in the Methodology section. I have
+implemented functionality and for code snippets in the Methodology section. I have
 carefully checked all texts created with these tools to ensure that they are correct
 and make sense.

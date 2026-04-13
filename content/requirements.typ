@@ -1,10 +1,10 @@
 = Requirements
 
-This chapter defines the requirements and constraints of the system developed and
-assessed in this thesis. The first section describes the existing system
+This chapter defines the requirements and constraints of the system that this thesis
+develops and assesses. The first section describes the existing system
 architecture, detailing the original session startup process, the integration with
 the Artemis learning platform, and the inherent limitations regarding routing and
-prewarming. Following this, the proposed system is introduced by specifying the
+prewarming. The chapter then introduces the proposed system by specifying the
 functional and non-functional requirements necessary to achieve low-latency,
 personalized cloud IDE sessions. The chapter concludes with dynamic models that
 illustrate the system's core workflows and interactions under various operational
@@ -28,7 +28,7 @@ toolchains, and base configurations for a specific programming language. The
 
 Originally, Theia Cloud employed a lazy session startup path. When a student
 requested a session, the operator dynamically provisioned the necessary Kubernetes
-resources from scratch. This includes a Kubernetes Deployment, a Service and routing
+resources from scratch. This includes a Kubernetes Deployment, a Service, and routing
 configuration. While this on-demand approach ensures that resources are only consumed
 when actively needed, it introduces significant startup latency. The process of
 scheduling a pod and initializing the IDE environment can take upwards of 15 seconds.
@@ -51,7 +51,7 @@ authentication tokens and Git credentials, to be present in the process environm
 While this assumption holds true for locally installed IDEs or lazily provisioned
 containers where user data is available at process startup time, it creates a
 fundamental incompatibility with prewarmed environments, which must start generically
-before user-specific data is known.
+before the system knows the user's data.
 
 === Routing and Deployment Setup
 
@@ -60,10 +60,11 @@ Each session requires not only compute resources (Deployments) but also networki
 resources (Services and Ingress) to make the IDE accessible to the student's browser.
 
 Routing plays an important role in the startup time. Previously, the system relied on
-one central `ingress-nginx` controller to expose sessions. When a new session was
-created, the operator had to update the ingress configuration to route traffic to the
-newly provisioned pod. The delay in routing propagation, the time it takes for the
-updated routing rules to take effect and for the session URL to become reachable,
+one central `ingress-nginx` controller to expose sessions. When the system created a
+new session, the operator had to update the ingress configuration to route traffic
+to the newly provisioned pod. The delay in routing propagation, that is, the time
+required for the updated routing rules to take effect and for the session URL to
+become reachable,
 contributed meaningfully to the end-to-end startup latency. This delay stems from the
 `ingress-nginx` update mechanism, which rebuilds the configuration model and reloads
 NGINX on most routing changes @kubernetes:ingressnginx:HowItWorks. In contrast,
@@ -83,20 +84,20 @@ educational cloud IDEs introduces a contradiction between latency and
 personalization.
 
 To be reusable and secure, prewarmed sessions must remain generic during their
-initialization phase. They cannot be personalized at creation time because the system
-does not yet know which student will be assigned to the pod. Baking user-specific
+initialization phase. The system cannot personalize them at creation time because it
+does not yet know which student will use the pod. Baking user-specific
 credentials or assignment metadata into a prewarmed container would violate security
 and isolation constraints @souppaya:2017:ApplicationContainerSecurityGuide.
-Therefore, personalization must be deferred until assignment of a generic instance to
-a specific user. This requires a mechanism for runtime data injection that securely
-delivers sensitive information into an already running container without requiring a
-restart, which would negate the latency benefits of prewarming.
+Therefore, the system must defer personalization until it assigns a generic instance
+to a specific user. This requires a mechanism for runtime data injection that
+securely delivers sensitive information into an already running container without
+requiring a restart, which would negate the latency benefits of prewarming.
 
 == Proposed System
 
 To address the limitations of the existing architecture, the proposed system
 introduces an eager session startup pipeline. This pipeline shifts provisioning work
-from the critical path of the student's request to be performed ahead of time,
+away from the critical path of the student's request and performs it ahead of time,
 supported by a hardened control plane and an API for automation.
 
 === Functional Requirements
@@ -135,8 +136,8 @@ achieve its objectives:
       #par(justify: true)[
         #strong[Runtime Data Injection]: The system must provide a mechanism to
         securely inject session-specific runtime data like authentication tokens and
-        Git credentials into the IDE container after it has been assigned, without
-        requiring a container restart.
+        Git credentials into the IDE container after the system assigns the
+        instance, without requiring a container restart.
       ] <fr3>
     ],
 
@@ -169,10 +170,9 @@ achieve its objectives:
     [FR7],
     [
       #par(justify: true)[
-        #strong[Fallback to Lazy Startup]: If the prewarmed pool is exhausted and no
-        warm instances are available, the system must gracefully fall back to the
-        traditional lazy startup path, ensuring availability up to the configured
-        maximum session limit.
+        #strong[Fallback to Lazy Startup]: If the prewarmed pool runs empty, the
+        system must gracefully fall back to the traditional lazy startup path,
+        ensuring availability up to the configured maximum session limit.
       ] <fr7>
     ],
   ),
@@ -225,8 +225,8 @@ non-functional requirements (NFRs) that define its operational quality:
     [
       #par(justify: true)[
         #strong[Security and Isolation]: Generic, prewarmed instances must not leak
-        credentials. Once a session is terminated, the instance state must be
-        destroyed before its resources can be returned to the pool.
+        credentials. Once a session ends, the system must destroy the instance state
+        before it returns the resources to the pool.
       ] <nfr4>
     ],
 
@@ -244,10 +244,10 @@ non-functional requirements (NFRs) that define its operational quality:
       #par(justify: true)[
         #strong[Observability]: The Theia Cloud landing page, service, and operator
         must support production-oriented monitoring of session-start performance and
-        failures. Critical control-plane, API, and user-facing entry steps must be
-        attributable in telemetry so that latency and errors can be diagnosed without
-        relying solely on end-to-end measurements. Sensitive data must not be exposed
-        in telemetry beyond what is necessary for operations.
+        failures. Telemetry must attribute critical control-plane, API, and
+        user-facing entry steps so that operators can diagnose latency and errors
+        without relying solely on end-to-end measurements. Sensitive data must not
+        appear in telemetry beyond what operations require.
       ] <nfr6>
     ],
   ),
@@ -275,11 +275,11 @@ data injection (#link(<fr3>)[FR3]), and lazy fallback (#link(<fr7>)[FR7]).
 
 The _Administrator_ operates the system's scaling and monitoring surface. Configuring
 the pool size maps to the scaling API requirement (#link(<fr5>)[FR5]), allowing
-prewarmed capacity to be adjusted ahead of anticipated demand. Monitoring pool
+operators to adjust prewarmed capacity ahead of anticipated demand. Monitoring pool
 utilization and resource usage support the observability requirement (#link(
   <nfr6>,
-)[NFR6]), giving operators visibility into whether the prewarmed pool is adequately
-sized and how infrastructure resources are consumed under load.
+)[NFR6]), giving operators visibility into whether the prewarmed pool has adequate
+capacity and how the infrastructure consumes resources under load.
 
 === End-to-End Startup Workflow
 
@@ -290,10 +290,10 @@ sized and how infrastructure resources are consumed under load.
 ) <fig:activity-diagram>
 
 @fig:activity-diagram outlines the end-to-end workflow from the moment a student
-starts an exercise to the point where they can work on the exercise. When a session
-is requested, Theia Cloud checks for an available prewarmed instance. If one exists,
-the system skips provisioning and directly binds the user environment to the
-ready-to-use instance. Otherwise, a new instance is lazily provisioned before
+starts an exercise to the point where they can work on the exercise. When a student
+requests a session, Theia Cloud checks for an available prewarmed instance. If one
+exists, the system skips provisioning and directly binds the user environment to the
+ready-to-use instance. Otherwise, the system lazily provisions a new instance before
 proceeding.
 
 This workflow implements the functional requirements. The system relies on continuous
@@ -307,10 +307,10 @@ assignment steps must handle concurrency safely (#link(
 )[FR6]).
 
 For the student, this eager provisioning minimizes idle time. By shifting
-initialization to occur before the request, latency is reduced, allowing productive
-work to begin sooner than in a lazy setup.
+initialization to a point before the request, the system reduces latency and allows
+productive work to begin sooner than in a lazy setup.
 
-If the prewarmed pool is exhausted, the system falls back to lazy startup (#link(
+If the prewarmed pool runs empty, the system falls back to lazy startup (#link(
   <fr7>,
 )[FR7]), provisioning a new session from scratch. This fallback guarantees
 availability up to the cluster's maximum capacity, ensuring students are not rejected

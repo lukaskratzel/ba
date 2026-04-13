@@ -4,8 +4,8 @@ The landscape of computer science education has transformed over the past decade
 Krusche et al. note that the surge in student numbers has rendered manual assessment
 of programming exercises impractical, prompting the need for automated assessment
 systems @krusche:2018:ArtemisAutomaticAssessment. In response, learning management
-system like Artemis have emerged to provide automatic programming exercise assessment
-with quick feedback at scale @krusche:2018:ArtemisAutomaticAssessment.
+systems like Artemis have emerged to provide automated programming exercise
+assessment with quick feedback at scale @krusche:2018:ArtemisAutomaticAssessment.
 
 Online IDE services for training, assessments, and development environments have
 proliferated as learning platforms increasingly migrate their development
@@ -17,9 +17,8 @@ to students @schmidt:2024:InclusiveLearningEnvironmentsa.
 Eclipse Theia is an extensible cloud and desktop IDE platform. It provides a unified
 interface for various programming languages in a browser-based environment. Theia
 Cloud enables the deployment and management of Theia-based IDEs on Kubernetes at
-scale. Artemis integrates Theia as shown in @fig:ssd. The instance of Theia Cloud
-developed and evaluated in this thesis is deployed at the university under the name
-EduIDE.
+scale. Figure @fig:ssd shows this integration. The university deploys the
+Theia Cloud instance that this thesis develops and evaluates under the name EduIDE.
 
 #figure(
   image("../figures/ssd3.svg"),
@@ -33,7 +32,7 @@ Despite the benefits of cloud-based IDEs like Theia Cloud, critical issues aroun
 performance, user experience, and infrastructure scalability impede their practical
 use in educational settings.
 
-One core problem is rooted in startup delays. When a student starts a session, the
+Startup delays create one core problem. When a student starts a session, the
 system provisions a Kubernetes pod along with the necessary resources to host the
 development session. This process can exceed 15 seconds, depending on system load and
 resource availability, creating delays during assignment releases or approaching
@@ -50,14 +49,15 @@ significant challenge.
 
 == Motivation
 
-Addressing the startup latency issues in cloud-based Integrated Development
-Environments is important from a scientific perspective, but also for improving
-educational outcomes and driving adoption of scalable learning platforms. Prewarming
+Addressing startup latency issues in cloud-based Integrated Development
+Environments is important not only from a scientific perspective but also for
+improving educational outcomes and driving the adoption of scalable learning
+platforms. Prewarming
 offers a solution by handling significant initialization tasks upfront.
 
 In this approach, when a student starts an exercise, EduIDE first checks for
 available prewarmed pods. If one exists, the system skips the costly provisioning
-steps including pod creation and IDE startup. It directly binds the user environment
+steps, including pod creation and IDE startup. It directly binds the user environment
 to the ready pod. This binding dynamically injects the necessary authentication
 tokens, repository credentials, and workspace settings into the already running
 container.
@@ -66,8 +66,8 @@ For students, immediate access to development environments can enhance their lea
 experience. Research by Benotti et al. demonstrated that web-based coding tools that
 provide quick feedback significantly enhance student engagement and improve learning
 outcomes in programming courses @benotti:2018:EffectWebbasedCoding. By minimizing
-startup delays, students can maintain focus and momentum, allowing them to focus on
-problem-solving.
+startup delays, students can maintain focus and momentum, allowing them to
+concentrate on problem-solving.
 
 From an instructor's viewpoint, a reliable and responsive cloud IDE infrastructure
 enables effective teaching strategies. With a system capable of supporting
@@ -163,7 +163,7 @@ objectives:
 
 == Outline
 
-The remainder of this thesis is structured as follows: Chapter 2 provides the
+The remainder of this thesis proceeds as follows: Chapter 2 provides the
 scientific background and context, detailing the challenges of startup latency and
 runtime personalization in cloud IDEs. Chapter 3 defines the system requirements,
 including the existing system context, the functional and non-functional

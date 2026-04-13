@@ -4,7 +4,7 @@ This chapter reviews the foundational literature and recent architectural
 advancements that contextualize the need for low-latency, personalized development
 environments in computer science education. It first examines the pedagogical shift
 towards web-based Integrated Development Environments (IDEs) and their integration
-with automated assessment platforms. Following this, the chapter explores relevant
+with automated assessment platforms. It then explores relevant
 infrastructure optimization techniques.
 
 == Cloud IDEs in Education
@@ -41,7 +41,7 @@ Function-as-a-Service (FaaS) platforms. The time required to schedule a pod, pul
 image, and initialize the runtime environment often leads to unacceptable delays. A
 widely validated mitigation strategy is container prewarming, which involves
 proactively maintaining a pool of pre-initialized, generic containers
-@mohan:2019:AgileColdStarts. By pre-crafting these resources, systems can bypass the
+@mohan:2019:AgileColdStarts. By preparing these resources in advance, systems can bypass the
 initialization overhead, reducing cold-start latency and maintaining stable response
 times even as concurrent requests spike @mohan:2019:AgileColdStarts. Studies
 demonstrate that pool-based prewarming strategies can reduce 99th percentile startup
@@ -60,11 +60,11 @@ Implementing prewarming in a multi-tenant educational platform introduces the
 challenge of personalization. Prewarmed containers must remain generic to be
 reusable, yet a student's IDE session requires specific, sensitive context, such as
 version control credentials and repository bindings. Resolving this requires
-"late-binding" mechanisms, where a generic compute resource is claimed from a
-prewarmed pool before the specific user payload or identity is injected
+"late-binding" mechanisms, where the system claims a generic compute resource from a
+prewarmed pool before it injects the specific user payload or identity
 @sfiligoi:2025:ContainerLatebindingUnprivileged. Recent advancements in unprivileged
-distributed computing demonstrate that late-binding can be successfully implemented
-in Kubernetes by utilizing multi-container pods and shared ephemeral storage,
-allowing user-specific configurations to be dynamically staged into running
-environments without requiring container restarts
+distributed computing demonstrate that Kubernetes can support late-binding through
+multi-container pods and shared ephemeral storage, allowing the system to
+dynamically stage user-specific configurations into running environments without
+requiring container restarts
 @sfiligoi:2025:ContainerLatebindingUnprivileged.

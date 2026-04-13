@@ -7,7 +7,7 @@ Kubernetes, leidet jedoch unter Cold-Start-Verzögerungen, die das synchrone Ler
 stören. Diese Arbeit implementiert eine Eager-Session-Startup-Pipeline für Theia
 Cloud, um diese Latenzen zu minimieren. Die Lösung nutzt vorgewärmte Instanzen in
 Kombination mit einer Data-Bridge für eine sichere Late-Binding-Personalisierung zur
-Laufzeit, was die Injektion von Anmeldedaten ohne Container-Neustarts erlaubt. Durch
+Laufzeit, die die Injektion von Anmeldedaten ohne Container-Neustarts erlaubt. Durch
 die Migration auf die Kubernetes Gateway API reduziert die Architektur die Startzeit
 weiter, indem sie Verzögerungen bei der Routing-Propagation verringert.
 
