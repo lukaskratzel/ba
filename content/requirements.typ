@@ -11,19 +11,17 @@ workflows and interactions under various operational scenarios.
 
 == Existing System
 
-To understand the necessity and design of the proposed improvements, it is essential
-to first examine the existing infrastructure of Theia Cloud and its integration with
-Artemis.
+The existing infrastructure of Theia Cloud and its integration with Artemis provide
+the necessary context for the proposed improvements.
 
 === Theia Cloud Session Startup
 
-In the context of this thesis, Theia Cloud serves as the orchestration layer for
-deploying and managing Eclipse Theia-based IDEs on Kubernetes. The system relies on
-two primary concepts: the `AppDefinition` and the `Session`. The `AppDefinition` acts
-as a blueprint specifying the IDE environment, including container images,
-toolchains, and base configurations for a specific programming language. The
-`Session` represents an individual user's active IDE instance based on an
-`AppDefinition`.
+Theia Cloud serves as the orchestration layer for deploying and managing Eclipse
+Theia-based IDEs on Kubernetes. The system relies on two primary concepts: the
+`AppDefinition` and the `Session`. The `AppDefinition` acts as a blueprint specifying
+the IDE environment, including container images, toolchains, and base configurations
+for a specific programming language. The `Session` represents an individual user's
+active IDE instance based on an `AppDefinition`.
 
 Originally, Theia Cloud employed a lazy session startup path. When a student
 requested a session, the operator dynamically provisioned the necessary Kubernetes
@@ -46,10 +44,10 @@ statements and feedback into the IDE.
 In the previous integration model, Scorpio assumed a classic desktop-style VS Code
 environment. It expected all necessary environment variables, including
 authentication tokens and Git credentials, to be present in the process environment.
-While this assumption holds true for locally installed IDEs or lazily provisioned
-containers where user data is available at process startup time, it creates a
-fundamental incompatibility with prewarmed environments, which must start generically
-before the system knows the user's data.
+This assumption holds for locally installed IDEs or lazily provisioned containers
+where user data exists at process startup time. It creates a fundamental
+incompatibility with prewarmed environments, which must start generically before the
+system knows the user's data.
 
 === Routing and Deployment Setup
 
@@ -64,11 +62,25 @@ the newly provisioned pod. The delay in routing propagation, that is, the time
 required for the updated routing rules to take effect and for the session URL to
 become reachable, contributed meaningfully to the end-to-end startup latency. This
 delay stems from the `ingress-nginx` update mechanism, which rebuilds the
-configuration model and reloads NGINX on most routing changes
-@kubernetes:ingressnginx:HowItWorks. In contrast, Envoy-based gateways update routing
-state dynamically at runtime via xDS APIs without requiring a reload, reducing route
-propagation latency @envoy:docs:DynamicConfiguration @envoygateway:docs:SystemDesign.
-Consequently, optimizing container startup time alone is insufficient if the
+configuration model and reloads NGINX on most routing changes#footnote[
+  Ingress-NGINX Controller, _How It Works_, documentation page, accessed April 7,
+  2026, #link("https://kubernetes.github.io/ingress-nginx/how-it-works/")[
+    kubernetes.github.io/ingress-nginx/how-it-works/
+  ].
+]. In contrast, Envoy-based gateways update routing state dynamically at runtime via
+xDS APIs without requiring a reload, reducing route propagation latency#footnote[
+  Envoy Project Authors, _xDS Configuration API Overview_, documentation page,
+  accessed April 7, 2026, #link(
+    "https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration",
+  )[
+    envoyproxy.io docs
+  ]; Envoy Gateway Maintainers, _System Design_, documentation page, accessed April
+  7, 2026, #link(
+    "https://gateway.envoyproxy.io/contributions/design/system-design/",
+  )[
+    gateway.envoyproxy.io
+  ].
+]. Consequently, optimizing container startup time alone is insufficient if the
 networking layer remains a bottleneck. This limitation necessitated the exploration
 of more dynamic routing solutions, such as the Kubernetes Gateway API using Envoy
 Gateway as an implementation.
@@ -80,21 +92,25 @@ maintaining a pool of ready-to-use resources. However, applying prewarming to
 educational cloud IDEs introduces a contradiction between latency and
 personalization.
 
-To be reusable and secure, prewarmed sessions must remain generic during their
+Reusable and secure prewarmed sessions must remain generic during their
 initialization phase. The system cannot personalize them at creation time because it
 does not yet know which student will use the pod. Baking user-specific credentials or
 assignment metadata into a prewarmed container would violate security and isolation
-constraints @souppaya:2017:ApplicationContainerSecurityGuide. Therefore, the system
-must defer personalization until it assigns a generic instance to a specific user.
-This requires a mechanism for runtime data injection that securely delivers sensitive
-information into an already running container without requiring a restart, which
-would negate the latency benefits of prewarming.
+constraints#footnote[
+  Murugiah Souppaya, John Morello, and Karen Scarfone, _Application Container
+  Security Guide_, NIST Special Publication 800-190, September 2017, #link(
+    "https://doi.org/10.6028/NIST.SP.800-190",
+  )[doi.org/10.6028/NIST.SP.800-190].
+]. Therefore, the system must defer personalization until it assigns a generic
+instance to a specific user. This requires a mechanism for runtime data injection
+that securely delivers sensitive information into an already running container
+without requiring a restart, which would negate the latency benefits of prewarming.
 
 == Proposed System
 
-To address the limitations of the existing architecture, the proposed system
-introduces an eager session startup pipeline. This pipeline shifts provisioning work
-away from the critical path of the student's request and performs it ahead of time,
+The proposed system introduces an eager session startup pipeline that addresses the
+limitations of the existing architecture. This pipeline shifts provisioning work away
+from the critical path of the student's request and performs it ahead of time,
 supported by a hardened control plane and an API for automation.
 
 === Functional Requirements
@@ -254,8 +270,8 @@ non-functional requirements (NFRs) that define its operational quality:
 
 == Dynamic Models
 
-To illustrate how the proposed system fulfills these requirements, the following
-dynamic models describe the core workflows and interactions within the architecture.
+The following dynamic models describe the core workflows and interactions within the
+architecture, illustrating how the proposed system fulfills these requirements.
 
 === Use Case Model
 
@@ -303,9 +319,9 @@ assignment steps must handle concurrency safely (#link(
   <fr6>,
 )[FR6]).
 
-For the student, this eager provisioning minimizes idle time. By shifting
-initialization to a point before the request, the system reduces latency and allows
-productive work to begin sooner than in a lazy setup.
+Eager provisioning minimizes idle time for the student. The system reduces latency
+and allows productive work to begin sooner than in a lazy setup by shifting
+initialization before the request.
 
 If the prewarmed pool runs empty, the system falls back to lazy startup (#link(
   <fr7>,

@@ -38,53 +38,49 @@ development session. This process can exceed 15 seconds, depending on system loa
 resource availability, creating delays during assignment releases or approaching
 deadlines.
 
-To address startup latency, Theia Cloud can maintain pools of prewarmed containers,
-an approach validated by Mohan et al. in the context of serverless functions
-@mohan:2019:AgileColdStarts. However, assigning users to prewarmed environments
-presents a significant challenge. Prewarmed environments must remain generic before
-assignment, while each student requires personalized configurations like version
-control credentials and assignment metadata. Technically, injecting this
-personalization at runtime without compromising the system's architecture poses a
-significant challenge.
+Theia Cloud can maintain pools of prewarmed containers to address startup latency, an
+approach Mohan et al. validated in the context of serverless functions
+@mohan:2019:AgileColdStarts. Assigning users to prewarmed environments, however,
+presents a challenge. Prewarmed environments must remain generic before assignment,
+while each student requires personalized configurations like version control
+credentials and assignment metadata. Injecting this personalization at runtime
+without compromising the system's architecture adds further complexity.
 
 == Motivation
 
-Addressing startup latency issues in cloud-based Integrated Development Environments
-is important not only from a scientific perspective but also for improving
-educational outcomes and driving the adoption of scalable learning platforms.
-Prewarming offers a solution by handling significant initialization tasks upfront.
+Startup latency in cloud-based Integrated Development Environments affects
+educational outcomes and the adoption of scalable learning platforms. Prewarming
+offers a path forward by handling initialization tasks upfront.
 
-In this approach, when a student starts an exercise, EduIDE first checks for
-available prewarmed pods. If one exists, the system skips the costly provisioning
-steps, including pod creation and IDE startup. It directly binds the user environment
-to the ready pod. This binding dynamically injects the necessary authentication
-tokens, repository credentials, and workspace settings into the already running
-container.
+When a student starts an exercise, EduIDE first checks for available prewarmed pods.
+If one exists, the system skips the costly provisioning steps, including pod creation
+and IDE startup. It directly binds the user environment to the ready pod. This
+binding dynamically injects the necessary authentication tokens, repository
+credentials, and workspace settings into the already running container.
 
-For students, immediate access to development environments can enhance their learning
-experience. Research by Benotti et al. demonstrated that web-based coding tools that
-provide quick feedback significantly enhance student engagement and improve learning
-outcomes in programming courses @benotti:2018:EffectWebbasedCoding. By minimizing
-startup delays, students can maintain focus and momentum, allowing them to
-concentrate on problem-solving.
+Immediate access to development environments enhances the student learning
+experience. Benotti et al. demonstrated that web-based coding tools with quick
+feedback loops enhance student engagement and improve learning outcomes in
+programming courses @benotti:2018:EffectWebbasedCoding. Minimal startup delays help
+students maintain focus and momentum and concentrate on problem-solving.
 
-From an instructor's viewpoint, a reliable and responsive cloud IDE infrastructure
-enables effective teaching strategies. With a system capable of supporting
-synchronized activities, instructors can design interactive exercises and live coding
-demonstrations for entire classes. Prewarming minimizes delays in exercise execution,
-which is especially valuable for short in-class exercises where startup latency would
-otherwise consume a significant portion of the available time.
+A reliable and responsive cloud IDE infrastructure enables effective teaching
+strategies. Instructors can design interactive exercises and live coding
+demonstrations for entire classes with a system that supports synchronized
+activities. Prewarming minimizes delays in exercise execution, which is valuable for
+short in-class exercises where startup latency would otherwise consume a large
+portion of the available time.
 
 == Objectives
 
 This thesis implements the architectural basis for low-latency personalized cloud IDE
-sessions in educational environments. Building upon Theia Cloud's existing
-infrastructure, the core contribution is a production-oriented eager session startup
-pipeline that combines prewarmed instance pools, concurrency-safe handling of burst
-session starts, runtime session personalization, faster routing, integration with
-Artemis, and server-side observability with Sentry for timing and error visibility
-across the Theia Cloud system. The work addresses the identified challenges through
-the following primary objectives:
+sessions in educational environments. The core contribution is a production-oriented
+eager session startup pipeline that builds upon Theia Cloud's existing
+infrastructure. It combines prewarmed instance pools, concurrency-safe handling of
+burst session starts, runtime session personalization, faster routing, integration
+with Artemis, and server-side observability with Sentry for timing and error
+visibility across the Theia Cloud system. The work addresses the identified
+challenges through the following primary objectives:
 
 #block[*Prewarmed IDE Instance Pool*: The central contribution of the eager startup
   pipeline is a dynamic pool of generic, ready-to-use IDE instances that the Operator

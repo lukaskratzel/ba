@@ -1,10 +1,10 @@
 = System Design
 
-This chapter details the system architecture that fulfills the requirements outlined
-in the previous chapter. We begin by establishing the core design goals, before
-introducing the static structural boundaries of the system and detailing the dynamic
-behavior of components under load. Finally, we elaborate on the role of observability
-and explain how the system manages persistent state and scaling.
+This chapter details the system architecture that fulfills the requirements from the
+previous chapter. The chapter first establishes the core design goals, then
+introduces the static structural boundaries of the system and details the dynamic
+behavior of components under load. It concludes with the role of observability and
+the system's approach to persistent state and scaling.
 
 == Design Goals
 
@@ -84,12 +84,13 @@ requirements, drove the architecture of the eager session startup pipeline:
 
 == System Structure
 
-To understand how the system achieves these goals, it is necessary to first define
-its static physical and logical boundaries. Addressing the goal to preserve platform
-compatibility (#link(<dg4>)[DG4]), the architecture builds directly upon existing
-Theia Cloud concepts rather than introducing a disruptive rewrite. It spans three
-primary environments: the external Artemis learning management system, the student's
-browser, and the Kubernetes cluster hosting Theia Cloud.
+The system's static physical and logical boundaries frame how it achieves these
+goals. The architecture builds directly upon existing Theia Cloud concepts rather
+than introducing a disruptive rewrite, preserving platform compatibility (#link(
+  <dg4>,
+)[DG4]). It spans three primary environments: the external Artemis learning
+management system, the student's browser, and the Kubernetes cluster hosting Theia
+Cloud.
 
 #figure(
   image("../figures/ssd4.svg", width: 100%),
@@ -196,8 +197,8 @@ components interact to deliver a fast, personalized IDE session.
 
 === Instance Lifecycle
 
-The foundation of the eager startup pipeline is the lifecycle of a single IDE pool
-slot, which the system represents as a Kubernetes Deployment.
+The lifecycle of a single IDE pool slot, which the system represents as a Kubernetes
+Deployment, forms the foundation of the eager startup pipeline.
 
 #figure(
   image("../figures/state-machine.drawio.svg", width: 100%),
@@ -231,9 +232,9 @@ the student's session ends, the operator resets the resources.
 
 === Fast-Path Session Assignment and Routing
 
-To minimize startup latency (#link(<dg1>)[DG1]), the critical path of an eager
-session startup performs operations synchronously only when necessary, shifting
-costly provisioning tasks out of the student's request cycle.
+The critical path of an eager session startup performs operations synchronously only
+when necessary, shifting costly provisioning tasks out of the student's request cycle
+to minimize startup latency (#link(<dg1>)[DG1]).
 
 #figure(
   image("../figures/startup-seq.svg", width: 100%),
@@ -275,17 +276,17 @@ internal Data Bridge component (`pollDataBridge(url)`) for readiness and subsequ
 injects the student's credentials and environment variables into the running IDE
 instance (`personalizeIDE()`).
 
-It is important to note that the latency of loading the IDE in the browser
-(`loadIDE(url)`) after opening the session URL is outside the optimization scope of
-this thesis. The optimized path covers only the duration of the `startSession()`
-call, including all infrastructure setup tasks, while the IDE's browser-side loading
-time remains unaffected by the eager startup pipeline.
+The latency of loading the IDE in the browser (`loadIDE(url)`) after opening the
+session URL falls outside the optimization scope of this thesis. The optimized path
+covers only the duration of the `startSession()` call, including all infrastructure
+setup tasks, while the IDE's browser-side loading time remains unaffected by the
+eager startup pipeline.
 
 === Runtime Personalization
 
-To decouple personalization from provisioning (#link(<dg2>)[DG2]), the operator
-injects student-specific context asynchronously only after it reserves a generic
-instance, keeping the pool generic. This asynchronous injection is not merely an
+The operator injects student-specific context asynchronously only after it reserves a
+generic instance, decoupling personalization from provisioning (#link(<dg2>)[DG2])
+and keeping the pool generic. This asynchronous injection is not merely an
 optimization to avoid blocking the critical path. An architectural constraint of the
 Theia IDE makes it necessary: Theia extensions only start when the student's browser
 loads the session. Consequently, the student must load the session in the browser for
@@ -322,10 +323,11 @@ preserve platform compatibility (#link(
 
 == Observability
 
-To support operability (#link(<dg6>)[DG6]), the implementation integrates Sentry
-distributed tracing across the landing page, service, and operator to monitor system
-dynamics and ensure performance goals, providing detailed production data about stage
-behavior, error rates, and each operation's share of total startup time.
+The implementation integrates Sentry distributed tracing across the landing page,
+service, and operator to support operability (#link(<dg6>)[DG6]), monitor system
+dynamics, and ensure performance goals. This integration provides detailed production
+data about stage behavior, error rates, and each operation's share of total startup
+time.
 
 Sentry tracks session-start requests as end-to-end performance transactions. The
 traces model sub-operations such as pool reservation, Routing Manager update
@@ -351,8 +353,8 @@ to perceived startup latency.
   ],
 ) <fig:sentry-trace>
 
-Such traces delineate the subprocesses involved in provisioning and directly guided
-targeted optimizations. For example, identifying NGINX route-rule propagation as a
+Such traces delineate the subprocesses involved in provisioning and directly guide
+targeted optimizations, for example by identifying NGINX route-rule propagation as a
 dominant synchronous cost. This integrated observability benefits all future changes
 by establishing concrete baseline metrics to prevent performance regressions and
 maintain fast startup times.
@@ -400,7 +402,7 @@ crucially, the scaling parameters governing the prewarmed pool (#link(<dg1>)[DG1
     parameters.],
 ) <lst:app-definition>
 
-As seen in the example, the `AppDefinition` exposes two key parameters for scaling:
+The `AppDefinition` exposes two key parameters for scaling:
 
 - `minInstances`: Dictates the size of the eager-start pool (the number of
   `Prewarmed` instances to maintain).
@@ -410,12 +412,13 @@ As seen in the example, the `AppDefinition` exposes two key parameters for scali
 // no diagram here, be sure to explain well and maybe go into mechanism marking
 // claimed instances as scheduled for deletion. Backreference to state machine.
 
-To enable programmatic scaling (#link(<dg5>)[DG5]), the architecture introduces a
-dedicated Scaling API that allows external systems to inspect and patch these
-parameters securely. To protect these administrative operations, the API enforces
-authorization using Bearer authentication with a custom admin token. This ensures
-that only trusted external systems, such as future machine-learning models predicting
-demand, can implement programmatic scaling logic.
+The architecture introduces a dedicated Scaling API that allows external systems to
+inspect and patch these parameters securely, enabling programmatic scaling (#link(
+  <dg5>,
+)[DG5]). The API enforces authorization using Bearer authentication with a custom
+admin token to protect these administrative operations. This ensures that only
+trusted external systems, such as future machine-learning models predicting demand,
+can implement programmatic scaling logic.
 
 The API exposes three primary endpoints under the `/service/admin/appdefinition`
 path. Table @tbl:scaling-api lists them.
