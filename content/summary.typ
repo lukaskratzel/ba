@@ -14,35 +14,35 @@ environments, specifically within the context of Theia Cloud and Artemis.
 
 === Realized Goals
 
-The implementation successfully achieved the core objectives set out at the
-beginning of the project. First, the project implemented a robust eager session
-start mechanism. The operator prewarms generic IDE instances and allows rapid,
-synchronized reservation. This realizes the maintenance of prewarmed pools
-(#link(<fr1>)[FR1]) and dynamic session assignment (#link(<fr2>)[FR2]) while
-significantly reducing provisioning
-delays in line with low startup latency (#link(<nfr1>)[NFR1]). Second, the
-runtime-personalization design resolved the contradiction between generic prewarming
-and user-specific environments. The introduction of the data bridge and the
-adaptation of the Scorpio extension enabled secure injection of credentials into
+The implementation successfully achieved the core objectives set out at the beginning
+of the project. First, the project implemented a robust eager session start
+mechanism. The operator prewarms generic IDE instances and allows rapid, synchronized
+reservation. This realizes the maintenance of prewarmed pools (#link(<fr1>)[FR1]) and
+dynamic session assignment (#link(<fr2>)[FR2]) while significantly reducing
+provisioning delays in line with low startup latency (#link(<nfr1>)[NFR1]). Second,
+the runtime-personalization design resolved the contradiction between generic
+prewarming and user-specific environments. The introduction of the data bridge and
+the adaptation of the Scorpio extension enabled secure injection of credentials into
 already-running containers, thereby fulfilling runtime data injection (#link(
   <fr3>,
 )[FR3]), support for Artemis workflows (#link(<fr4>)[FR4]), and security and
 isolation (#link(<nfr4>)[NFR4]). Third, the project fortified the control plane to
-handle burst workloads. Mechanisms such as race-aware session handling, synchronized pool
-reservations, and independent routing rule mutations ensure the system remains stable
-during simulated load scenarios. Fourth, the migration from `ingress-nginx` to the
-Kubernetes Gateway API reduced routing propagation delays, unblocking the latency
+handle burst workloads. Mechanisms such as race-aware session handling, synchronized
+pool reservations, and independent routing rule mutations ensure the system remains
+stable during simulated load scenarios. Fourth, the migration from `ingress-nginx` to
+the Kubernetes Gateway API reduced routing propagation delays, unblocking the latency
 benefits of the prewarmed pool. Fifth, the project implemented a dedicated Scaling
 API to expose and control the `minInstances` and `maxInstances` scaling parameters,
 successfully decoupling the mechanical scaling of the infrastructure from the logic
-of demand prediction. Sixth, the project integrated detailed instrumentation into
-the Theia Cloud landing page, service, and operator. By adding Sentry transactions
-and spans for session-start operations across all major system components, operators can
+of demand prediction. Sixth, the project integrated detailed instrumentation into the
+Theia Cloud landing page, service, and operator. By adding Sentry transactions and
+spans for session-start operations across all major system components, operators can
 diagnose timing and failures at the level of pool reservation, routing updates, and
 data injection. This facilitates both iterative optimization and operational
-monitoring.
-Taken together, these changes satisfy programmatic scaling (#link(<fr5>)[FR5]), safe
-concurrency handling (#link(<fr6>)[FR6]), fallback to lazy startup (#link(
+monitoring. Taken together, these changes satisfy programmatic scaling (#link(
+  <fr5>,
+)[FR5]), safe concurrency handling (#link(<fr6>)[FR6]), fallback to lazy startup
+(#link(
   <fr7>,
 )[FR7]), correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst
 load (#link(<nfr3>)[NFR3]), and observability (#link(<nfr6>)[NFR6]).
@@ -50,17 +50,17 @@ load (#link(<nfr3>)[NFR3]), and observability (#link(<nfr6>)[NFR6]).
 === Open Goals
 
 While the foundational architecture is complete, certain aspects of the original
-vision remain open. These objectives belonged to the initial scope but
-still require further refinement or validation.
+vision remain open. These objectives belonged to the initial scope but still require
+further refinement or validation.
 
 First, while the evaluation benchmarked the system in a controlled and simulated
-environment, a broader evaluation using real student traffic during an active semester is
-necessary to fully validate the system's impact on user experience and infrastructure
-load. Second, while the current concurrency measures prevent system failure during
-bursts, extreme scenarios involving hundreds of simultaneous requests can still
-bottleneck at synchronization points in the operator, particularly around pool
-reservation. Further reducing these bottlenecks to maximize throughput remains an
-open objective for the upper limits of scalability under burst load (#link(
+environment, a broader evaluation using real student traffic during an active
+semester is necessary to fully validate the system's impact on user experience and
+infrastructure load. Second, while the current concurrency measures prevent system
+failure during bursts, extreme scenarios involving hundreds of simultaneous requests
+can still bottleneck at synchronization points in the operator, particularly around
+pool reservation. Further reducing these bottlenecks to maximize throughput remains
+an open objective for the upper limits of scalability under burst load (#link(
   <nfr3>,
 )[NFR3]).
 
@@ -91,18 +91,17 @@ synchronous educational activities.
 The completed architecture opens several promising directions for future research and
 engineering that extend beyond the scope of this thesis.
 
-With the Scaling API in place, the immediate next step is to develop a
-predictive scaling service. By consuming historical usage data such as exercise
-release schedules and typical student working hours, this service could proactively
-adjust the prewarmed pool just before demand spikes, minimizing both latency and the
-cost of idle resources.
+With the Scaling API in place, the immediate next step is to develop a predictive
+scaling service. By consuming historical usage data such as exercise release
+schedules and typical student working hours, this service could proactively adjust
+the prewarmed pool just before demand spikes, minimizing both latency and the cost of
+idle resources.
 
 As the eager startup pipeline has significantly reduced session preparation time, the
 client-side latency bottleneck is now a more relevant contributor to the overall
-startup latency.
-Optimizing the browser's loading of the IDE session, asset caching, and initial
-rendering is the next logical step toward improving the end-to-end startup
-experience.
+startup latency. Optimizing the browser's loading of the IDE session, asset caching,
+and initial rendering is the next logical step toward improving the end-to-end
+startup experience.
 
 While Sentry currently covers session-start paths, extending this telemetry into the
 student-facing IDE would close the observability gap. Implementing client-side

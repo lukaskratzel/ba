@@ -1,10 +1,10 @@
 = System Design
 
-This chapter details the system architecture that fulfills the requirements
-outlined in the previous chapter. We begin by establishing the core design goals,
-before introducing the static structural boundaries of the system and detailing the
-dynamic behavior of components under load. Finally, we elaborate on the role of
-observability and explain how the system manages persistent state and scaling.
+This chapter details the system architecture that fulfills the requirements outlined
+in the previous chapter. We begin by establishing the core design goals, before
+introducing the static structural boundaries of the system and detailing the dynamic
+behavior of components under load. Finally, we elaborate on the role of observability
+and explain how the system manages persistent state and scaling.
 
 == Design Goals
 
@@ -72,9 +72,9 @@ requirements, drove the architecture of the eager session startup pipeline:
     [
       #par(justify: true)[
         #strong[Support Operability]: The system must remain diagnosable in
-        production. The landing page, service, and operator must expose
-        fine-grained timing and error reporting on session-start paths to validate
-        optimizations, explain variance under load, and shorten incident response.
+        production. The landing page, service, and operator must expose fine-grained
+        timing and error reporting on session-start paths to validate optimizations,
+        explain variance under load, and shorten incident response.
       ] <dg6>
     ],
   ),
@@ -88,8 +88,8 @@ To understand how the system achieves these goals, it is necessary to first defi
 its static physical and logical boundaries. Addressing the goal to preserve platform
 compatibility (#link(<dg4>)[DG4]), the architecture builds directly upon existing
 Theia Cloud concepts rather than introducing a disruptive rewrite. It spans three
-primary environments: the external Artemis learning management system,
-the student's browser, and the Kubernetes cluster hosting Theia Cloud.
+primary environments: the external Artemis learning management system, the student's
+browser, and the Kubernetes cluster hosting Theia Cloud.
 
 #figure(
   image("../figures/ssd4.svg", width: 100%),
@@ -99,11 +99,11 @@ the student's browser, and the Kubernetes cluster hosting Theia Cloud.
     hosting the Theia Cloud Service, Operator, and Prewarmed Resource Pool.],
 ) <fig:subsystem-decomposition>
 
-Figure @fig:subsystem-decomposition illustrates several
-interconnected subsystems. The _LMS Server_ represents the external Artemis platform,
-which manages the _Programming Exercise_ and acts as the primary entry point for
-students. It communicates with Theia Cloud via the _Online IDE Service_ interface to
-request session provisioning.
+Figure @fig:subsystem-decomposition illustrates several interconnected subsystems.
+The _LMS Server_ represents the external Artemis platform, which manages the
+_Programming Exercise_ and acts as the primary entry point for students. It
+communicates with Theia Cloud via the _Online IDE Service_ interface to request
+session provisioning.
 
 The _Student Browser_ hosts the _EduIDE_ client, which utilizes the _LMS Integration_
 Scorpio to communicate with the LMS server and the _Theia Session API_ to interact
@@ -111,8 +111,8 @@ with the running IDE.
 
 The core of the system resides within the Kubernetes cluster. The Kubernetes API
 Server acts as the central control plane, managing the state of all Kubernetes
-resources within the cluster. Theia Cloud runs as a set of components within
-this cluster, as detailed in @tbl:theia-components.
+resources within the cluster. Theia Cloud runs as a set of components within this
+cluster, as detailed in @tbl:theia-components.
 
 #figure(
   table(
@@ -135,9 +135,9 @@ this cluster, as detailed in @tbl:theia-components.
     [*Service*],
     [
       #par(justify: true)[
-        The public-facing service exposes session management APIs to the
-        Landing Page. It creates and watches custom resources via the Kubernetes API
-        Server, expressing desired cluster state declaratively.
+        The public-facing service exposes session management APIs to the Landing
+        Page. It creates and watches custom resources via the Kubernetes API Server,
+        expressing desired cluster state declaratively.
       ]
     ],
     table.hline(stroke: 0.4pt),
@@ -173,8 +173,8 @@ this cluster, as detailed in @tbl:theia-components.
     [*Theia\ Session*],
     [
       #par(justify: true)[
-        The isolated runtime environment where the student's IDE executes. It contains
-        the _Data Bridge_, an internal HTTP server responsible for runtime
+        The isolated runtime environment where the student's IDE executes. It
+        contains the _Data Bridge_, an internal HTTP server responsible for runtime
         personalization.
       ]
     ],
@@ -204,15 +204,15 @@ slot, which the system represents as a Kubernetes Deployment.
   caption: [Instance Lifecycle State Machine Diagram. It depicts the lifecycle of a
     single IDE pool slot that a Kubernetes Deployment manages, transitioning from
     generic Provisioning to a Prewarmed standby state, entering Reserved after a
-    student request, undergoing Personalizing, and finally becoming Bound to an active
-    session.],
+    student request, undergoing Personalizing, and finally becoming Bound to an
+    active session.],
 ) <fig:state-machine>
 
-Figure @fig:state-machine shows that an instance begins in the `Provisioning` state when
-the system scales up to meet the configured pool size. During this phase, Kubernetes
-schedules the pod and pulls the necessary container images if not already present.
-Once the generic container is running and healthy, it transitions to the `Prewarmed`
-state, waiting in the pool.
+Figure @fig:state-machine shows that an instance begins in the `Provisioning` state
+when the system scales up to meet the configured pool size. During this phase,
+Kubernetes schedules the pod and pulls the necessary container images if not already
+present. Once the generic container is running and healthy, it transitions to the
+`Prewarmed` state, waiting in the pool.
 
 When a student requests a session, the operator acquires a lock on a prewarmed
 instance, moving it to the `Reserved` state. This mechanism addresses the need for
@@ -224,11 +224,10 @@ serves the session. When the session ends, the operator resets the underlying
 deployment, and the deployment controller routes the slot back to the `Provisioning`
 phase to guarantee a clean, generic environment for the next student. One exception
 to this rule occurs when administrators reduce pool capacity while the instance
-remains in the `Bound` state. In
-that case, the operator cannot delete the instance immediately and must wait until
-the session ends. The prewarmed pool handles this special case by marking the
-running session's underlying resources for deletion. When the student's
-session ends, the operator resets the resources.
+remains in the `Bound` state. In that case, the operator cannot delete the instance
+immediately and must wait until the session ends. The prewarmed pool handles this
+special case by marking the running session's underlying resources for deletion. When
+the student's session ends, the operator resets the resources.
 
 === Fast-Path Session Assignment and Routing
 
@@ -289,8 +288,8 @@ injects student-specific context asynchronously only after it reserves a generic
 instance, keeping the pool generic. This asynchronous injection is not merely an
 optimization to avoid blocking the critical path. An architectural constraint of the
 Theia IDE makes it necessary: Theia extensions only start when the student's browser
-loads the session. Consequently, the student must load the session in the browser for the
-internal data bridge to become active and ready to receive the injected data.
+loads the session. Consequently, the student must load the session in the browser for
+the internal data bridge to become active and ready to receive the injected data.
 
 Once the instance is in the `Personalizing` state, the operator begins polling the
 internal Data Bridge service running inside the IDE instance. As soon as the student
@@ -311,8 +310,8 @@ environment variables or the newly introduced data bridge. For sessions that sta
 generically from the prewarmed pool, Scorpio automatically chooses the data bridge
 strategy by reading the `SCORPIO_THEIA_ENV_STRATEGY` environment variable. The
 process environment cannot realize the late-binding personalization because it
-remains static after the system prewarms the container generically. Scorpio waits for the
-Data Bridge to signal that the injection is complete. It then retrieves the
+remains static after the system prewarms the container generically. Scorpio waits for
+the Data Bridge to signal that the injection is complete. It then retrieves the
 credentials, authenticates with Artemis, and clones the student's repository without
 requiring a container restart. This decoupling of infrastructure provisioning from
 runtime personalization ensures that the prewarmed pool remains secure and reusable
@@ -325,31 +324,38 @@ preserve platform compatibility (#link(
 
 To support operability (#link(<dg6>)[DG6]), the implementation integrates Sentry
 distributed tracing across the landing page, service, and operator to monitor system
-dynamics and ensure performance goals, providing detailed production data about
-stage behavior, error rates, and each operation's share of total startup time.
-
-This observability guided the implementation by enabling focused, system-wide
-optimizations. For example, traces revealed NGINX route rule propagation caused
-startup delay for both eager and lazy sessions, allowing targeted improvements.
+dynamics and ensure performance goals, providing detailed production data about stage
+behavior, error rates, and each operation's share of total startup time.
 
 Sentry tracks session-start requests as end-to-end performance transactions. The
 traces model sub-operations such as pool reservation, Routing Manager update
-propagation, and asynchronous data injection as spans. This approach tracks
-fast-path assignment and late-binding personalization timings without logging
-sensitive payloads.
+propagation, and asynchronous data injection as spans. This approach tracks fast-path
+assignment and late-binding personalization timings without logging sensitive
+payloads.
 
-// TODO: Insert screenshot of Sentry eager startup trace here
-// #figure(
-//   image("../figures/sentry-trace.png", width: 100%),
-//   caption: [Distributed trace of an eager session startup captured via Sentry. The trace
-//     visualizes the end-to-end performance transaction, breaking down the total startup
-//     time into distinct spans such as pool reservation, routing rule propagation, and
-//     asynchronous data injection.],
-// ) <fig:sentry-trace>
+@fig:sentry-trace shows a representative trace of an eager session startup completing
+in 1.43s. The dominant synchronous costs are claiming a prewarmed pool instance
+(90.62ms) and transferring Kubernetes resource ownership to the session (229.76ms).
+Registering the session-specific routing rules adds another 27.48ms, after which the
+route propagates externally within 610ms. Credential injection into the running
+container takes 7.85s. However, the system schedules injection while updating the
+session URL and runs it asynchronously in the background, so it does not contribute
+to perceived startup latency.
 
-Such a trace delineates the subprocesses involved in provisioning. This integrated
-observability benefits all future changes by establishing target metrics to prevent
-performance regressions and maintain fast startup times.
+#figure(
+  image("../figures/sentry-observability.png", width: 100%),
+  caption: [
+    Sentry distributed trace of an eager session startup (1.43s total). The
+    asynchronous `databridge.inject` span (7.85s) runs asynchronously and does not
+    affect perceived startup time.
+  ],
+) <fig:sentry-trace>
+
+Such traces delineate the subprocesses involved in provisioning and directly guided
+targeted optimizations. For example, identifying NGINX route-rule propagation as a
+dominant synchronous cost. This integrated observability benefits all future changes
+by establishing concrete baseline metrics to prevent performance regressions and
+maintain fast startup times.
 
 == Persistent State and Scaling Control
 
@@ -448,8 +454,8 @@ path. Table @tbl:scaling-api lists them.
   kind: table,
 ) <tbl:scaling-api>
 
-When an administrator updates the `minInstances` value through the `PATCH`
-endpoint, the Kubernetes API server persists the change, and the Theia Cloud
-Operator reconciles the pool, either provisioning new instances to meet anticipated
-demand or scaling down excess capacity according to the state transitions defined in
+When an administrator updates the `minInstances` value through the `PATCH` endpoint,
+the Kubernetes API server persists the change, and the Theia Cloud Operator
+reconciles the pool, either provisioning new instances to meet anticipated demand or
+scaling down excess capacity according to the state transitions defined in
 @fig:state-machine.

@@ -2,9 +2,9 @@
 
 This chapter benchmarks the implemented system architecture to determine the
 effectiveness of the eager session startup pipeline and optimizations in the lazy
-pipeline. It details the benchmark design, outlines the specific objectives,
-presents the quantitative results, and discusses the implications of these findings
-for educational cloud IDE deployments.
+pipeline. It details the benchmark design, outlines the specific objectives, presents
+the quantitative results, and discusses the implications of these findings for
+educational cloud IDE deployments.
 
 == Design
 
@@ -17,13 +17,13 @@ The benchmark suite ran against a dedicated Kubernetes cluster running the Theia
 Cloud infrastructure. The cluster was provisioned as a Rancher-managed RKE2
 deployment consisting of eleven QEMU virtual machines running Ubuntu 20.04.5 LTS,
 organized into three control-plane nodes and eight worker nodes. Each node was
-allocated 12 virtual CPUs and approximately 31.3 GiB of RAM, yielding a total
-cluster capacity of 132 vCPUs and roughly 345 GiB of RAM, with the worker pool
-alone contributing 96 vCPUs and 251 GiB of RAM to schedulable workloads. The
-underlying physical hardware is slightly heterogeneous: the majority of nodes are
-backed by AMD EPYC 9374F processors, while one control-plane node and one worker
-node utilize Intel Xeon Gold 6234 processors. Networking was provided by Calico as
-the Container Network Interface.
+allocated 12 virtual CPUs and approximately 31.3 GiB of RAM, yielding a total cluster
+capacity of 132 vCPUs and roughly 345 GiB of RAM, with the worker pool alone
+contributing 96 vCPUs and 251 GiB of RAM to schedulable workloads. The underlying
+physical hardware is slightly heterogeneous: the majority of nodes are backed by AMD
+EPYC 9374F processors, while one control-plane node and one worker node utilize Intel
+Xeon Gold 6234 processors. Networking was provided by Calico as the Container Network
+Interface.
 
 To simulate realistic usage patterns, the evaluation defined two distinct workload
 scenarios:
@@ -55,11 +55,11 @@ states to isolate the impact of specific architectural changes:
 
 This benchmark measures end-to-end session-preparation time.
 
-The timer starts with the initial API call to the Theia Cloud service that requests
-a session. The timer stops when the system has fully prepared the session, scheduled
+The timer starts with the initial API call to the Theia Cloud service that requests a
+session. The timer stops when the system has fully prepared the session, scheduled
 the runtime data injection, propagated the routing rules, and exposed an externally
-reachable session URL. This measurement boundary corresponds directly
-to low startup latency (#link(<nfr1>)[NFR1]).
+reachable session URL. This measurement boundary corresponds directly to low startup
+latency (#link(<nfr1>)[NFR1]).
 
 This measurement does not include the client-side browser loading time. The time
 taken for the student's browser to download the IDE assets, render the DOM, and
@@ -109,8 +109,8 @@ seconds (mean: 6.40s, max: 12.35s). By introducing internal startup path
 optimizations and updating the routing layer to Gateway API (lazy after
 optimization), the median latency improved to 4.18 seconds (mean: 4.24s, max: 8.35s).
 
-The eager state yields the fastest startup time. Utilizing the prewarmed pool
-reduced the median startup time to just 1.37 seconds (mean: 1.54s, max: 3.28s). This
+The eager state yields the fastest startup time. Utilizing the prewarmed pool reduced
+the median startup time to just 1.37 seconds (mean: 1.54s, max: 3.28s). This
 represents a 75% reduction in median latency compared to the original baseline, and a
 67% reduction compared to the optimized lazy path, providing strong evidence that the
 implementation satisfies the low-startup-latency target (#link(
@@ -180,10 +180,12 @@ control plane. In the baseline system, burst requests caused strong latency
 degradation. The lazy after optimization state already demonstrates significant
 resilience. Building on this, the eager state's synchronized reservation mechanism
 ensured that the system remained stable and responsive, neutralizing much of the
-burst penalty. When eager capacity runs out, the system can still degrade
-gracefully through the availability guarantee defined by fallback to lazy startup
-(#link(<fr7>)[FR7]), which is the practical counterpart to scalability under burst
-load (#link(<nfr3>)[NFR3]).
+burst penalty. When eager capacity runs out, the system can still degrade gracefully
+through the availability guarantee defined by fallback to lazy startup (#link(
+  <fr7>,
+)[FR7]), which is the practical counterpart to scalability under burst load (#link(
+  <nfr3>,
+)[NFR3]).
 
 While the eager startup pipeline improves user experience, it introduces a tradeoff
 regarding resource consumption. As in serverless systems, reducing cold-start latency
@@ -193,11 +195,11 @@ Measurements of prewarmed instances in the idle state quantify this overhead. Ea
 pod in the prewarmed state consumes 0.0006 CPU cores and 265 MiB of memory on
 average, while the Kubernetes configuration reserves 200m CPU and 500 MiB memory with
 limits of 2 CPU and 2400 MiB. The idle footprint therefore stays below the reserved
-resources, meaning the reservations dominate the practical cost of a warm pool
-rather than real utilization. This emphasizes the importance of the newly introduced
-Scaling API. By exposing `minInstances` and `maxInstances`, the system provides the
-necessary control surface for administrators or future predictive algorithms to
-dynamically adjust the pool size, exercising programmatic scaling (#link(
+resources, meaning the reservations dominate the practical cost of a warm pool rather
+than real utilization. This emphasizes the importance of the newly introduced Scaling
+API. By exposing `minInstances` and `maxInstances`, the system provides the necessary
+control surface for administrators or future predictive algorithms to dynamically
+adjust the pool size, exercising programmatic scaling (#link(
   <fr5>,
 )[FR5]) while keeping the maintenance of prewarmed pools (#link(
   <fr1>,

@@ -1,14 +1,13 @@
 = Requirements
 
 This chapter defines the requirements and constraints of the system that this thesis
-develops and assesses. The first section describes the existing system
-architecture, detailing the original session startup process, the integration with
-the Artemis learning platform, and the inherent limitations regarding routing and
-prewarming. The chapter then introduces the proposed system by specifying the
-functional and non-functional requirements necessary to achieve low-latency,
-personalized cloud IDE sessions. The chapter concludes with dynamic models that
-illustrate the system's core workflows and interactions under various operational
-scenarios.
+develops and assesses. The first section describes the existing system architecture,
+detailing the original session startup process, the integration with the Artemis
+learning platform, and the inherent limitations regarding routing and prewarming. The
+chapter then introduces the proposed system by specifying the functional and
+non-functional requirements necessary to achieve low-latency, personalized cloud IDE
+sessions. The chapter concludes with dynamic models that illustrate the system's core
+workflows and interactions under various operational scenarios.
 
 == Existing System
 
@@ -60,20 +59,19 @@ resources (Services and Ingress) to make the IDE accessible to the student's bro
 
 Routing plays an important role in the startup time. Previously, the system relied on
 one central `ingress-nginx` controller to expose sessions. When the system created a
-new session, the operator had to update the ingress configuration to route traffic
-to the newly provisioned pod. The delay in routing propagation, that is, the time
+new session, the operator had to update the ingress configuration to route traffic to
+the newly provisioned pod. The delay in routing propagation, that is, the time
 required for the updated routing rules to take effect and for the session URL to
-become reachable,
-contributed meaningfully to the end-to-end startup latency. This delay stems from the
-`ingress-nginx` update mechanism, which rebuilds the configuration model and reloads
-NGINX on most routing changes @kubernetes:ingressnginx:HowItWorks. In contrast,
-Envoy-based gateways update routing state dynamically at runtime via xDS APIs without
-requiring a reload, reducing route propagation latency
-@envoy:docs:DynamicConfiguration @envoygateway:docs:SystemDesign. Consequently,
-optimizing container startup time alone is insufficient if the networking layer
-remains a bottleneck. This limitation necessitated the exploration of more dynamic
-routing solutions, such as the Kubernetes Gateway API using Envoy Gateway as an
-implementation.
+become reachable, contributed meaningfully to the end-to-end startup latency. This
+delay stems from the `ingress-nginx` update mechanism, which rebuilds the
+configuration model and reloads NGINX on most routing changes
+@kubernetes:ingressnginx:HowItWorks. In contrast, Envoy-based gateways update routing
+state dynamically at runtime via xDS APIs without requiring a reload, reducing route
+propagation latency @envoy:docs:DynamicConfiguration @envoygateway:docs:SystemDesign.
+Consequently, optimizing container startup time alone is insufficient if the
+networking layer remains a bottleneck. This limitation necessitated the exploration
+of more dynamic routing solutions, such as the Kubernetes Gateway API using Envoy
+Gateway as an implementation.
 
 === Personalization and Prewarming Constraints
 
@@ -84,13 +82,13 @@ personalization.
 
 To be reusable and secure, prewarmed sessions must remain generic during their
 initialization phase. The system cannot personalize them at creation time because it
-does not yet know which student will use the pod. Baking user-specific
-credentials or assignment metadata into a prewarmed container would violate security
-and isolation constraints @souppaya:2017:ApplicationContainerSecurityGuide.
-Therefore, the system must defer personalization until it assigns a generic instance
-to a specific user. This requires a mechanism for runtime data injection that
-securely delivers sensitive information into an already running container without
-requiring a restart, which would negate the latency benefits of prewarming.
+does not yet know which student will use the pod. Baking user-specific credentials or
+assignment metadata into a prewarmed container would violate security and isolation
+constraints @souppaya:2017:ApplicationContainerSecurityGuide. Therefore, the system
+must defer personalization until it assigns a generic instance to a specific user.
+This requires a mechanism for runtime data injection that securely delivers sensitive
+information into an already running container without requiring a restart, which
+would negate the latency benefits of prewarming.
 
 == Proposed System
 
@@ -135,8 +133,8 @@ achieve its objectives:
       #par(justify: true)[
         #strong[Runtime Data Injection]: The system must provide a mechanism to
         securely inject session-specific runtime data like authentication tokens and
-        Git credentials into the IDE container after the system assigns the
-        instance, without requiring a container restart.
+        Git credentials into the IDE container after the system assigns the instance,
+        without requiring a container restart.
       ] <fr3>
     ],
 
