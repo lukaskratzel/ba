@@ -6,8 +6,6 @@ This directory is the self-contained reproduction package for the benchmark resu
 - the six CSV exports used for the figures in the benchmark chapter,
 - the Python plotting script used to generate the duration boxplot from the benchmark CSV files.
 
-The package is intentionally cleaned up compared to the original scratch directory: it excludes local environment state (`node_modules`, `.venv`, `.env`, `.mplconfig`), ad hoc session CSV exports, editor metadata, and generated plot outputs.
-
 ## Directory Layout
 
 ```text

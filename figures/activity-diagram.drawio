@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36">
   <diagram name="Page-1" id="74e2e168-ea6b-b213-b513-2b3c1d86103e">
-    <mxGraphModel dx="2514" dy="828" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1290" dy="111" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -53,13 +53,13 @@
         <mxCell id="ehTyB_eqRNOIh_GQiDzH-13" parent="gSW93OqfGVZ1SfKaacRM-6" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=8;align=center;" value="Check for Prewarmed Instance" vertex="1">
           <mxGeometry height="60" width="100" x="20" y="80" as="geometry" />
         </mxCell>
-        <mxCell id="ehTyB_eqRNOIh_GQiDzH-14" edge="1" parent="gSW93OqfGVZ1SfKaacRM-6" source="ehTyB_eqRNOIh_GQiDzH-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ehTyB_eqRNOIh_GQiDzH-19" value="Yes">
+        <mxCell id="ehTyB_eqRNOIh_GQiDzH-14" edge="1" parent="gSW93OqfGVZ1SfKaacRM-6" source="ehTyB_eqRNOIh_GQiDzH-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ehTyB_eqRNOIh_GQiDzH-19" value="[yes]">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ehTyB_eqRNOIh_GQiDzH-15" edge="1" parent="gSW93OqfGVZ1SfKaacRM-6" source="ehTyB_eqRNOIh_GQiDzH-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="ehTyB_eqRNOIh_GQiDzH-21">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ehTyB_eqRNOIh_GQiDzH-16" connectable="0" parent="ehTyB_eqRNOIh_GQiDzH-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="No" vertex="1">
+        <mxCell id="ehTyB_eqRNOIh_GQiDzH-16" connectable="0" parent="ehTyB_eqRNOIh_GQiDzH-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="[no]" vertex="1">
           <mxGeometry relative="1" x="-0.1" y="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>

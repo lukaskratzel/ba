@@ -6,24 +6,39 @@ pipeline. It details the benchmark design, outlines the specific objectives, pre
 the quantitative results, and discusses the implications of these findings for
 educational cloud IDE deployments.
 
+== Objectives
+
+The benchmark aims to validate the system against the non-functional requirements
+established in Chapter 3, with a specific focus on the session-preparation phase. In
+particular, it evaluates low startup latency (#link(<nfr1>)[NFR1]), correctness under
+concurrency (#link(<nfr2>)[NFR2]), scalability under burst load (#link(
+  <nfr3>,
+)[NFR3]), and the diagnostic support promised by observability (#link(
+  <nfr6>,
+)[NFR6]). The primary objectives are to:
+
+1. Quantify the absolute and relative reduction in session preparation time that the
+  eager startup pipeline achieves compared to the lazy baseline.
+2. Assess the system's robustness and latency degradation when it faces a sudden
+  spike in concurrent session requests.
+
 == Design
 
-This benchmark systematically compares the performance of the proposed architecture
-against the previous implementation state.
+The design aims to systematically compare the performance of the proposed
+architecture against the previous implementation state.
 
 === Benchmark Environment and Workloads
 
-The benchmark suite ran against a dedicated Kubernetes cluster running the Theia
-Cloud infrastructure. The cluster was provisioned as a Rancher-managed RKE2
-deployment consisting of eleven QEMU virtual machines running Ubuntu 20.04.5 LTS,
-organized into three control-plane nodes and eight worker nodes. Each node was
-allocated 12 virtual CPUs and approximately 31.3 GiB of RAM, yielding a total cluster
-capacity of 132 vCPUs and roughly 345 GiB of RAM, with the worker pool alone
-contributing 96 vCPUs and 251 GiB of RAM to schedulable workloads. The underlying
-physical hardware is slightly heterogeneous: the majority of nodes are backed by AMD
-EPYC 9374F processors, while one control-plane node and one worker node utilize Intel
-Xeon Gold 6234 processors. Networking was provided by Calico as the Container Network
-Interface.
+The benchmark suite ran against a dedicated Kubernetes cluster hosting the Theia
+Cloud infrastructure. Rancher managed the cluster as an RKE2 deployment comprising
+eleven QEMU virtual machines running Ubuntu 20.04.5 LTS, organized into three
+control-plane nodes and eight worker nodes. Each node received 12 virtual CPUs and
+approximately 31.3 GiB of RAM, yielding a total cluster capacity of 132 vCPUs and
+roughly 345 GiB of RAM, with the worker pool alone contributing 96 vCPUs and 251 GiB
+of RAM to schedulable workloads. The underlying physical hardware is heterogeneous:
+AMD EPYC 9374F processors back the majority of nodes, while one control-plane node
+and one worker node use Intel Xeon Gold 6234 processors. Calico served as the
+Container Network Interface.
 
 The evaluation defined two distinct workload scenarios to simulate realistic usage
 patterns:
@@ -72,20 +87,15 @@ confirm which sub-steps dominate latency or widen variance under burst load. Tho
 traces do not substitute for the controlled measurements above, but they provide
 complementary, fine-grained timing context.
 
-== Objectives
-
-The benchmark aims to validate the system against the non-functional requirements
-established in Chapter 3, with a specific focus on the backend session-preparation
-phase. In particular, it evaluates low startup latency (#link(<nfr1>)[NFR1]),
-correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst load
-(#link(<nfr3>)[NFR3]), and the diagnostic support promised by observability (#link(
-  <nfr6>,
-)[NFR6]). The primary objectives are to:
-
-1. Quantify the absolute and relative reduction in session preparation time that the
-  eager startup pipeline achieves compared to the lazy baseline.
-2. Assess the system's robustness and latency degradation when it faces a sudden
-  spike in concurrent session requests.
+The benchmark reproduction package, including the benchmark runner, input datasets,
+and execution instructions, is provided with this thesis in `reproduction/benchmarks`
+#footnote[
+  The reproduction package is also available in the thesis repository at #link(
+    "https://github.com/lukaskratzel/ba/tree/main/reproduction/benchmarks",
+  )[
+    github.com/lukaskratzel/ba/tree/main/reproduction/benchmarks
+  ].
+].
 
 == Results
 
@@ -147,10 +157,10 @@ burst load (#link(<nfr3>)[NFR3]).
 == Discussion
 
 The benchmark results confirm that the architectural changes address the primary
-challenges of cloud IDE provisioning in educational contexts.
-The transition from on-demand provisioning to prewarming is the dominant factor in
-latency reduction. Removing pod scheduling and container initialization from the
-critical path reduces session preparation time.
+challenges of cloud IDE provisioning in educational contexts. The transition from
+on-demand provisioning to prewarming is the dominant factor in latency reduction.
+Removing pod scheduling and container initialization from the critical path reduces
+session preparation time.
 
 Commercial cloud IDEs employ a similar pattern of shifting setup work off the
 critical path. GitHub Codespaces and Gitpod use prebuilds to prepare dependencies and
@@ -222,3 +232,64 @@ cloud IDEs that fulfills the maintenance of prewarmed pools (#link(<fr1>)[FR1]),
 runtime data injection (#link(<fr3>)[FR3]), and low startup latency (#link(
   <nfr1>,
 )[NFR1]) in practice.
+
+== Threats to Validity
+
+Several factors limit the generalizability of the reported results. This section
+separates them into threats to internal and external validity and describes how the
+benchmark design mitigates each where possible.
+
+=== Internal Validity
+
+The benchmark prepares sessions but never actively loads or uses them in a browser. A
+real student would open the IDE, trigger client-side asset downloads, establish
+WebSocket connections, and execute workloads inside the container. This additional
+activity would impose load on both the individual session pod and the shared cluster,
+which could raise steady-state CPU and memory pressure, delay pod scheduling through
+node resource contention, and slower routing propagation. The reported latencies
+therefore represent a lower bound on what students would observe in practice, and the
+concurrent workload likely underestimates the degradation that active usage would
+introduce.
+
+The cluster combines AMD EPYC 9374F and Intel Xeon Gold 6234 processors across nodes,
+and the Kubernetes scheduler does not pin session pods to a specific CPU
+architecture. Consequently, individual session starts execute on heterogeneous
+hardware, which introduces variance that the reported medians and means absorb but do
+not isolate. A homogeneous node pool could tighten the distribution and shift the
+absolute numbers.
+
+The observability stack that the architecture introduces remained active during every
+run. Sentry transactions and spans in the landing page, service, and operator add
+serialization and network overhead to the critical path. Disabling telemetry would
+likely reduce absolute latencies, but keeping it active reflects the intended
+production configuration and keeps the three states comparable.
+
+The eager runs always started with a fully populated prewarmed pool. The benchmark
+therefore measures the fast path of reservation and runtime injection, not the
+fallback to lazy provisioning that triggers when the pool runs empty (#link(
+  <fr7>,
+)[FR7]). Workloads that exhaust the pool would mix eager and lazy latencies, and the
+reported eager distribution does not capture such cases.
+
+=== External Validity
+
+The two workload scenarios approximate educational usage patterns but do not
+reproduce the full variability of real student traffic. Actual cohorts arrive with
+heavier-tailed interarrival times, reconnect after failures, and interleave session
+starts with active IDE usage. A broader evaluation during live semester traffic would
+complement the controlled measurements presented here.
+
+The benchmark exercises a single `AppDefinition` and a single cluster topology of
+three control-plane and eight worker nodes. Other IDE images carry different
+container sizes, startup scripts, and language-server footprints, and larger or
+smaller clusters shift the balance between scheduling latency, routing propagation,
+and pool reservation. The absolute timings therefore transfer to comparable Theia
+Cloud deployments but require re-measurement for substantially different images or
+cluster shapes.
+
+The sequential and concurrent workloads fix the request counts at 100 and 50
+respectively. Deployments that face sustained burst sizes in the hundreds or steady
+concurrency beyond the measured window may encounter the synchronization bottlenecks
+around pool reservation that the summary identifies as an open goal for scalability
+under burst load (#link(<nfr3>)[NFR3]). The results support claims at the measured
+scale but do not extrapolate linearly to those regimes.

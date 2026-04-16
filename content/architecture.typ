@@ -409,14 +409,11 @@ The `AppDefinition` exposes two key parameters for scaling:
 - `maxInstances`: Defines the ceiling for concurrent sessions allowed for that
   specific application.
 
-// no diagram here, be sure to explain well and maybe go into mechanism marking
-// claimed instances as scheduled for deletion. Backreference to state machine.
-
 The architecture introduces a dedicated Scaling API that allows external systems to
 inspect and patch these parameters securely, enabling programmatic scaling (#link(
   <dg5>,
 )[DG5]). The API enforces authorization using Bearer authentication with a custom
-admin token to protect these administrative operations. This ensures that only
+admin token to protect administrative operations. This approach ensures that only
 trusted external systems, such as future machine-learning models predicting demand,
 can implement programmatic scaling logic.
 

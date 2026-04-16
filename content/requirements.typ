@@ -62,25 +62,25 @@ the newly provisioned pod. The delay in routing propagation, that is, the time
 required for the updated routing rules to take effect and for the session URL to
 become reachable, contributed meaningfully to the end-to-end startup latency. This
 delay stems from the `ingress-nginx` update mechanism, which rebuilds the
-configuration model and reloads NGINX on most routing changes#footnote[
-  Ingress-NGINX Controller, _How It Works_, documentation page, accessed April 7,
+configuration model and reloads NGINX on most routing changes.#footnote[
+  Ingress-NGINX Controller, _How It Works_, documentation page, accessed 7 April
   2026, #link("https://kubernetes.github.io/ingress-nginx/how-it-works/")[
     kubernetes.github.io/ingress-nginx/how-it-works/
   ].
-]. In contrast, Envoy-based gateways update routing state dynamically at runtime via
-xDS APIs without requiring a reload, reducing route propagation latency#footnote[
+] In contrast, Envoy-based gateways update routing state dynamically at runtime via
+xDS APIs without requiring a reload, reducing route propagation latency.#footnote[
   Envoy Project Authors, _xDS Configuration API Overview_, documentation page,
-  accessed April 7, 2026, #link(
+  accessed 7 April 2026, #link(
     "https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration",
   )[
     envoyproxy.io docs
-  ]; Envoy Gateway Maintainers, _System Design_, documentation page, accessed April
-  7, 2026, #link(
+  ]; Envoy Gateway Maintainers, _System Design_, documentation page, accessed 7 April
+  2026, #link(
     "https://gateway.envoyproxy.io/contributions/design/system-design/",
   )[
     gateway.envoyproxy.io
   ].
-]. Consequently, optimizing container startup time alone is insufficient if the
+] Consequently, optimizing container startup time alone is insufficient if the
 networking layer remains a bottleneck. This limitation necessitated the exploration
 of more dynamic routing solutions, such as the Kubernetes Gateway API using Envoy
 Gateway as an implementation.
@@ -96,12 +96,12 @@ Reusable and secure prewarmed sessions must remain generic during their
 initialization phase. The system cannot personalize them at creation time because it
 does not yet know which student will use the pod. Baking user-specific credentials or
 assignment metadata into a prewarmed container would violate security and isolation
-constraints#footnote[
+constraints.#footnote[
   Murugiah Souppaya, John Morello, and Karen Scarfone, _Application Container
   Security Guide_, NIST Special Publication 800-190, September 2017, #link(
     "https://doi.org/10.6028/NIST.SP.800-190",
   )[doi.org/10.6028/NIST.SP.800-190].
-]. Therefore, the system must defer personalization until it assigns a generic
+] Therefore, the system must defer personalization until it assigns a generic
 instance to a specific user. This requires a mechanism for runtime data injection
 that securely delivers sensitive information into an already running container
 without requiring a restart, which would negate the latency benefits of prewarming.
