@@ -148,7 +148,6 @@ burst load (#link(<nfr3>)[NFR3]).
 
 The benchmark results confirm that the architectural changes address the primary
 challenges of cloud IDE provisioning in educational contexts.
-
 The transition from on-demand provisioning to prewarming is the dominant factor in
 latency reduction. Removing pod scheduling and container initialization from the
 critical path reduces session preparation time.

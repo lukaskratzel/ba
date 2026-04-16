@@ -1,0 +1,8 @@
+node_modules
+.venv
+.mplconfig
+
+*.png
+
+.DS_Store
+.env
