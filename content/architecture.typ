@@ -94,10 +94,10 @@ Cloud.
 
 #figure(
   image("../figures/ssd4.svg", width: 100%),
-  caption: [Subsystem Decomposition Diagram. This diagram illustrates the physical
-    and logical boundaries of the EduIDE architecture across three main environments:
-    the external Artemis LMS, the student's browser, and the Kubernetes cluster
-    hosting the Theia Cloud Service, Operator, and Prewarmed Resource Pool.],
+  caption: [The deployment diagram illustrates the physical and logical boundaries of
+    the EduIDE architecture across three main environments: the external Artemis LMS,
+    the student's browser, and the Kubernetes cluster hosting the Theia Cloud
+    Service, Operator, and Prewarmed Resource Pool.],
 ) <fig:subsystem-decomposition>
 
 Figure @fig:subsystem-decomposition illustrates several interconnected subsystems.

@@ -193,7 +193,7 @@ achieve its objectives:
   kind: table,
 )
 
-=== Nonfunctional Requirements
+=== Quality Attributes
 
 In addition to the functional capabilities, the system must satisfy several
 non-functional requirements (NFRs) that define its operational quality:
