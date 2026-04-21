@@ -17,14 +17,14 @@ project. First, the project implemented a robust eager session start mechanism. 
 operator prewarms generic IDE instances and allows rapid, synchronized reservation.
 This realizes the maintenance of prewarmed pools (#link(<fr1>)[FR1]) and dynamic
 session assignment (#link(<fr2>)[FR2]) while significantly reducing provisioning
-delays in line with low startup latency (#link(<nfr1>)[NFR1]). Second, the
+delays in line with low startup latency (#link(<qa1>)[QA1]). Second, the
 runtime-personalization design resolved the contradiction between generic prewarming
 and user-specific environments. The introduction of the data bridge and the
 adaptation of the Scorpio extension enabled secure injection of credentials into
 already-running containers, thereby fulfilling runtime data injection (#link(
   <fr3>,
 )[FR3]), support for Artemis workflows (#link(<fr4>)[FR4]), and security and
-isolation (#link(<nfr4>)[NFR4]). Third, the project fortified the control plane to
+isolation (#link(<qa4>)[QA4]). Third, the project fortified the control plane to
 handle burst workloads. Mechanisms such as race-aware session handling, synchronized
 pool reservations, and independent routing rule mutations ensure the system remains
 stable during simulated load scenarios. Fourth, the migration from `ingress-nginx` to
@@ -42,8 +42,8 @@ monitoring. Taken together, these changes satisfy programmatic scaling (#link(
 )[FR5]), safe concurrency handling (#link(<fr6>)[FR6]), fallback to lazy startup
 (#link(
   <fr7>,
-)[FR7]), correctness under concurrency (#link(<nfr2>)[NFR2]), scalability under burst
-load (#link(<nfr3>)[NFR3]), and observability (#link(<nfr6>)[NFR6]).
+)[FR7]), correctness under concurrency (#link(<qa2>)[QA2]), scalability under burst
+load (#link(<qa3>)[QA3]), and observability (#link(<qa6>)[QA6]).
 
 === Open Goals
 
@@ -59,8 +59,8 @@ failure during bursts, extreme scenarios involving hundreds of simultaneous requ
 can still bottleneck at synchronization points in the operator, particularly around
 pool reservation. Further reducing these bottlenecks to maximize throughput remains
 an open objective for the upper limits of scalability under burst load (#link(
-  <nfr3>,
-)[NFR3]).
+  <qa3>,
+)[QA3]).
 
 == Conclusion
 
@@ -69,8 +69,8 @@ IDE sessions in educational environments. By transitioning Theia Cloud from a pu
 lazy provisioning model to a production-oriented eager startup pipeline, the
 implementation reduced session-preparation time by up to 89% under burst loads,
 thereby meeting the central target of low startup latency (#link(
-  <nfr1>,
-)[NFR1]).
+  <qa1>,
+)[QA1]).
 
 The core contribution lies in showing that prewarming can support personalized
 educational tools. The system combines prewarmed instance pools, concurrency-safe

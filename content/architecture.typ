@@ -8,79 +8,49 @@ the system's approach to persistent state and scaling.
 
 == Design Goals
 
-Six primary design goals, derived from the functional and non-functional
-requirements, drove the architecture of the eager session startup pipeline:
+Six primary design goals, derived from the functional requirements and quality
+attributes, drove the architecture of the eager session startup pipeline:
 
-#figure(
-  table(
-    columns: (auto, 1fr),
-    stroke: none,
-    column-gutter: 1em,
-    row-gutter: 0.85em,
-    align: (top + left, top + left),
-    [DG1],
-    [
-      #par(justify: true)[
-        #strong[Minimize Startup Latency]: The primary objective is to reduce the
-        time it takes for a requested session to become reachable. This requires
-        shifting costly operations, such as pod scheduling and image pulling, out of
-        the critical path of the student's request.
-      ] <dg1>
-    ],
+#par(justify: true)[
+  #strong[DG1: Minimize Startup Latency.] The primary objective is to reduce the time
+  it takes for a requested session to become reachable. This requires shifting costly
+  operations, such as pod scheduling and image pulling, out of the critical path of
+  the student's request.
+] <dg1>
 
-    [DG2],
-    [
-      #par(justify: true)[
-        #strong[Decouple Personalization from Provisioning]: To utilize prewarming
-        effectively, the architecture must separate the generic infrastructure
-        provisioning phase from the session-specific personalization phase.
-        Personalization must occur dynamically at runtime.
-      ] <dg2>
-    ],
+#par(justify: true)[
+  #strong[DG2: Decouple Personalization from Provisioning.] To utilize prewarming
+  effectively, the architecture must separate the generic infrastructure provisioning
+  phase from the session-specific personalization phase. Personalization must occur
+  dynamically at runtime.
+] <dg2>
 
-    [DG3],
-    [
-      #par(justify: true)[
-        #strong[Ensure Robustness Under Burst Load]: Educational platforms frequently
-        experience sudden spikes in demand. The architecture must handle high
-        concurrency safely, preventing race conditions on shared resources and
-        degrading gracefully when eager capacity runs out.
-      ] <dg3>
-    ],
+#par(justify: true)[
+  #strong[DG3: Ensure Robustness Under Burst Load.] Educational platforms frequently
+  experience sudden spikes in demand. The architecture must handle high concurrency
+  safely, preventing race conditions on shared resources and degrading gracefully
+  when eager capacity runs out.
+] <dg3>
 
-    [DG4],
-    [
-      #par(justify: true)[
-        #strong[Preserve Platform Compatibility]: The solution must build upon the
-        existing Theia Cloud concepts (`AppDefinition`, `Session`) and integrate
-        seamlessly with the Artemis learning platform. It should act as a transparent
-        optimization layer.
-      ] <dg4>
-    ],
+#par(justify: true)[
+  #strong[DG4: Preserve Platform Compatibility.] The solution must build upon the
+  existing Theia Cloud concepts (`AppDefinition`, `Session`) and integrate seamlessly
+  with the Artemis learning platform. It should act as a transparent optimization
+  layer.
+] <dg4>
 
-    [DG5],
-    [
-      #par(justify: true)[
-        #strong[Enable Programmatic Scaling]: The system must expose an API-driven
-        control surface for scaling parameters, allowing external systems or future
-        machine-learning models to adjust prewarmed pool sizes based on anticipated
-        demand.
-      ] <dg5>
-    ],
+#par(justify: true)[
+  #strong[DG5: Enable Programmatic Scaling.] The system must expose an API-driven
+  control surface for scaling parameters, allowing external systems or future
+  machine-learning models to adjust prewarmed pool sizes based on anticipated demand.
+] <dg5>
 
-    [DG6],
-    [
-      #par(justify: true)[
-        #strong[Support Operability]: The system must remain diagnosable in
-        production. The landing page, service, and operator must expose fine-grained
-        timing and error reporting on session-start paths to validate optimizations,
-        explain variance under load, and shorten incident response.
-      ] <dg6>
-    ],
-  ),
-  caption: [Design Goals],
-  kind: table,
-)
+#par(justify: true)[
+  #strong[DG6: Support Operability.] The system must remain diagnosable in
+  production. The landing page, service, and operator must expose fine-grained timing
+  and error reporting on session-start paths to validate optimizations, explain
+  variance under load, and shorten incident response.
+] <dg6>
 
 == System Structure
 
@@ -221,14 +191,17 @@ robustness under burst load (#link(<dg3>)[DG3]), preventing race conditions when
 multiple students request sessions simultaneously. The instance then enters the
 `Personalizing` phase, where the operator injects student-specific data. After this
 data injection succeeds, the instance becomes `Bound` to the student and actively
-serves the session. When the session ends, the operator resets the underlying
-deployment, and the deployment controller routes the slot back to the `Provisioning`
-phase to guarantee a clean, generic environment for the next student. One exception
-to this rule occurs when administrators reduce pool capacity while the instance
-remains in the `Bound` state. In that case, the operator cannot delete the instance
-immediately and must wait until the session ends. The prewarmed pool handles this
-special case by marking the running session's underlying resources for deletion. When
-the student's session ends, the operator resets the resources.
+serves the session.
+
+When the session ends, the operator triggers an `Instance reset` by recreating the
+session's underlying compute resources. Since all session state is ephemeral, this
+recreation acts as a full reset, and the deployment controller routes the slot back
+to the `Provisioning` phase to guarantee a clean, generic environment for the next
+student. One exception to this rule occurs when administrators reduce pool capacity
+while the instance is in the `Bound` state. In that case, the operator cannot delete
+the instance immediately and must wait until the session ends. The prewarmed pool
+handles this special case by marking the running session's underlying resources for
+deletion. When the student's session ends, the operator resets the resources.
 
 === Fast-Path Session Assignment and Routing
 

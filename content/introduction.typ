@@ -115,8 +115,8 @@ challenges through the following primary objectives:
 The remainder of this thesis proceeds as follows: Chapter 2 provides the scientific
 background and context, detailing the challenges of startup latency and runtime
 personalization in cloud IDEs. Chapter 3 defines the system requirements, including
-the existing system context, the functional and non-functional requirements, and the
-dynamic models that capture the intended workflows. Chapter 4 presents the system
+the existing system context, the functional requirements, the quality attributes, and
+the dynamic models that capture the intended workflows. Chapter 4 presents the system
 design, detailing the core components of the eager startup pipeline, such as the
 prewarmed resource pool, runtime personalization via the data bridge, the routing
 migration, observability, and the scaling API. Chapter 5 benchmarks the system's

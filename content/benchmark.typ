@@ -8,14 +8,14 @@ educational cloud IDE deployments.
 
 == Objectives
 
-The benchmark aims to validate the system against the non-functional requirements
-established in Chapter 3, with a specific focus on the session-preparation phase. In
-particular, it evaluates low startup latency (#link(<nfr1>)[NFR1]), correctness under
-concurrency (#link(<nfr2>)[NFR2]), scalability under burst load (#link(
-  <nfr3>,
-)[NFR3]), and the diagnostic support promised by observability (#link(
-  <nfr6>,
-)[NFR6]). The primary objectives are to:
+The benchmark aims to validate the system against the quality attributes established
+in Chapter 3, with a specific focus on the session-preparation phase. In particular,
+it evaluates low startup latency (#link(<qa1>)[QA1]), correctness under concurrency
+(#link(<qa2>)[QA2]), scalability under burst load (#link(
+  <qa3>,
+)[QA3]), and the diagnostic support promised by observability (#link(
+  <qa6>,
+)[QA6]). The primary objectives are to:
 
 1. Quantify the absolute and relative reduction in session preparation time that the
   eager startup pipeline achieves compared to the lazy baseline.
@@ -74,7 +74,7 @@ The timer starts with the initial API call to the Theia Cloud service that reque
 session. The timer stops when the system has fully prepared the session, scheduled
 the runtime data injection, propagated the routing rules, and exposed an externally
 reachable session URL. This measurement boundary corresponds directly to low startup
-latency (#link(<nfr1>)[NFR1]).
+latency (#link(<qa1>)[QA1]).
 
 This measurement does not include the client-side browser loading time. The time
 taken for the student's browser to download the IDE assets, render the DOM, and
@@ -124,8 +124,8 @@ startup time to 1.37 seconds (mean: 1.54s, max: 3.28s). This represents a 75%
 reduction in median latency compared to the original baseline, and a 67% reduction
 compared to the optimized lazy path, providing evidence that the implementation
 satisfies the low-startup-latency target (#link(
-  <nfr1>,
-)[NFR1]).
+  <qa1>,
+)[QA1]).
 
 === Concurrent Workload Results
 
@@ -151,8 +151,8 @@ rather than scheduling new pods kept the median startup time at 1.99 seconds (me
 median latency during high-stress scenarios, while also validating the concurrency
 and burst-load expectations of safe concurrency handling (#link(
   <fr6>,
-)[FR6]), correctness under concurrency (#link(<nfr2>)[NFR2]), and scalability under
-burst load (#link(<nfr3>)[NFR3]).
+)[FR6]), correctness under concurrency (#link(<qa2>)[QA2]), and scalability under
+burst load (#link(<qa3>)[QA3]).
 
 == Discussion
 
@@ -202,8 +202,8 @@ When eager capacity runs out, the system can still degrade gracefully through th
 availability guarantee defined by fallback to lazy startup (#link(
   <fr7>,
 )[FR7]), which is the practical counterpart to scalability under burst load (#link(
-  <nfr3>,
-)[NFR3]).
+  <qa3>,
+)[QA3]).
 
 While the eager startup pipeline improves user experience, it introduces a tradeoff
 regarding resource consumption. Serverless systems demonstrate a similar pattern:
@@ -230,8 +230,8 @@ The implemented system transforms prewarming into a production-ready, personaliz
 session-start pipeline, providing a responsive and robust foundation for educational
 cloud IDEs that fulfills the maintenance of prewarmed pools (#link(<fr1>)[FR1]),
 runtime data injection (#link(<fr3>)[FR3]), and low startup latency (#link(
-  <nfr1>,
-)[NFR1]) in practice.
+  <qa1>,
+)[QA1]) in practice.
 
 == Threats to Validity
 
@@ -291,5 +291,5 @@ The sequential and concurrent workloads fix the request counts at 100 and 50
 respectively. Deployments that face sustained burst sizes in the hundreds or steady
 concurrency beyond the measured window may encounter the synchronization bottlenecks
 around pool reservation that the summary identifies as an open goal for scalability
-under burst load (#link(<nfr3>)[NFR3]). The results support claims at the measured
+under burst load (#link(<qa3>)[QA3]). The results support claims at the measured
 scale but do not extrapolate linearly to those regimes.
