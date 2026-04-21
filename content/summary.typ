@@ -89,20 +89,64 @@ The completed architecture opens several promising directions for future researc
 engineering that extend beyond the scope of this thesis.
 
 With the Scaling API in place, the immediate next step is to develop a predictive
-scaling service. This service could consume historical usage data such as exercise
-release schedules and typical student working hours to proactively adjust the
-prewarmed pool before demand spikes, minimizing both latency and the cost of idle
-resources.
+scaling service. Such a service could consume historical usage data such as exercise
+release schedules, exam registrations, assignment deadlines, and typical student
+working hours to proactively adjust the prewarmed pool before demand spikes. A
+production-ready predictor should not only optimize for latency, but also include a
+cost model for idle resources. This would allow administrators to define policies
+that trade warm capacity against resource budgets, for example by scaling up shortly
+before scheduled labs and scaling down during predictable off-hours.
+
+A second direction is a broader evaluation under real teaching conditions. The
+benchmark in this thesis used controlled sequential and burst workloads and started
+eager runs with a fully populated prewarmed pool. Future evaluations should collect
+data during active courses or exams, where students arrive with more irregular
+interarrival times, reconnect after interruptions, and use the IDE while other
+sessions are still starting. Such measurements would validate the improvement
+that students perceive and reveal how the eager path behaves when real workloads
+mix warm starts, lazy fallback, active language servers, repository cloning, and
+cluster resource contention.
+
+The benchmark also leaves open the question of how the architecture behaves across
+a wider range of deployment shapes. Future work should repeat the evaluation with
+multiple `AppDefinition`s, larger cohorts, different IDE images, heterogeneous
+programming languages, and smaller or larger Kubernetes clusters. This would
+clarify how pool sizing guidelines depend on image size, language-server memory
+consumption, routing propagation, and available cluster capacity. In particular,
+future work should study workloads with hundreds of simultaneous starts to
+determine whether pool reservation, the Kubernetes API, or routing updates become
+the dominant bottleneck at higher scale.
+
+Future work could also refine the control plane for these larger bursts. The current
+implementation prevents races and keeps the system stable, but the synchronized
+reservation of prewarmed instances can still serialize parts of the startup path.
+Future engineering work could investigate finer-grained locking and faster
+orchestration mechanisms such as in-process orchestration for singleton operators
+or external databases for replicated operators. These changes would preserve the
+correctness guarantees of the current design while increasing throughput for large
+exam cohorts.
 
 The eager startup pipeline has reduced session preparation time, making client-side
-latency a more relevant contributor to overall startup latency. Optimizing the
-browser's loading of the IDE session, asset caching, and initial rendering is the
-next logical step toward improving the end-to-end startup experience.
+latency a more significant contributor to overall startup latency. Optimizing the
+browser's loading of the IDE session, asset caching, WebSocket establishment, and
+initial rendering is therefore the next logical step toward improving the
+end-to-end startup experience. While Sentry currently covers session-start paths in
+the landing page, service, and operator, extending telemetry into the student-facing
+IDE would close the remaining observability gap. Client-side tracing would capture
+the actual perceived latency and help separate infrastructure delays from browser,
+network, and IDE initialization costs.
 
-While Sentry currently covers session-start paths, extending this telemetry into the
-student-facing IDE would close the observability gap. Implementing client-side
-tracing would capture the true perceived latency and help pinpoint rendering or
-network bottlenecks in the browser.
+The runtime personalization mechanism offers another path for future work. The data
+bridge currently provides late-bound key-value data to extensions, which is
+sufficient for credentials, tokens, and similar configuration values. Future versions
+could extend this model beyond key-value semantics and support active instance
+configuration during late binding. For example, the bridge could trigger controlled
+CLI-based setup steps that generate language-specific workspace templates, configure
+package managers, create toolchain files, or prepare exercise-specific project
+structures only after the system has bound the session to a specific student and
+assignment. These use cases would make configuration options available in prewarmed
+environments that otherwise depend on user- or exercise-specific data at startup
+time.
 
 
 // Suggested New Claim / Detail,Section to Add,Benefit to Thesis "Response Time
