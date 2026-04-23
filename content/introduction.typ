@@ -18,7 +18,7 @@ Eclipse Theia is an extensible cloud and desktop IDE platform. It provides a uni
 interface for various programming languages in a browser-based environment. Theia
 Cloud enables the deployment and management of Theia-based IDEs on Kubernetes at
 scale. Figure @fig:ssd shows this integration. The university deploys the Theia Cloud
-instance that this thesis develops and evaluates under the name EduIDE.
+instance that this thesis advances and evaluates under the name EduIDE.
 
 #figure(
   image("../figures/ssd3.svg"),
@@ -28,9 +28,9 @@ instance that this thesis develops and evaluates under the name EduIDE.
 
 == Problem
 
-Despite the benefits of cloud-based IDEs like Theia Cloud, critical issues around
-performance, user experience, and infrastructure scalability impede their practical
-use in educational settings.
+Despite the benefits of cloud-based IDEs like Theia Cloud, issues around performance,
+user experience, and infrastructure scalability impede their practical use in
+educational settings.
 
 Startup delays create one core problem. When a student starts a session, the system
 provisions a Kubernetes pod along with the necessary resources to host the
@@ -89,13 +89,13 @@ challenges through the following primary objectives:
   students request sessions simultaneously, the pool must assign each request to a
   distinct instance without severe performance degradation. The work introduces a
   reservation mechanism that serializes competing claims and recycles slots after
-  sessions end, keeping the pool in a valid state at all times.]
+  sessions end, keeping the pool in a consistent state at all times.]
 
 #block[*Secure Context Injection Mechanism*: Prewarmed containers must remain generic
   until the system assigns a student, yet each session requires personalized
   credentials and repository access. To bridge this gap, the thesis introduces the
   data bridge, a runtime personalization mechanism that injects user-specific
-  configuration into an already running container after assignment, decoupling the
+  configuration into a running container after assignment, decoupling the
   provisioning phase from session-specific setup.]
 
 #block[*Dynamic Scaling Architecture*: Adjusting pool capacity in response to

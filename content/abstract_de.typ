@@ -1,9 +1,8 @@
 Cloud-basierte integrierte Entwicklungsumgebungen reduzieren technische Barrieren in
-der Informatikausbildung, indem sie einen unmittelbaren Zugriff auf
-Programmierumgebungen ohne komplexe lokale Installationen ermöglichen. Der
-Online-Dienst Theia Cloud nutzt eine dynamische Provisionierung innerhalb von
-Kubernetes, leidet jedoch unter Cold-Start-Verzögerungen, die das synchrone Lernen
-stören.
+der Informatikausbildung, indem sie Zugriff auf Programmierumgebungen ohne komplexe
+lokale Installationen ermöglichen. Der Online-Dienst Theia Cloud nutzt eine
+dynamische Provisionierung innerhalb von Kubernetes, leidet jedoch unter
+Cold-Start-Verzögerungen, die das synchrone Lernen stören.
 
 Diese Arbeit implementiert eine Eager-Session-Startup-Pipeline für Theia Cloud, um
 diese Latenzen zu minimieren. Die Lösung nutzt vorgewärmte Instanzen in Kombination

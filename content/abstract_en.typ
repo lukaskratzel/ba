@@ -1,7 +1,7 @@
 Cloud-based Integrated Development Environments (IDEs) reduce technical barriers in
-computer science education by providing immediate access to programming tools without
-complex local installations. Theia Cloud uses dynamic provisioning within Kubernetes
-and suffers from cold-start delays that disrupt synchronous learning.
+computer science education by providing access to programming tools without complex
+local installations. Theia Cloud uses dynamic provisioning within Kubernetes and
+suffers from cold-start delays that disrupt synchronous learning.
 
 This thesis implements an eager session startup pipeline for Theia Cloud to mitigate
 these latencies. The solution uses prewarmed instance pools combined with a data

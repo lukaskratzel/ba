@@ -102,39 +102,39 @@ benchmark in this thesis used controlled sequential and burst workloads and star
 eager runs with a fully populated prewarmed pool. Future evaluations should collect
 data during active courses or exams, where students arrive with more irregular
 interarrival times, reconnect after interruptions, and use the IDE while other
-sessions are still starting. Such measurements would validate the improvement
-that students perceive and reveal how the eager path behaves when real workloads
-mix warm starts, lazy fallback, active language servers, repository cloning, and
-cluster resource contention.
+sessions are still starting. Such measurements would validate the improvement that
+students perceive and reveal how the eager path behaves when real workloads mix warm
+starts, lazy fallback, active language servers, repository cloning, and cluster
+resource contention.
 
-The benchmark also leaves open the question of how the architecture behaves across
-a wider range of deployment shapes. Future work should repeat the evaluation with
+The benchmark also leaves open the question of how the architecture behaves across a
+wider range of deployment shapes. Future work should repeat the evaluation with
 multiple `AppDefinition`s, larger cohorts, different IDE images, heterogeneous
-programming languages, and smaller or larger Kubernetes clusters. This would
-clarify how pool sizing guidelines depend on image size, language-server memory
-consumption, routing propagation, and available cluster capacity. In particular,
-future work should study workloads with hundreds of simultaneous starts to
-determine whether pool reservation, the Kubernetes API, or routing updates become
-the dominant bottleneck at higher scale.
+programming languages, and smaller or larger Kubernetes clusters. This would clarify
+how pool sizing guidelines depend on image size, language-server memory consumption,
+routing propagation, and available cluster capacity. In particular, future work
+should study workloads with hundreds of simultaneous starts to determine whether pool
+reservation, the Kubernetes API, or routing updates become the dominant bottleneck at
+higher scale.
 
 Future work could also refine the control plane for these larger bursts. The current
 implementation prevents races and keeps the system stable, but the synchronized
 reservation of prewarmed instances can still serialize parts of the startup path.
 Future engineering work could investigate finer-grained locking and faster
-orchestration mechanisms such as in-process orchestration for singleton operators
-or external databases for replicated operators. These changes would preserve the
+orchestration mechanisms such as in-process orchestration for singleton operators or
+external databases for replicated operators. These changes would preserve the
 correctness guarantees of the current design while increasing throughput for large
 exam cohorts.
 
 The eager startup pipeline has reduced session preparation time, making client-side
 latency a more significant contributor to overall startup latency. Optimizing the
 browser's loading of the IDE session, asset caching, WebSocket establishment, and
-initial rendering is therefore the next logical step toward improving the
-end-to-end startup experience. While Sentry currently covers session-start paths in
-the landing page, service, and operator, extending telemetry into the student-facing
-IDE would close the remaining observability gap. Client-side tracing would capture
-the actual perceived latency and help separate infrastructure delays from browser,
-network, and IDE initialization costs.
+initial rendering is therefore the next logical step toward improving the end-to-end
+startup experience. While Sentry currently covers session-start paths in the landing
+page, service, and operator, extending telemetry into the student-facing IDE would
+close the remaining observability gap. Client-side tracing would capture the actual
+perceived latency and help separate infrastructure delays from browser, network, and
+IDE initialization costs.
 
 The runtime personalization mechanism offers another path for future work. The data
 bridge currently provides late-bound key-value data to extensions, which is

@@ -103,8 +103,8 @@ constraints.#footnote[
   )[doi.org/10.6028/NIST.SP.800-190].
 ] Therefore, the system must defer personalization until it assigns a generic
 instance to a specific user. This requires a mechanism for runtime data injection
-that securely delivers sensitive information into an already running container
-without requiring a restart, which would negate the latency benefits of prewarming.
+that securely delivers sensitive information into a running container without
+requiring a restart, which would negate the latency benefits of prewarming.
 
 == Proposed System
 
@@ -183,7 +183,7 @@ ISO/IEC 25010 quality characteristics and sub-characteristics:
 #par(justify: true)[
   #strong[QA3 (Performance Efficiency / Capacity).] The system must maintain high
   throughput during spikes in demand and degrade gracefully via lazy fallback without
-  rejecting requests.
+  rejecting requests or timing out.
 ] <qa3>
 
 #par(justify: true)[
@@ -201,7 +201,7 @@ ISO/IEC 25010 quality characteristics and sub-characteristics:
 #par(justify: true)[
   #strong[QA6 (Maintainability / Analysability).] The Theia Cloud landing page,
   service, and operator must support production-oriented monitoring of session-start
-  performance and failures. Telemetry must attribute critical control-plane, API, and
+  performance and failures. Telemetry must attribute control-plane, API, and
   user-facing entry steps so that operators can diagnose latency and errors without
   relying solely on end-to-end measurements. Sensitive data must not appear in
   telemetry beyond what operations require.
