@@ -15,12 +15,10 @@ it evaluates low startup latency (#link(<qa1>)[QA1]), correctness under concurre
   <qa3>,
 )[QA3]), and the diagnostic support promised by observability (#link(
   <qa6>,
-)[QA6]). The primary objectives are to:
-
-1. Quantify the absolute and relative reduction in session preparation time that the
-  eager startup pipeline achieves compared to the lazy baseline.
-2. Assess the system's robustness and latency degradation when it faces a sudden
-  spike in concurrent session requests.
+)[QA6]). The primary objectives are to (1) quantify the absolute and relative
+reduction in session preparation time that the eager startup pipeline achieves
+compared to the lazy baseline and (2) assess the system's robustness and latency
+degradation when it faces a sudden spike in concurrent session requests.
 
 == Design
 
@@ -88,14 +86,15 @@ traces do not substitute for the controlled measurements above, but they provide
 complementary, fine-grained timing context.
 
 The benchmark reproduction package, including the benchmark runner, input datasets,
-and execution instructions, is provided with this thesis in `reproduction/benchmarks`
+and execution instructions, is provided with this thesis in
+`reproduction/benchmarks`.
 #footnote[
   The reproduction package is also available in the thesis repository at #link(
     "https://github.com/lukaskratzel/ba/tree/main/reproduction/benchmarks",
   )[
     github.com/lukaskratzel/ba/tree/main/reproduction/benchmarks
   ].
-].
+]
 
 == Results
 
@@ -165,7 +164,7 @@ session preparation time.
 Commercial cloud IDEs employ a similar pattern of shifting setup work off the
 critical path. GitHub Codespaces and Gitpod use prebuilds to prepare dependencies and
 configurations ahead of session creation, but those prebuilds also incur storage and
-compute costs#footnote[
+compute costs.#footnote[
   GitHub, _About GitHub Codespaces prebuilds_, documentation page, accessed April 6,
   2026, #link(
     "https://docs.github.com/en/codespaces/prebuilding-your-codespaces/about-github-codespaces-prebuilds",
@@ -176,7 +175,7 @@ compute costs#footnote[
   )[
     ona.com/docs/classic/user/configure/repositories/prebuilds
   ].
-]. The architecture in this thesis differs by emphasizing late-binding of sensitive
+] The architecture in this thesis differs by emphasizing late-binding of sensitive
 user context. Pooled pods remain generic until assignment and receive
 session-specific data through runtime injection within a Kubernetes-native control
 plane. This preserves multi-tenant isolation for educational platforms. If the pool
@@ -270,6 +269,36 @@ fallback to lazy provisioning that triggers when the pool runs empty (#link(
   <fr7>,
 )[FR7]). Workloads that exhaust the pool would mix eager and lazy latencies, and the
 reported eager distribution does not capture such cases.
+
+=== Construct Validity
+
+The benchmark uses session-preparation time as the operational measure for startup
+latency. This metric captures the startup phase that the eager startup pipeline
+targets: session resource creation, prewarmed instance reservation, routing
+propagation, and exposure of an externally reachable session URL. The metric excludes
+browser-side IDE loading, WebSocket establishment, extension activation, and the
+point at which the student can begin editing.
+
+The measurement boundary therefore represents the infrastructure-controlled portion
+of low startup latency (#link(<qa1>)[QA1]), not the complete student-perceived
+startup experience. The benchmark supports claims about backend and control-plane
+latency in the evaluated deployment. A future evaluation should add browser-based
+end-to-end tests that measure the time from starting an exercise in Artemis to a
+loaded and editable IDE.
+
+=== Conclusion Validity
+
+The benchmark compares the measured system states under fixed sequential and
+concurrent workloads. The evaluation reports descriptive statistics and latency
+distributions, but it does not calculate confidence intervals or apply hypothesis
+tests. The benchmark also runs in one controlled cluster environment and does not
+repeat the same workloads across many independent days or operating conditions.
+
+These design choices limit the strength of statistical conclusions. The results show
+that the eager startup pipeline reduced session-preparation time in the measured
+scenarios. The exact size of the improvement remains benchmark-specific and should
+not be treated as a general performance guarantee for different cluster loads,
+hardware mixes, or cohort sizes.
 
 === External Validity
 

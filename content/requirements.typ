@@ -116,46 +116,46 @@ supported by a hardened control plane and an API for automation.
 === Functional Requirements
 
 The proposed system must fulfill the following functional requirements (FRs) to
-achieve its objectives:
+achieve its objectives.
 
 #par(justify: true)[
-  #strong[FR1: Maintain Prewarmed Pools.] The system must maintain a pool of
+  #strong[FR1 (Maintain Prewarmed Pools):] The system must maintain a pool of
   prewarmed, generic IDE instances per `AppDefinition`. The size of this pool must be
   configurable.
 ] <fr1>
 
 #par(justify: true)[
-  #strong[FR2: Dynamic Session Assignment.] Upon receiving a request to start a
+  #strong[FR2 (Dynamic Session Assignment):] Upon receiving a request to start a
   session, the system must be able to dynamically and safely reserve an available
   prewarmed instance from the pool and assign it to the requesting user.
 ] <fr2>
 
 #par(justify: true)[
-  #strong[FR3: Runtime Data Injection.] The system must provide a mechanism to
+  #strong[FR3 (Runtime Data Injection):] The system must provide a mechanism to
   securely inject session-specific runtime data like authentication tokens and Git
   credentials into the IDE container after the system assigns the instance, without
   requiring a container restart.
 ] <fr3>
 
 #par(justify: true)[
-  #strong[FR4: Support Artemis Workflows.] The system must adapt the Scorpio
+  #strong[FR4 (Support Artemis Workflows):] The system must adapt the Scorpio
   extension to consume the runtime-injected data, ensuring that Artemis workflows
   function correctly within the prewarmed IDE environment.
 ] <fr4>
 
 #par(justify: true)[
-  #strong[FR5: Expose Scaling API.] The system must expose a dedicated API to inspect
-  and programmatically adjust the scaling parameters (`minInstances` and
+  #strong[FR5 (Expose Scaling API):] The system must expose a dedicated API to
+  inspect and programmatically adjust the scaling parameters (`minInstances` and
   `maxInstances`) of an `AppDefinition`.
 ] <fr5>
 
 #par(justify: true)[
-  #strong[FR6: Safe Concurrency Handling.] The system must handle concurrent session
+  #strong[FR6 (Safe Concurrency Handling):] The system must handle concurrent session
   starts safely, particularly during burst loads like the start of an exam.
 ] <fr6>
 
 #par(justify: true)[
-  #strong[FR7: Fallback to Lazy Startup.] If the prewarmed pool runs empty, the
+  #strong[FR7 (Fallback to Lazy Startup):] If the prewarmed pool runs empty, the
   system must gracefully fall back to the traditional lazy startup path, ensuring
   availability up to the configured maximum session limit.
 ] <fr7>
@@ -164,42 +164,42 @@ achieve its objectives:
 
 In addition to the functional capabilities, the system must satisfy several quality
 attributes (QAs) that define its operational quality. The grouping follows common
-ISO/IEC 25010 quality characteristics and sub-characteristics:
+ISO/IEC 25010 quality characteristics and sub-characteristics.
 
 #par(justify: true)[
-  #strong[QA1 (Performance Efficiency / Time Behaviour).] The session preparation
+  #strong[QA1 (Performance Efficiency / Time Behaviour):] The session preparation
   time, measured from the initial API call to the Theia Cloud service until the
   session URL is reachable, must be significantly reduced compared to the lazy
   startup baseline.
 ] <qa1>
 
 #par(justify: true)[
-  #strong[QA2 (Reliability / Maturity).] The control plane must remain robust under
+  #strong[QA2 (Reliability / Maturity):] The control plane must remain robust under
   high contention. Shared resources, such as the prewarmed pool and routing objects,
   must not become corrupted or enter inconsistent states during simultaneous session
   requests.
 ] <qa2>
 
 #par(justify: true)[
-  #strong[QA3 (Performance Efficiency / Capacity).] The system must maintain high
+  #strong[QA3 (Performance Efficiency / Capacity):] The system must maintain high
   throughput during spikes in demand and degrade gracefully via lazy fallback without
   rejecting requests or timing out.
 ] <qa3>
 
 #par(justify: true)[
-  #strong[QA4 (Security / Confidentiality).] Generic, prewarmed instances must not
+  #strong[QA4 (Security / Confidentiality):] Generic, prewarmed instances must not
   leak credentials. Once a session ends, the system must destroy the instance state
   before it returns the resources to the pool.
 ] <qa4>
 
 #par(justify: true)[
-  #strong[QA5 (Maintainability / Modifiability).] The eager startup logic should
+  #strong[QA5 (Maintainability / Modifiability):] The eager startup logic should
   integrate with the existing operator patterns. It should build upon the existing
   `AppDefinition` and `Session` concepts.
 ] <qa5>
 
 #par(justify: true)[
-  #strong[QA6 (Maintainability / Analysability).] The Theia Cloud landing page,
+  #strong[QA6 (Maintainability / Analysability):] The Theia Cloud landing page,
   service, and operator must support production-oriented monitoring of session-start
   performance and failures. Telemetry must attribute control-plane, API, and
   user-facing entry steps so that operators can diagnose latency and errors without
@@ -260,9 +260,8 @@ assignment steps must handle concurrency safely (#link(
 
 Eager provisioning minimizes idle time for the student. The system reduces latency
 and allows productive work to begin sooner than in a lazy setup by shifting
-initialization before the request.
-
-If the prewarmed pool runs empty, the system falls back to lazy startup (#link(
+initialization before the request. If the prewarmed pool runs empty, the system falls
+back to lazy startup (#link(
   <fr7>,
 )[FR7]), provisioning a new session from scratch. This fallback guarantees
 availability up to the cluster's maximum capacity, ensuring students are not rejected

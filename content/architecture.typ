@@ -9,44 +9,44 @@ the system's approach to persistent state and scaling.
 == Design Goals
 
 Six primary design goals, derived from the functional requirements and quality
-attributes, drove the architecture of the eager session startup pipeline:
+attributes, drove the architecture of the eager session startup pipeline.
 
 #par(justify: true)[
-  #strong[DG1: Minimize Startup Latency.] The primary objective is to reduce the time
-  it takes for a requested session to become reachable. This requires shifting costly
-  operations, such as pod scheduling and image pulling, out of the critical path of
-  the student's request.
+  #strong[DG1 (Minimize Startup Latency):] The primary objective is to reduce the
+  time it takes for a requested session to become reachable. This requires shifting
+  costly operations, such as pod scheduling and image pulling, out of the critical
+  path of the student's request.
 ] <dg1>
 
 #par(justify: true)[
-  #strong[DG2: Decouple Personalization from Provisioning.] To utilize prewarming
+  #strong[DG2 (Decouple Personalization from Provisioning):] To utilize prewarming
   effectively, the architecture must separate the generic infrastructure provisioning
   phase from the session-specific personalization phase. Personalization must occur
   dynamically at runtime.
 ] <dg2>
 
 #par(justify: true)[
-  #strong[DG3: Ensure Robustness Under Burst Load.] Educational platforms frequently
+  #strong[DG3 (Ensure Robustness Under Burst Load):] Educational platforms frequently
   experience sudden spikes in demand. The architecture must handle high concurrency
   safely, preventing race conditions on shared resources and degrading gracefully
   when eager capacity runs out.
 ] <dg3>
 
 #par(justify: true)[
-  #strong[DG4: Preserve Platform Compatibility.] The solution must build upon the
+  #strong[DG4 (Preserve Platform Compatibility):] The solution must build upon the
   existing Theia Cloud concepts (`AppDefinition`, `Session`) and integrate seamlessly
   with the Artemis learning platform. It should act as a transparent optimization
   layer.
 ] <dg4>
 
 #par(justify: true)[
-  #strong[DG5: Enable Programmatic Scaling.] The system must expose an API-driven
+  #strong[DG5 (Enable Programmatic Scaling):] The system must expose an API-driven
   control surface for scaling parameters, allowing external systems or future
   machine-learning models to adjust prewarmed pool sizes based on anticipated demand.
 ] <dg5>
 
 #par(justify: true)[
-  #strong[DG6: Support Operability.] The system must remain diagnosable in
+  #strong[DG6 (Support Operability):] The system must remain diagnosable in
   production. The landing page, service, and operator must expose fine-grained timing
   and error reporting on session-start paths to validate optimizations, explain
   variance under load, and shorten incident response.
@@ -66,15 +66,15 @@ Cloud.
   image("../figures/ssd4.svg", width: 100%),
   caption: [The deployment diagram illustrates the physical and logical boundaries of
     the EduIDE architecture across three main environments: the external Artemis LMS,
-    the student's browser, and the Kubernetes cluster hosting the Theia Cloud
-    Service, Operator, and Prewarmed Resource Pool.],
+    the student's browser, and the Kubernetes cluster. Theia Cloud components are
+    colored blue, Theia IDE related components are green and LMS components are
+    highlighted in yellow.],
 ) <fig:subsystem-decomposition>
 
-Figure @fig:subsystem-decomposition illustrates several interconnected subsystems.
-The _LMS Server_ represents the external Artemis platform, which manages the
-_Programming Exercise_ and acts as the primary entry point for students. It
-communicates with Theia Cloud via the _Online IDE Service_ interface to request
-session provisioning.
+@fig:subsystem-decomposition illustrates several interconnected subsystems. The _LMS
+Server_ represents the external Artemis platform, which manages the _Programming
+Exercise_ and acts as the primary entry point for students. It communicates with
+Theia Cloud via the _Online IDE Service_ interface to request session provisioning.
 
 The _Student Browser_ hosts the _EduIDE_ client, which utilizes the _LMS Integration_
 Scorpio to communicate with the LMS server and the _Theia Session API_ to interact
@@ -90,10 +90,11 @@ cluster, as detailed in @tbl:theia-components.
     columns: (8em, 1fr),
     stroke: none,
     inset: (x: 0.65em, y: 0.5em),
+    column-gutter: 0pt,
     align: (top + left, top + left),
+    table.hline(stroke: 0.75pt),
     [*Component*], [*Description*],
     table.hline(stroke: 0.75pt),
-    table.vline(x: 1, stroke: 0.75pt),
     [*Landing Page*],
     [
       #par(justify: true)[
@@ -102,7 +103,6 @@ cluster, as detailed in @tbl:theia-components.
         redirects the student to the assigned IDE URL.
       ]
     ],
-    table.hline(stroke: 0.4pt),
     [*Service*],
     [
       #par(justify: true)[
@@ -111,7 +111,6 @@ cluster, as detailed in @tbl:theia-components.
         expressing desired cluster state declaratively.
       ]
     ],
-    table.hline(stroke: 0.4pt),
     [*Operator*],
     [
       #par(justify: true)[
@@ -122,7 +121,6 @@ cluster, as detailed in @tbl:theia-components.
         runtime personalization, among other tasks.
       ]
     ],
-    table.hline(stroke: 0.4pt),
     [*Prewarmed Resource Pool*],
     [
       #par(justify: true)[
@@ -131,7 +129,6 @@ cluster, as detailed in @tbl:theia-components.
         handles concurrent resource reservation and keeps the pool in a valid state.
       ]
     ],
-    table.hline(stroke: 0.4pt),
     [*Routing Manager*],
     [
       #par(justify: true)[
@@ -140,7 +137,6 @@ cluster, as detailed in @tbl:theia-components.
         control.
       ]
     ],
-    table.hline(stroke: 0.4pt),
     [*Theia\ Session*],
     [
       #par(justify: true)[
@@ -149,6 +145,7 @@ cluster, as detailed in @tbl:theia-components.
         personalization.
       ]
     ],
+    table.hline(stroke: 0.75pt),
   ),
   caption: [Theia Cloud Components],
   kind: table,
@@ -174,16 +171,16 @@ Deployment, forms the foundation of the eager startup pipeline.
   image("../figures/state-machine.drawio.svg", width: 100%),
   caption: [Instance Lifecycle State Machine Diagram. It depicts the lifecycle of a
     single IDE pool slot that a Kubernetes Deployment manages, transitioning from
-    generic Provisioning to a Prewarmed standby state, entering Reserved after a
-    student request, undergoing Personalizing, and finally becoming Bound to an
+    generic `Provisioning` to a `Prewarmed` standby state, entering `Reserved` after
+    a student request, undergoing `Personalizing`, and finally becoming `Bound` to an
     active session.],
 ) <fig:state-machine>
 
-Figure @fig:state-machine shows that an instance begins in the `Provisioning` state
-when the system scales up to meet the configured pool size. During this phase,
-Kubernetes schedules the pod and pulls the necessary container images if not already
-present. Once the generic container is running and healthy, it transitions to the
-`Prewarmed` state, waiting in the pool.
+@fig:state-machine shows that an instance begins in the `Provisioning` state when the
+system scales up to meet the configured pool size. During this phase, Kubernetes
+schedules the pod and pulls the necessary container images if not already present.
+Once the generic container is running and healthy, it transitions to the `Prewarmed`
+state, waiting in the pool.
 
 When a student requests a session, the operator acquires a lock on a prewarmed
 instance, moving it to the `Reserved` state. This mechanism addresses the need for
@@ -218,11 +215,10 @@ to minimize startup latency (#link(<dg1>)[DG1]).
     background.],
 ) <fig:startup-seq>
 
-Figure @fig:startup-seq illustrates how the startup process begins when a student
-requests a session (`startSession()`) from the Theia Cloud Service. The Service
-creates a new `Session` resource in the Kubernetes API Server and waits for the
-Operator to complete its work by updating the session resource with the external
-session URL.
+@fig:startup-seq illustrates how the startup process begins when a student requests a
+session (`startSession()`) from the Theia Cloud Service. The Service creates a new
+`Session` resource in the Kubernetes API Server and waits for the Operator to
+complete its work by updating the session resource with the external session URL.
 
 The Operator, watching the Session custom resource, detects the new session
 (`created(session)`) and attempts to claim a generic instance from the Prewarmed

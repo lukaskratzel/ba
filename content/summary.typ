@@ -1,4 +1,4 @@
-= Summary
+= Conclusion and Future Work
 
 This chapter reviews the project status by contrasting realized goals with those that
 remain open, assesses the impact of the implemented architecture, and outlines
@@ -62,7 +62,7 @@ an open objective for the upper limits of scalability under burst load (#link(
   <qa3>,
 )[QA3]).
 
-== Conclusion
+== Summary
 
 This thesis implemented the architectural basis for low-latency, personalized cloud
 IDE sessions in educational environments. By transitioning Theia Cloud from a purely
@@ -72,9 +72,18 @@ thereby meeting the central target of low startup latency (#link(
   <qa1>,
 )[QA1]).
 
+The benchmark results quantify this improvement. Under the sequential workload, the
+eager startup pipeline reduced the median session-preparation time from 5.59s in the
+original lazy baseline to 1.37s, while the optimized lazy path reached 4.18s. Under
+the concurrent burst workload, the median dropped from 18.67s in the original lazy
+baseline to 1.99s with eager startup, compared to 11.58s in the optimized lazy path.
+These measurements show that prewarmed instance reservation removes pod scheduling
+and container startup from the critical path and keeps startup latency low during
+synchronized exercise starts.
+
 The core contribution lies in showing that prewarming can support personalized
-educational tools. The system combines prewarmed instance pools, concurrency-safe
-control planes, faster Gateway API routing, runtime data injection, and Sentry-backed
+educational tools. The system combines prewarmed instance pools, a concurrency-safe
+control plane, faster routing propagation, runtime data injection, and Sentry-backed
 observability on the landing page, service, and operator to deliver fast access to
 configured development environments that remain analyzable when latency or load
 patterns shift. The Scaling API ensures that this architecture is not a static

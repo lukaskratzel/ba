@@ -1,11 +1,17 @@
 = Introduction
 
 The landscape of computer science education has transformed over the past decade.
-Krusche et al. note that the surge in student numbers has rendered manual assessment
-of programming exercises impractical, prompting the need for automated assessment
-systems @krusche:2018:ArtemisAutomaticAssessment. In response, learning management
-systems like Artemis have emerged to provide automated programming exercise
-assessment with quick feedback at scale @krusche:2018:ArtemisAutomaticAssessment.
+Krusche et al. @krusche:2018:ArtemisAutomaticAssessment note that the surge in
+student numbers has rendered manual assessment of programming exercises impractical,
+prompting the need for automated assessment systems. In response, learning management
+systems like Artemis#footnote[
+  Artemis source repository, accessed 3 May 2026, #link(
+    "https://github.com/ls1intum/Artemis",
+  )[
+    github.com/ls1intum/Artemis
+  ].
+] have emerged to provide automated programming exercise assessment with quick
+feedback at scale @krusche:2018:ArtemisAutomaticAssessment.
 
 Online IDE services for training, assessments, and development environments have
 proliferated as learning platforms increasingly migrate their development
@@ -17,13 +23,13 @@ to students @schmidt:2024:InclusiveLearningEnvironmentsa.
 Eclipse Theia is an extensible cloud and desktop IDE platform. It provides a unified
 interface for various programming languages in a browser-based environment. Theia
 Cloud enables the deployment and management of Theia-based IDEs on Kubernetes at
-scale. Figure @fig:ssd shows this integration. The university deploys the Theia Cloud
-instance that this thesis advances and evaluates under the name EduIDE.
+scale. The university deploys the Theia Cloud instance that this thesis advances and
+evaluates under the name EduIDE. @fig:ssd shows this integration.
 
 #figure(
   image("../figures/ssd3.svg"),
-  caption: [The deployment diagram showing the integration between Artemis and Theia
-    Cloud. Adapted from Schmidt @schmidt:2024:InclusiveLearningEnvironmentsa.],
+  caption: [The deployment diagram showing the integration between Artemis and
+    EduIDE. Adapted from Schmidt @schmidt:2024:InclusiveLearningEnvironmentsa.],
 ) <fig:ssd>
 
 == Problem
@@ -39,12 +45,12 @@ resource availability, creating delays during assignment releases or approaching
 deadlines.
 
 Theia Cloud can maintain pools of prewarmed containers to address startup latency, an
-approach Mohan et al. validated in the context of serverless functions
-@mohan:2019:AgileColdStarts. Assigning users to prewarmed environments, however,
-presents a challenge. Prewarmed environments must remain generic before assignment,
-while each student requires personalized configurations like version control
-credentials and assignment metadata. Injecting this personalization at runtime
-without compromising the system's architecture adds further complexity.
+approach Mohan et al. @mohan:2019:AgileColdStarts validated in the context of
+serverless functions. Assigning users to prewarmed environments, however, presents a
+challenge. Prewarmed environments must remain generic before assignment, while each
+student requires personalized configurations like version control credentials and
+assignment metadata. Injecting this personalization at runtime without compromising
+the system's architecture adds further complexity.
 
 == Motivation
 
@@ -59,9 +65,9 @@ binding dynamically injects the necessary authentication tokens, repository
 credentials, and workspace settings into the already running container.
 
 Immediate access to development environments enhances the student learning
-experience. Benotti et al. demonstrated that web-based coding tools with quick
-feedback loops enhance student engagement and improve learning outcomes in
-programming courses @benotti:2018:EffectWebbasedCoding. Minimal startup delays help
+experience. Benotti et al. @benotti:2018:EffectWebbasedCoding demonstrated that
+web-based coding tools with quick feedback loops enhance student engagement and
+improve learning outcomes in programming courses. Minimal startup delays help
 students maintain focus and momentum and concentrate on problem-solving.
 
 A reliable and responsive cloud IDE infrastructure enables effective teaching
@@ -80,7 +86,7 @@ infrastructure. It combines prewarmed instance pools, concurrency-safe handling 
 burst session starts, runtime session personalization, faster routing, integration
 with Artemis, and server-side observability with Sentry for timing and error
 visibility across the Theia Cloud system. The work addresses the identified
-challenges through the following primary objectives:
+challenges through the following primary objectives.
 
 #block[*Prewarmed IDE Instance Pool*: The central contribution of the eager startup
   pipeline is a dynamic pool of generic, ready-to-use IDE instances that the Operator
@@ -109,6 +115,11 @@ challenges through the following primary objectives:
   general performance optimizations. The results provide a quantitative basis for
   evaluating the effectiveness of the eager startup pipeline and for informing pool
   sizing decisions in production deployments.]
+
+The evaluation shows that the eager startup pipeline reduces median
+session-preparation time from 5.59s to 1.37s under sequential starts and from 18.67s
+to 1.99s under burst starts. These results demonstrate that prewarmed reservation
+reduces the infrastructure-controlled part of startup latency.
 
 == Outline
 
