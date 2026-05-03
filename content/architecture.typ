@@ -19,9 +19,9 @@ attributes, drove the architecture of the eager session startup pipeline.
 ] <dg1>
 
 #par(justify: true)[
-  #strong[DG2 (Decouple Personalization from Provisioning):] To utilize prewarming
-  effectively, the architecture must separate the generic infrastructure provisioning
-  phase from the session-specific personalization phase. Personalization must occur
+  #strong[DG2 (Decouple Personalization from Provisioning):] The architecture must
+  separate the generic infrastructure provisioning phase from the session-specific
+  personalization phase to use prewarming effectively. Personalization must occur
   dynamically at runtime.
 ] <dg2>
 
@@ -225,8 +225,8 @@ The Operator, watching the Session custom resource, detects the new session
 Resource Pool (`reserveInstance()`). Once the operator successfully reserves an
 instance, it instructs the Routing Manager to create a `HTTPRoute`
 (`addRules(instance)`), effectively assigning an external URL to the specific
-instance. Those rules also include authentication and access control to ensure only
-the assigned student can access the session. This fast-path reservation is the core
+instance. Those rules include authentication and access control to ensure only the
+assigned student can access the session. This fast-path reservation is the core
 realization of the eager startup design, while the fallback to lazy provisioning when
 no warm slot is available ensures graceful degradation under burst load (#link(
   <dg3>,

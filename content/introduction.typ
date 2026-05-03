@@ -99,15 +99,15 @@ challenges through the following primary objectives.
 
 #block[*Secure Context Injection Mechanism*: Prewarmed containers must remain generic
   until the system assigns a student, yet each session requires personalized
-  credentials and repository access. To bridge this gap, the thesis introduces the
-  data bridge, a runtime personalization mechanism that injects user-specific
+  credentials and repository access. The thesis addresses this challenge through the
+  data bridge. This runtime personalization mechanism injects user-specific
   configuration into a running container after assignment, decoupling the
   provisioning phase from session-specific setup.]
 
 #block[*Dynamic Scaling Architecture*: Adjusting pool capacity in response to
   anticipated demand requires a control interface that integrates with the existing
-  system. To this end, the thesis designs and implements a scaling API that allows
-  operators to inspect and modify pool targets at runtime, without redeploying the
+  system. The thesis designs and implements a scaling API for this purpose, allowing
+  operators to inspect and modify pool targets at runtime without redeploying the
   system.]
 
 #block[*Performance Benchmarks*: A benchmark measures session startup time under

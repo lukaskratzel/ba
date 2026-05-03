@@ -101,9 +101,9 @@ With the Scaling API in place, the immediate next step is to develop a predictiv
 scaling service. Such a service could consume historical usage data such as exercise
 release schedules, exam registrations, assignment deadlines, and typical student
 working hours to proactively adjust the prewarmed pool before demand spikes. A
-production-ready predictor should not only optimize for latency, but also include a
-cost model for idle resources. This would allow administrators to define policies
-that trade warm capacity against resource budgets, for example by scaling up shortly
+production-ready predictor should not only optimize for latency, but include a cost
+model for idle resources. This would allow administrators to define policies that
+trade warm capacity against resource budgets, for example by scaling up shortly
 before scheduled labs and scaling down during predictable off-hours.
 
 A second direction is a broader evaluation under real teaching conditions. The
@@ -116,17 +116,17 @@ students perceive and reveal how the eager path behaves when real workloads mix 
 starts, lazy fallback, active language servers, repository cloning, and cluster
 resource contention.
 
-The benchmark also leaves open the question of how the architecture behaves across a
-wider range of deployment shapes. Future work should repeat the evaluation with
-multiple `AppDefinition`s, larger cohorts, different IDE images, heterogeneous
-programming languages, and smaller or larger Kubernetes clusters. This would clarify
-how pool sizing guidelines depend on image size, language-server memory consumption,
-routing propagation, and available cluster capacity. In particular, future work
-should study workloads with hundreds of simultaneous starts to determine whether pool
-reservation, the Kubernetes API, or routing updates become the dominant bottleneck at
-higher scale.
+The benchmark leaves open the question of how the architecture behaves across a wider
+range of deployment shapes. Future work should repeat the evaluation with multiple
+`AppDefinition`s, larger cohorts, different IDE images, heterogeneous programming
+languages, and smaller or larger Kubernetes clusters. This would clarify how pool
+sizing guidelines depend on image size, language-server memory consumption, routing
+propagation, and available cluster capacity. In particular, future work should study
+workloads with hundreds of simultaneous starts to determine whether pool reservation,
+the Kubernetes API, or routing updates become the dominant bottleneck at higher
+scale.
 
-Future work could also refine the control plane for these larger bursts. The current
+Future work could refine the control plane for these larger bursts. The current
 implementation prevents races and keeps the system stable, but the synchronized
 reservation of prewarmed instances can still serialize parts of the startup path.
 Future engineering work could investigate finer-grained locking and faster

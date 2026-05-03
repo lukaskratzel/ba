@@ -66,13 +66,13 @@ states to isolate the impact of specific architectural changes:
 
 === Measurement Boundary
 
-This benchmark measures end-to-end session-preparation time.
-
-The timer starts with the initial API call to the Theia Cloud service that requests a
-session. The timer stops when the system has fully prepared the session, scheduled
-the runtime data injection, propagated the routing rules, and exposed an externally
-reachable session URL. This measurement boundary corresponds directly to low startup
-latency (#link(<qa1>)[QA1]).
+This benchmark measures end-to-end session-preparation time. The timer starts with
+the initial API call to the Theia Cloud service that requests a session. The timer
+stops when the system has fully prepared the session, scheduled the runtime data
+injection, propagated the routing rules, and exposed an externally reachable session
+URL. This measurement boundary corresponds directly to low startup latency (#link(
+  <qa1>,
+)[QA1]).
 
 This measurement does not include the client-side browser loading time. The time
 taken for the student's browser to download the IDE assets, render the DOM, and
@@ -85,11 +85,10 @@ confirm which sub-steps dominate latency or widen variance under burst load. Tho
 traces do not substitute for the controlled measurements above, but they provide
 complementary, fine-grained timing context.
 
-The benchmark reproduction package, including the benchmark runner, input datasets,
-and execution instructions, is provided with this thesis in
-`reproduction/benchmarks`.
+This thesis provides the benchmark reproduction package, including the benchmark
+runner, input datasets, and execution instructions, in `reproduction/benchmarks`.
 #footnote[
-  The reproduction package is also available in the thesis repository at #link(
+  The reproduction package is available in the thesis repository at #link(
     "https://github.com/lukaskratzel/ba/tree/main/reproduction/benchmarks",
   )[
     github.com/lukaskratzel/ba/tree/main/reproduction/benchmarks
@@ -147,8 +146,8 @@ reducing the median to 11.58 seconds (mean: 13.13s, max: 23.72s).
 The eager state counteracted the burst penalty. Reserving already-running instances
 rather than scheduling new pods kept the median startup time at 1.99 seconds (mean:
 3.73s, max: 9.33s). Compared to the original baseline, this is an 89% reduction in
-median latency during high-stress scenarios, while also validating the concurrency
-and burst-load expectations of safe concurrency handling (#link(
+median latency during high-stress scenarios. This result validates the concurrency
+and burst-load expectations for safe concurrency handling (#link(
   <fr6>,
 )[FR6]), correctness under concurrency (#link(<qa2>)[QA2]), and scalability under
 burst load (#link(<qa3>)[QA3]).
@@ -163,7 +162,7 @@ session preparation time.
 
 Commercial cloud IDEs employ a similar pattern of shifting setup work off the
 critical path. GitHub Codespaces and Gitpod use prebuilds to prepare dependencies and
-configurations ahead of session creation, but those prebuilds also incur storage and
+configurations ahead of session creation, but those prebuilds incur storage and
 compute costs.#footnote[
   GitHub, _About GitHub Codespaces prebuilds_, documentation page, accessed April 6,
   2026, #link(
@@ -291,14 +290,14 @@ loaded and editable IDE.
 The benchmark compares the measured system states under fixed sequential and
 concurrent workloads. The evaluation reports descriptive statistics and latency
 distributions, but it does not calculate confidence intervals or apply hypothesis
-tests. The benchmark also runs in one controlled cluster environment and does not
-repeat the same workloads across many independent days or operating conditions.
+tests. The benchmark runs in one controlled cluster environment and does not repeat
+the same workloads across many independent days or operating conditions.
 
 These design choices limit the strength of statistical conclusions. The results show
 that the eager startup pipeline reduced session-preparation time in the measured
-scenarios. The exact size of the improvement remains benchmark-specific and should
-not be treated as a general performance guarantee for different cluster loads,
-hardware mixes, or cohort sizes.
+scenarios. Readers should treat the exact size of the improvement as
+benchmark-specific rather than as a general performance guarantee for different
+cluster loads, hardware mixes, or cohort sizes.
 
 === External Validity
 

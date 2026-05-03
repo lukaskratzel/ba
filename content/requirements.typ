@@ -34,9 +34,9 @@ delay disrupts the student's workflow and degrades user experience.
 
 === Artemis-Theia Integration
 
-Artemis is an interactive learning management platform. To bridge the gap between the
-learning platform and the development environment, Artemis utilizes an integration
-layer called Scorpio, which runs as an extension inside the IDE
+Artemis is an interactive learning management platform. Artemis utilizes an
+integration layer called Scorpio to bridge the gap between the learning platform and
+the development environment. Scorpio runs as an extension inside the IDE
 @jandow:2024:ScorpioVisualStudio. Scorpio handles workflows such as authenticating
 the user, cloning the correct exercise repository, and synchronizing problem
 statements and feedback into the IDE.
@@ -52,8 +52,8 @@ system knows the user's data.
 === Routing and Deployment Setup
 
 The deployment architecture of Theia Cloud leverages standard Kubernetes primitives.
-Each session requires not only compute resources (Deployments) but also networking
-resources (Services and Ingress) to make the IDE accessible to the student's browser.
+Each session requires compute resources (Deployments) and networking resources
+(Services and Ingress) to make the IDE accessible to the student's browser.
 
 Routing plays an important role in the startup time. Previously, the system relied on
 one central `ingress-nginx` controller to expose sessions. When the system created a
@@ -253,8 +253,8 @@ pool maintenance (#link(<fr1>)[FR1]) to ensure ready instances. Upon a request, 
 dynamically assigns a free instance (#link(<fr2>)[FR2]) and injects session-specific
 data at runtime (#link(<fr3>)[FR3]) to avoid latency-inducing container restarts.
 This data enables the Artemis integration to authenticate and clone repositories
-(#link(<fr4>)[FR4]). To support many students starting simultaneously, these
-assignment steps must handle concurrency safely (#link(
+(#link(<fr4>)[FR4]). These assignment steps must handle concurrency safely to support
+many students starting simultaneously (#link(
   <fr6>,
 )[FR6]).
 
