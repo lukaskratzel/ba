@@ -116,11 +116,6 @@ challenges through the following primary objectives.
   evaluating the effectiveness of the eager startup pipeline and for informing pool
   sizing decisions in production deployments.]
 
-The evaluation shows that the eager startup pipeline reduces median
-session-preparation time from 5.59s to 1.37s under sequential starts and from 18.67s
-to 1.99s under burst starts. These results demonstrate that prewarmed reservation
-reduces the infrastructure-controlled part of startup latency.
-
 == Outline
 
 The remainder of this thesis proceeds as follows: Chapter 2 provides the scientific

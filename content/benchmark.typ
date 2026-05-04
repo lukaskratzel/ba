@@ -234,8 +234,8 @@ runtime data injection (#link(<fr3>)[FR3]), and low startup latency (#link(
 == Threats to Validity
 
 Several factors limit the generalizability of the reported results. This section
-separates them into threats to internal and external validity and describes how the
-benchmark design mitigates each where possible.
+separates them into threats to internal, construct, conclusion, and external validity
+and describes how the benchmark design mitigates each where possible.
 
 === Internal Validity
 

@@ -305,13 +305,13 @@ assignment and late-binding personalization timings without logging sensitive
 payloads.
 
 @fig:sentry-trace shows a representative trace of an eager session startup completing
-in 1.43s. The dominant synchronous costs are claiming a prewarmed pool instance
-(90.62ms) and transferring Kubernetes resource ownership to the session (229.76ms).
-Registering the session-specific routing rules adds another 27.48ms, after which the
-route propagates externally within 610ms. Credential injection into the running
-container takes 7.85s. However, the system schedules injection while updating the
-session URL and runs it asynchronously in the background, so it does not contribute
-to perceived startup latency.
+in 1.43s. The dominant costs are claiming a prewarmed pool instance (90.62ms) and
+transferring Kubernetes resource ownership to the session (229.76ms). Registering the
+session-specific routing rules adds another 27.48ms, after which the route propagates
+externally within 610ms. Credential injection into the running container takes 7.85s.
+However, the system schedules injection while updating the session URL and runs it
+asynchronously in the background, so it does not contribute to perceived startup
+latency.
 
 #figure(
   image("../figures/sentry-observability.png", width: 100%),
@@ -322,11 +322,11 @@ to perceived startup latency.
   ],
 ) <fig:sentry-trace>
 
-Such traces delineate the subprocesses involved in provisioning and directly guide
-targeted optimizations, for example by identifying NGINX route-rule propagation as a
-dominant synchronous cost. This integrated observability benefits all future changes
-by establishing concrete baseline metrics to prevent performance regressions and
-maintain fast startup times.
+Such traces delineate the subprocesses involved in provisioning and guide targeted
+optimizations, for example by identifying NGINX route-rule propagation as a relevant
+bottleneck. This integrated observability benefits all future changes by establishing
+concrete baseline metrics to prevent performance regressions and maintain fast
+startup times.
 
 == Persistent State and Scaling Control
 
