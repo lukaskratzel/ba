@@ -387,7 +387,7 @@ trusted external systems, such as future machine-learning models predicting dema
 can implement programmatic scaling logic.
 
 The API exposes three primary endpoints under the `/service/admin/appdefinition`
-path. Table @tbl:scaling-api lists them.
+path. @tbl:scaling-api lists them.
 
 #figure(
   table(
