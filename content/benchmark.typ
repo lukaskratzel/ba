@@ -127,7 +127,7 @@ satisfies the low-startup-latency target (#link(
 
 === Concurrent Workload Results
 
-Figure @fig:latency-concurrent shows that the benefits of the eager startup
+@fig:latency-concurrent shows that the benefits of the eager startup
 architecture become more pronounced under burst conditions.
 
 #figure(
