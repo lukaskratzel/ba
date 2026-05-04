@@ -33,6 +33,15 @@
   grid(
     columns: 2,
     gutter: 1fr,
-    "Munich, " + submissionDate.display("[day].[month].[year]"), author,
+    "Munich, " + submissionDate.display("[day].[month].[year]"),
+    [
+      #place(
+        top + left,
+        dx: -2mm,
+        dy: -17mm,
+        image("/figures/signature.png", width: 38mm),
+      )
+      #author
+    ],
   )
 }
