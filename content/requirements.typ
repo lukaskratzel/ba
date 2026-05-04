@@ -26,11 +26,11 @@ active IDE instance based on an `AppDefinition`.
 Originally, Theia Cloud employed a lazy session startup path. When a student
 requested a session, the operator dynamically provisioned the necessary Kubernetes
 resources from scratch. This includes a Kubernetes Deployment, a Service, and routing
-configuration. While this on-demand approach ensures that resources are only consumed
-when actively needed, it introduces significant startup latency. The process of
-scheduling a pod and initializing the IDE environment can take upwards of 15 seconds.
-In an educational setting, especially during synchronous exercises or exams, this
-delay disrupts the student's workflow and degrades user experience.
+configuration. This on-demand approach ensures that resources are only consumed when
+actively needed, but it introduces startup latency. The process of scheduling a pod
+and initializing the IDE environment can take upwards of 15 seconds. In an
+educational setting, especially during synchronous exercises or exams, this delay
+disrupts the student's workflow and degrades user experience.
 
 === Artemis-Theia Integration
 
@@ -216,7 +216,9 @@ architecture, illustrating how the proposed system fulfills these requirements.
 
 #figure(
   image("../figures/use-case.svg"),
-  caption: [Use case diagram for the prewarming and session management system.],
+  caption: [Use case diagram for the prewarming and session management system. It
+    shows how students request, access, and end IDE sessions and how administrators
+    configure and monitor prewarmed pools.],
 ) <fig:use-case>
 
 @fig:use-case identifies two primary actors. The _Student_ initiates the session

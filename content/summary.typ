@@ -13,31 +13,34 @@ environments, specifically within the context of Theia Cloud and Artemis.
 === Realized Goals
 
 The implementation achieved the core objectives set out at the beginning of the
-project. First, the project implemented a robust eager session start mechanism. The
-operator prewarms generic IDE instances and allows rapid, synchronized reservation.
-This realizes the maintenance of prewarmed pools (#link(<fr1>)[FR1]) and dynamic
-session assignment (#link(<fr2>)[FR2]) while significantly reducing provisioning
-delays in line with low startup latency (#link(<qa1>)[QA1]). Second, the
-runtime-personalization design resolved the contradiction between generic prewarming
-and user-specific environments. The introduction of the data bridge and the
-adaptation of the Scorpio extension enabled secure injection of credentials into
+project. The project implemented a robust eager session start mechanism. The operator
+prewarms generic IDE instances and allows rapid, synchronized reservation. This
+realizes the maintenance of prewarmed pools (#link(<fr1>)[FR1]) and dynamic session
+assignment (#link(<fr2>)[FR2]) while reducing provisioning delays in line with low
+startup latency (#link(<qa1>)[QA1]).
+
+The runtime-personalization design resolved the contradiction between generic
+prewarming and user-specific environments. The introduction of the data bridge and
+the adaptation of the Scorpio extension enabled secure injection of credentials into
 already-running containers, thereby fulfilling runtime data injection (#link(
   <fr3>,
 )[FR3]), support for Artemis workflows (#link(<fr4>)[FR4]), and security and
-isolation (#link(<qa4>)[QA4]). Third, the project fortified the control plane to
-handle burst workloads. Mechanisms such as race-aware session handling, synchronized
-pool reservations, and independent routing rule mutations ensure the system remains
-stable during simulated load scenarios. Fourth, the migration from `ingress-nginx` to
-the Kubernetes Gateway API reduced routing propagation delays, unblocking the latency
-benefits of the prewarmed pool. Fifth, the project implemented a dedicated Scaling
-API to expose and control the `minInstances` and `maxInstances` scaling parameters,
-decoupling the mechanical scaling of the infrastructure from the logic of demand
-prediction. Sixth, the project integrated detailed instrumentation into the Theia
-Cloud landing page, service, and operator. Sentry transactions and spans for
-session-start operations across all major system components enable operators to
-diagnose timing and failures at the level of pool reservation, routing updates, and
-data injection. This facilitates both iterative optimization and operational
-monitoring. Taken together, these changes satisfy programmatic scaling (#link(
+isolation (#link(<qa4>)[QA4]). The project also fortified the control plane to handle
+burst workloads. Mechanisms such as race-aware session handling, synchronized pool
+reservations, and independent routing rule mutations ensure the system remains stable
+during simulated load scenarios. The migration from `ingress-nginx` to the Kubernetes
+Gateway API reduced routing propagation delays, unblocking the latency benefits of
+the prewarmed pool.
+
+The project implemented a dedicated Scaling API to expose and control the
+`minInstances` and `maxInstances` scaling parameters, decoupling the mechanical
+scaling of the infrastructure from the logic of demand prediction. It also integrated
+detailed instrumentation into the Theia Cloud landing page, service, and operator.
+Sentry transactions and spans for session-start operations across all major system
+components enable operators to diagnose timing and failures at the level of pool
+reservation, routing updates, and data injection. This facilitates both iterative
+optimization and operational monitoring. Taken together, these changes satisfy
+programmatic scaling (#link(
   <fr5>,
 )[FR5]), safe concurrency handling (#link(<fr6>)[FR6]), fallback to lazy startup
 (#link(
@@ -47,18 +50,18 @@ load (#link(<qa3>)[QA3]), and observability (#link(<qa6>)[QA6]).
 
 === Open Goals
 
-While the foundational architecture is complete, certain aspects of the original
-vision remain open. These objectives belonged to the initial scope but still require
+The foundational architecture is complete, but certain aspects of the original vision
+remain open. These objectives belonged to the initial scope but still require
 refinement or validation.
 
-First, while the evaluation benchmarked the system in a controlled and simulated
-environment, a broader evaluation using real student traffic during an active
-semester is necessary to validate the system's impact on user experience and
-infrastructure load. Second, while the current concurrency measures prevent system
-failure during bursts, extreme scenarios involving hundreds of simultaneous requests
-can still bottleneck at synchronization points in the operator, particularly around
-pool reservation. Further reducing these bottlenecks to maximize throughput remains
-an open objective for the upper limits of scalability under burst load (#link(
+The evaluation benchmarked the system in a controlled and simulated environment. A
+broader evaluation using real student traffic during an active semester is necessary
+to validate the system's impact on user experience and infrastructure load. The
+current concurrency measures prevent system failure during bursts, but extreme
+scenarios involving hundreds of simultaneous requests can still bottleneck at
+synchronization points in the operator, particularly around pool reservation.
+Reducing these bottlenecks to maximize throughput remains an open objective for the
+upper limits of scalability under burst load (#link(
   <qa3>,
 )[QA3]).
 
@@ -139,8 +142,8 @@ The eager startup pipeline has reduced session preparation time, making client-s
 latency a more significant contributor to overall startup latency. Optimizing the
 browser's loading of the IDE session, asset caching, WebSocket establishment, and
 initial rendering is therefore the next logical step toward improving the end-to-end
-startup experience. While Sentry currently covers session-start paths in the landing
-page, service, and operator, extending telemetry into the student-facing IDE would
+startup experience. Sentry currently covers session-start paths in the landing page,
+service, and operator, but extending telemetry into the student-facing IDE would
 close the remaining observability gap. Client-side tracing would capture the actual
 perceived latency and help separate infrastructure delays from browser, network, and
 IDE initialization costs.
@@ -156,14 +159,3 @@ structures only after the system has bound the session to a specific student and
 assignment. These use cases would make configuration options available in prewarmed
 environments that otherwise depend on user- or exercise-specific data at startup
 time.
-
-
-// Suggested New Claim / Detail,Section to Add,Benefit to Thesis "Response Time
-// Thresholds: Define ""low latency"" using established human-computer interaction (HCI)
-// limits (e.g., the 2-second rule).",3.2.2 Nonfunctional Requirements,"Instead of just
-// saying ""significantly reduced"" , you can argue your 1.37s result meets specific
-// pedagogical/psychological requirements for student focus.+1" "Comparison to ""State
-// of the Art"" Cloud IDEs: Add a brief comparison to how commercial tools (e.g., GitHub
-// Codespaces or Gitpod) handle prewarming.",5.4 Discussion,"It puts your work in
-// context with industry leaders, showing that your solution for educational platforms
-// is on par with professional-grade infrastructure.+1"

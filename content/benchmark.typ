@@ -127,8 +127,8 @@ satisfies the low-startup-latency target (#link(
 
 === Concurrent Workload Results
 
-Figure @fig:latency-concurrent shows that the benefits of the eager startup
-architecture become more pronounced under burst conditions.
+@fig:latency-concurrent shows that the benefits of the eager startup architecture
+become more pronounced under burst conditions.
 
 #figure(
   image("../figures/benchmarks/latency_concurrent.svg", width: 80%),
@@ -203,7 +203,7 @@ availability guarantee defined by fallback to lazy startup (#link(
   <qa3>,
 )[QA3]).
 
-While the eager startup pipeline improves user experience, it introduces a tradeoff
+The eager startup pipeline improves user experience, but it introduces a tradeoff
 regarding resource consumption. Serverless systems demonstrate a similar pattern:
 reducing cold-start latency via warm pools shifts cost from latency to continuously
 allocated memory and compute, creating a cost-performance tradeoff
@@ -244,7 +244,7 @@ real student would open the IDE, trigger client-side asset downloads, establish
 WebSocket connections, and execute workloads inside the container. This additional
 activity would impose load on both the individual session pod and the shared cluster,
 which could raise steady-state CPU and memory pressure, delay pod scheduling through
-node resource contention, and slower routing propagation. The reported latencies
+node resource contention, and slow routing propagation. The reported latencies
 therefore represent a lower bound on what students would observe in practice, and the
 concurrent workload likely underestimates the degradation that active usage would
 introduce.

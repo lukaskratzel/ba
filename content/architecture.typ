@@ -191,7 +191,7 @@ data injection succeeds, the instance becomes `Bound` to the student and activel
 serves the session.
 
 When the session ends, the operator triggers an `Instance reset` by recreating the
-session's underlying compute resources. Since all session state is ephemeral, this
+session's underlying compute resources. All session state is ephemeral, so this
 recreation acts as a full reset, and the deployment controller routes the slot back
 to the `Provisioning` phase to guarantee a clean, generic environment for the next
 student. One exception to this rule occurs when administrators reduce pool capacity
@@ -387,7 +387,7 @@ trusted external systems, such as future machine-learning models predicting dema
 can implement programmatic scaling logic.
 
 The API exposes three primary endpoints under the `/service/admin/appdefinition`
-path. Table @tbl:scaling-api lists them.
+path. @tbl:scaling-api lists them.
 
 #figure(
   table(
@@ -419,7 +419,9 @@ path. Table @tbl:scaling-api lists them.
       ]
     ],
   ),
-  caption: [Scaling API Endpoints under `/service/admin/appdefinition`],
+  caption: [Scaling API endpoints under `/service/admin/appdefinition`. The API lets
+    operators inspect current pool limits and update `minInstances` or `maxInstances`
+    for a specific `AppDefinition`.],
   kind: table,
 ) <tbl:scaling-api>
 

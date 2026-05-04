@@ -26,11 +26,11 @@ and error-prone local environment setup @frankford:2025:OnlineIntegratedDevelopm
 Advanced cloud IDEs, such as Eclipse Theia, offer feature-rich, browser-accessible
 interfaces that closely mirror professional desktop tools, providing essential
 features like syntax highlighting and advanced autocompletion
-@frankford:2025:OnlineIntegratedDevelopment. While integrating robust IDEs into APAS
-platforms improves the learning experience, it introduces resource and scalability
-challenges. Deploying individual containerized environments for hundreds of
-concurrent students results in high memory consumption and startup delays, which can
-disrupt synchronous educational activities like exams or live labs
+@frankford:2025:OnlineIntegratedDevelopment. Integrating robust IDEs into APAS
+platforms improves the learning experience, but it introduces resource and
+scalability challenges. Deploying individual containerized environments for hundreds
+of concurrent students results in high memory consumption and startup delays, which
+can disrupt synchronous educational activities like exams or live labs
 @frankford:2025:OnlineIntegratedDevelopment.
 
 == Prewarming and Cold-Start Mitigation
